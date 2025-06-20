@@ -32,13 +32,21 @@ git push -u origin main
 
 ### 2. Configure GitHub Pages
 
-1. Go to your repository on GitHub
+1. Go to your repository on GitHub: `https://github.com/rifrocket/fabricjs-design-tool`
 2. Click **Settings** tab
-3. Scroll to **Pages** section
-4. Under **Source**, select **GitHub Actions**
-5. The workflow will automatically deploy on every push to main
+3. Scroll to **Pages** section in the left sidebar
+4. Under **Source**, select **GitHub Actions** (not Deploy from a branch)
+5. Click **Save**
+6. The workflow will automatically deploy on the next push to main
 
-### 3. Access Your Sites
+### 3. Verify Deployment
+
+1. Go to the **Actions** tab in your repository
+2. You should see the "Deploy to GitHub Pages" workflow running
+3. Wait for it to complete (green checkmark)
+4. Check the workflow logs if there are any issues
+
+### 4. Access Your Sites
 
 Once deployed, your sites will be available at:
 

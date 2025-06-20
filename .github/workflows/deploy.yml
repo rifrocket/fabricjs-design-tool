@@ -3,12 +3,14 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     permissions:
       contents: read
@@ -38,6 +40,9 @@ jobs:
       run: npm run build:web
       env:
         NODE_ENV: production
+
+    - name: Copy documentation
+      run: cp -r docs dist/docs
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
