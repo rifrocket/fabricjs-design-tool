@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Components - FabricJS Design Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-tertiary: #edf2f7;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-primary);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { 
+            font-size: 2rem; 
+            margin-top: 3rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        h3 { 
+            font-size: 1.5rem; 
+            margin-top: 2rem;
+            color: var(--primary-color);
+        }
+        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Code Blocks */
+        pre, code {
+            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        }
+
+        code {
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--text-primary);
+        }
+
+        pre {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.9rem;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* API sections */
+        .api-section {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background: var(--bg-secondary);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+
+        /* Component showcase */
+        .component-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .component-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .component-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><span class="emoji">⚛️</span>React Components</h1>
+            <p>Pre-built React UI components for rapid development.</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="container">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="getting-started.html">Getting Started</a>
+                <a href="core-api.html">Core API</a>
+                <a href="react-components.html" class="active">React Components</a>
+                <a href="examples.html">Examples</a>
+                <a href="customization.html">Customization</a>
+                <a href="migration.html">Migration</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <h2><span class="emoji">📦</span>Import</h2>
+            <pre><code>import { 
+  CanvasWrapper,
+  Header,
+  LeftSidebar,
+  RightSidebar,
+  BottomToolbar,
+  QRCodeDialog,
+  ShapeDialog,
+  KeyboardShortcutsModal
+} from 'fabricjs-design-tool/ui';</code></pre>
+
+            <h2><span class="emoji">🖼️</span>Main Components</h2>
+
+            <div class="component-showcase">
+                <div class="component-card">
+                    <h4>&lt;CanvasWrapper /&gt;</h4>
+                    <p>The core canvas component that wraps Fabric.js functionality with enhanced features.</p>
+                    <pre><code>&lt;CanvasWrapper
+  width={1000}
+  height={700}
+  backgroundColor="#f5f5f5"
+  onCanvasReady={setCanvas}
+/&gt;</code></pre>
+                </div>
+
+                <div class="component-card">
+                    <h4>&lt;Header /&gt;</h4>
+                    <p>Application header with file operations, zoom controls, and settings.</p>
+                    <pre><code>&lt;Header
+  title="My Design Tool"
+  showLogo={true}
+  onExport={handleExport}
+/&gt;</code></pre>
+                </div>
+
+                <div class="component-card">
+                    <h4>&lt;LeftSidebar /&gt;</h4>
+                    <p>Tool palette with shapes, drawing tools, and templates.</p>
+                    <pre><code>&lt;LeftSidebar
+  collapsed={false}
+  tools={customTools}
+  onToolSelect={handleTool}
+/&gt;</code></pre>
+                </div>
+
+                <div class="component-card">
+                    <h4>&lt;RightSidebar /&gt;</h4>
+                    <p>Properties panel for selected objects with styling options.</p>
+                    <pre><code>&lt;RightSidebar
+  selectedObject={selected}
+  onPropertyChange={handleChange}
+/&gt;</code></pre>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>CanvasWrapper Props</h3>
+                <pre><code>interface CanvasWrapperProps {
+  width?: number;           // Canvas width (default: 800)
+  height?: number;          // Canvas height (default: 600)
+  backgroundColor?: string; // Canvas background (default: '#ffffff')
+  className?: string;       // CSS class
+  style?: React.CSSProperties;
+  onCanvasReady?: (canvas: fabric.Canvas) => void;
+  onSelectionChange?: (selected: fabric.Object[]) => void;
+  onObjectModified?: (object: fabric.Object) => void;
+}</code></pre>
+
+                <h4>Complete Example</h4>
+                <pre><code>import React, { useState } from 'react';
+import { CanvasWrapper } from 'fabricjs-design-tool/ui';
+
+function MyApp() {
+  const [canvas, setCanvas] = useState(null);
+  const [selected, setSelected] = useState(null);
+  
+  return (
+    &lt;div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}&gt;
+      &lt;CanvasWrapper
+        width={1000}
+        height={700}
+        backgroundColor="#f8f9fa"
+        onCanvasReady={setCanvas}
+        onSelectionChange={(objects) =&gt; setSelected(objects[0])}
+        onObjectModified={(obj) =&gt; console.log('Modified:', obj)}
+      /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            </div>
+
+            <h2><span class="emoji">🔧</span>Utility Components</h2>
+
+            <div class="component-showcase">
+                <div class="component-card">
+                    <h4>&lt;QRCodeDialog /&gt;</h4>
+                    <p>Advanced QR code generator with customization options.</p>
+                    <pre><code>&lt;QRCodeDialog
+  open={showQR}
+  onClose={() =&gt; setShowQR(false)}
+  onGenerate={handleQRGenerate}
+/&gt;</code></pre>
+                </div>
+
+                <div class="component-card">
+                    <h4>&lt;ShapeDialog /&gt;</h4>
+                    <p>Shape creation dialog with preset options and custom configurations.</p>
+                    <pre><code>&lt;ShapeDialog
+  open={showShapes}
+  onClose={() =&gt; setShowShapes(false)}
+  onShapeCreate={handleShapeCreate}
+/&gt;</code></pre>
+                </div>
+
+                <div class="component-card">
+                    <h4>&lt;KeyboardShortcutsModal /&gt;</h4>
+                    <p>Help modal displaying all available keyboard shortcuts.</p>
+                    <pre><code>&lt;KeyboardShortcutsModal
+  open={showHelp}
+  onClose={() =&gt; setShowHelp(false)}
+/&gt;</code></pre>
+                </div>
+
+                <div class="component-card">
+                    <h4>&lt;BottomToolbar /&gt;</h4>
+                    <p>Status bar with zoom controls, coordinates, and quick actions.</p>
+                    <pre><code>&lt;BottomToolbar
+  zoom={zoom}
+  onZoomChange={setZoom}
+  coordinates={mousePos}
+/&gt;</code></pre>
+                </div>
+            </div>
+
+            <h2><span class="emoji">🎨</span>Complete Layout Example</h2>
+            <pre><code>import React, { useState } from 'react';
+import { 
+  CanvasWrapper,
+  Header,
+  LeftSidebar,
+  RightSidebar,
+  BottomToolbar,
+  QRCodeDialog,
+  ShapeDialog,
+  KeyboardShortcutsModal
+} from 'fabricjs-design-tool/ui';
+
+function DesignApp() {
+  const [canvas, setCanvas] = useState(null);
+  const [selectedObject, setSelectedObject] = useState(null);
+  const [zoom, setZoom] = useState(1);
+  const [showQR, setShowQR] = useState(false);
+  const [showShapes, setShowShapes] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+
+  return (
+    &lt;div className="design-app"&gt;
+      &lt;Header 
+        onExport={() =&gt; console.log('Export')}
+        onShowQR={() =&gt; setShowQR(true)}
+        onShowShapes={() =&gt; setShowShapes(true)}
+        onShowHelp={() =&gt; setShowHelp(true)}
+      /&gt;
+      
+      &lt;div className="design-body"&gt;
+        &lt;LeftSidebar 
+          canvas={canvas}
+          onToolSelect={(tool) =&gt; console.log('Tool:', tool)}
+        /&gt;
+        
+        &lt;CanvasWrapper
+          onCanvasReady={setCanvas}
+          onSelectionChange={(objs) =&gt; setSelectedObject(objs[0])}
+          width={1200}
+          height={800}
+        /&gt;
+        
+        &lt;RightSidebar 
+          selectedObject={selectedObject}
+          onPropertyChange={(prop, value) =&gt; {
+            if (selectedObject) {
+              selectedObject.set(prop, value);
+              canvas?.renderAll();
+            }
+          }}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;BottomToolbar 
+        zoom={zoom}
+        onZoomChange={setZoom}
+      /&gt;
+
+      &lt;QRCodeDialog 
+        open={showQR}
+        onClose={() =&gt; setShowQR(false)}
+      /&gt;
+      
+      &lt;ShapeDialog 
+        open={showShapes}
+        onClose={() =&gt; setShowShapes(false)}
+      /&gt;
+      
+      &lt;KeyboardShortcutsModal 
+        open={showHelp}
+        onClose={() =&gt; setShowHelp(false)}
+      /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default DesignApp;</code></pre>
+
+            <h2><span class="emoji">💡</span>Pro Tips</h2>
+            <ul>
+                <li><strong>Responsive Design:</strong> Components automatically adapt to different screen sizes</li>
+                <li><strong>Theme Support:</strong> Built-in dark/light theme switching</li>
+                <li><strong>Keyboard Shortcuts:</strong> All components support keyboard navigation</li>
+                <li><strong>Accessibility:</strong> Components follow WCAG guidelines</li>
+                <li><strong>Customization:</strong> Easy to theme and extend with CSS variables</li>
+            </ul>
+
+            <h2><span class="emoji">🎯</span>Next Steps</h2>
+            <ul>
+                <li><a href="examples.html"><strong>📋 Examples</strong></a> - See complete implementation examples</li>
+                <li><a href="customization.html"><strong>🔧 Customization</strong></a> - Learn how to customize components</li>
+                <li><a href="core-api.html"><strong>🎨 Core API</strong></a> - Understand the underlying functionality</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
+        </div>
+    </div>
+</body>
+</html>

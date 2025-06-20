@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core API Reference - FabricJS Design Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-tertiary: #edf2f7;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-primary);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { 
+            font-size: 2rem; 
+            margin-top: 3rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        h3 { 
+            font-size: 1.5rem; 
+            margin-top: 2rem;
+            color: var(--primary-color);
+        }
+        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Code Blocks */
+        pre, code {
+            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        }
+
+        code {
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--text-primary);
+        }
+
+        pre {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.9rem;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Method signatures */
+        .method-signature {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Parameter tables */
+        .param-table {
+            margin: 1rem 0;
+        }
+
+        .param-table th {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* API sections */
+        .api-section {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background: var(--bg-secondary);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><span class="emoji">🎨</span>Core API Reference</h1>
+            <p>Framework-agnostic core functionality that works with any JavaScript framework.</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="container">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="getting-started.html">Getting Started</a>
+                <a href="core-api.html" class="active">Core API</a>
+                <a href="react-components.html">React Components</a>
+                <a href="examples.html">Examples</a>
+                <a href="customization.html">Customization</a>
+                <a href="migration.html">Migration</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <h2><span class="emoji">📦</span>Import</h2>
+            <pre><code>import { 
+  useCanvasManager,
+  useShapeCreator,
+  useCanvasPan,
+  useCanvasKeyboardShortcuts,
+  useAlignmentGuides,
+  shapeFactory,
+  canvasUtils,
+  historyManager,
+  EXPORT_FORMATS
+} from 'fabricjs-design-tool';</code></pre>
+
+            <div class="api-section">
+                <h2><span class="emoji">🎨</span>Canvas Management</h2>
+
+                <h3>useCanvasManager(canvas, options?)</h3>
+                <p>Main hook for managing canvas state and operations.</p>
+
+                <div class="method-signature">
+                    useCanvasManager(canvas: fabric.Canvas, options?: CanvasManagerOptions)
+                </div>
+
+                <h4>Parameters</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>canvas</code></td>
+                            <td><code>fabric.Canvas</code></td>
+                            <td>Fabric.js canvas instance</td>
+                        </tr>
+                        <tr>
+                            <td><code>options</code></td>
+                            <td><code>CanvasManagerOptions</code></td>
+                            <td>Optional configuration options</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Returns</h4>
+                <pre><code>{
+  canvas: fabric.Canvas | null;
+  selectedObject: fabric.Object | null;
+  zoom: number;
+  isDarkMode: boolean;
+  alignmentGuides: AlignmentGuidesConfig;
+  
+  // Methods
+  selectObject: (object: fabric.Object) => void;
+  deleteSelected: () => void;
+  duplicateSelected: () => void;
+  setZoom: (zoom: number) => void;
+  resetZoom: () => void;
+  fitToScreen: () => void;
+  toggleDarkMode: () => void;
+}</code></pre>
+
+                <h4>Example</h4>
+                <pre><code>import { Canvas } from 'fabric';
+import { useCanvasManager } from 'fabricjs-design-tool';
+
+const canvas = new Canvas('my-canvas');
+const canvasManager = useCanvasManager(canvas, {
+  showGrid: true,
+  gridSize: 20,
+  alignmentGuides: true
+});
+
+// Select an object
+canvasManager.selectObject(someObject);
+
+// Zoom controls
+canvasManager.setZoom(1.5);
+canvasManager.fitToScreen();</code></pre>
+            </div>
+
+            <div class="api-section">
+                <h3>useCanvasPan(canvas)</h3>
+                <p>Enables pan functionality with mouse/touch.</p>
+
+                <h4>Example</h4>
+                <pre><code>const panControls = useCanvasPan(canvas);
+
+// Pan is automatically enabled
+// Hold Shift + drag to pan (configurable)</code></pre>
+            </div>
+
+            <div class="api-section">
+                <h3>useCanvasKeyboardShortcuts(canvas)</h3>
+                <p>Adds keyboard shortcuts to canvas.</p>
+
+                <h4>Default Shortcuts</h4>
+                <ul>
+                    <li><code>Ctrl+Z</code> / <code>Cmd+Z</code> - Undo</li>
+                    <li><code>Ctrl+Y</code> / <code>Cmd+Y</code> - Redo</li>
+                    <li><code>Delete</code> / <code>Backspace</code> - Delete selected</li>
+                    <li><code>Ctrl+C</code> / <code>Cmd+C</code> - Copy</li>
+                    <li><code>Ctrl+V</code> / <code>Cmd+V</code> - Paste</li>
+                    <li><code>Ctrl+A</code> / <code>Cmd+A</code> - Select all</li>
+                    <li><code>Escape</code> - Deselect all</li>
+                </ul>
+            </div>
+
+            <div class="api-section">
+                <h2><span class="emoji">🔧</span>Shape Factory</h2>
+
+                <h3>shapeFactory</h3>
+                <p>Factory methods for creating shapes with consistent styling.</p>
+
+                <h4>Available Methods</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>createRectangle(options)</code></td>
+                            <td>Create a rectangle shape</td>
+                        </tr>
+                        <tr>
+                            <td><code>createCircle(options)</code></td>
+                            <td>Create a circle shape</td>
+                        </tr>
+                        <tr>
+                            <td><code>createTriangle(options)</code></td>
+                            <td>Create a triangle shape</td>
+                        </tr>
+                        <tr>
+                            <td><code>createLine(options)</code></td>
+                            <td>Create a line shape</td>
+                        </tr>
+                        <tr>
+                            <td><code>createText(text, options)</code></td>
+                            <td>Create a text object</td>
+                        </tr>
+                        <tr>
+                            <td><code>createArrow(options)</code></td>
+                            <td>Create an arrow shape</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Example</h4>
+                <pre><code>import { shapeFactory } from 'fabricjs-design-tool';
+
+// Create a rectangle
+const rect = shapeFactory.createRectangle({
+  left: 100,
+  top: 100,
+  width: 200,
+  height: 150,
+  fill: 'blue',
+  stroke: 'red',
+  strokeWidth: 2
+});
+
+// Create a circle with gradient
+const circle = shapeFactory.createCircle({
+  left: 300,
+  top: 100,
+  radius: 75,
+  fill: new fabric.Gradient({
+    type: 'radial',
+    coords: { x1: 0, y1: 0, x2: 0, y2: 0, r1: 0, r2: 75 },
+    colorStops: [
+      { offset: 0, color: '#ff0000' },
+      { offset: 1, color: '#0000ff' }
+    ]
+  })
+});
+
+canvas.add(rect, circle);</code></pre>
+            </div>
+
+            <div class="api-section">
+                <h2><span class="emoji">🛠</span>Canvas Utils</h2>
+
+                <h3>canvasUtils</h3>
+                <p>Utility functions for canvas operations.</p>
+
+                <h4>Available Methods</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>exportCanvas(canvas, format, options)</code></td>
+                            <td>Export canvas to various formats</td>
+                        </tr>
+                        <tr>
+                            <td><code>loadFromJSON(canvas, json)</code></td>
+                            <td>Load canvas from JSON data</td>
+                        </tr>
+                        <tr>
+                            <td><code>saveToJSON(canvas)</code></td>
+                            <td>Save canvas to JSON</td>
+                        </tr>
+                        <tr>
+                            <td><code>clearCanvas(canvas)</code></td>
+                            <td>Clear all objects from canvas</td>
+                        </tr>
+                        <tr>
+                            <td><code>centerObject(canvas, object)</code></td>
+                            <td>Center an object on canvas</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Export Formats</h4>
+                <pre><code>import { canvasUtils, EXPORT_FORMATS } from 'fabricjs-design-tool';
+
+// Export as PNG
+const pngDataUrl = canvasUtils.exportCanvas(canvas, EXPORT_FORMATS.PNG);
+
+// Export as PDF
+const pdfBlob = canvasUtils.exportCanvas(canvas, EXPORT_FORMATS.PDF, {
+  format: 'a4',
+  orientation: 'portrait'
+});
+
+// Export as SVG
+const svgString = canvasUtils.exportCanvas(canvas, EXPORT_FORMATS.SVG);</code></pre>
+            </div>
+
+            <div class="api-section">
+                <h2><span class="emoji">📝</span>History Manager</h2>
+
+                <h3>historyManager</h3>
+                <p>Manage undo/redo operations.</p>
+
+                <h4>Methods</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>init(canvas)</code></td>
+                            <td>Initialize history tracking</td>
+                        </tr>
+                        <tr>
+                            <td><code>undo()</code></td>
+                            <td>Undo last action</td>
+                        </tr>
+                        <tr>
+                            <td><code>redo()</code></td>
+                            <td>Redo last undone action</td>
+                        </tr>
+                        <tr>
+                            <td><code>canUndo()</code></td>
+                            <td>Check if undo is available</td>
+                        </tr>
+                        <tr>
+                            <td><code>canRedo()</code></td>
+                            <td>Check if redo is available</td>
+                        </tr>
+                        <tr>
+                            <td><code>clear()</code></td>
+                            <td>Clear history</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Example</h4>
+                <pre><code>import { historyManager } from 'fabricjs-design-tool';
+
+// Initialize history
+historyManager.init(canvas);
+
+// Use undo/redo
+if (historyManager.canUndo()) {
+  historyManager.undo();
+}
+
+if (historyManager.canRedo()) {
+  historyManager.redo();
+}</code></pre>
+            </div>
+
+            <div class="api-section">
+                <h2><span class="emoji">📏</span>Alignment Guides</h2>
+
+                <h3>useAlignmentGuides(canvas, options?)</h3>
+                <p>Enable smart alignment guides for precise object positioning.</p>
+
+                <h4>Options</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>enabled</code></td>
+                            <td><code>boolean</code></td>
+                            <td><code>true</code></td>
+                            <td>Enable/disable alignment guides</td>
+                        </tr>
+                        <tr>
+                            <td><code>snapDistance</code></td>
+                            <td><code>number</code></td>
+                            <td><code>10</code></td>
+                            <td>Snap distance in pixels</td>
+                        </tr>
+                        <tr>
+                            <td><code>lineColor</code></td>
+                            <td><code>string</code></td>
+                            <td><code>'#ff0000'</code></td>
+                            <td>Guide line color</td>
+                        </tr>
+                        <tr>
+                            <td><code>lineWidth</code></td>
+                            <td><code>number</code></td>
+                            <td><code>1</code></td>
+                            <td>Guide line width</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Example</h4>
+                <pre><code>import { useAlignmentGuides } from 'fabricjs-design-tool';
+
+const alignmentGuides = useAlignmentGuides(canvas, {
+  enabled: true,
+  snapDistance: 15,
+  lineColor: '#00ff00',
+  lineWidth: 2
+});</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
+        </div>
+    </div>
+</body>
+</html>

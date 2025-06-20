@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration Guide - FabricJS Design Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-tertiary: #edf2f7;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-primary);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { 
+            font-size: 2rem; 
+            margin-top: 3rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        h3 { 
+            font-size: 1.5rem; 
+            margin-top: 2rem;
+            color: var(--primary-color);
+        }
+        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Code Blocks */
+        pre, code {
+            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        }
+
+        code {
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--text-primary);
+        }
+
+        pre {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.9rem;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+
+        /* Migration tables */
+        .migration-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .migration-table th,
+        .migration-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .migration-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .migration-table .old-code {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .migration-table .new-code {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><span class="emoji">🔄</span>Migration Guide</h1>
+            <p>Upgrade from plain Fabric.js to FabricJS Design Tool with ease.</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="container">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="getting-started.html">Getting Started</a>
+                <a href="core-api.html">Core API</a>
+                <a href="react-components.html">React Components</a>
+                <a href="examples.html">Examples</a>
+                <a href="customization.html">Customization</a>
+                <a href="migration.html" class="active">Migration</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <h2><span class="emoji">📦</span>Installation Migration</h2>
+            
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before (Plain Fabric.js)</th>
+                        <th>After (FabricJS Design Tool)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <code>npm install fabric</code>
+                        </td>
+                        <td class="new-code">
+                            <code>npm install fabricjs-design-tool</code>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><span class="emoji">🎯</span>Import Changes</h2>
+
+            <h3>Core Functionality</h3>
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <pre><code>import { fabric } from 'fabric';
+
+const canvas = new fabric.Canvas('canvas');
+const rect = new fabric.Rect({
+  left: 100,
+  top: 100,
+  width: 50,
+  height: 50,
+  fill: 'red'
+});
+canvas.add(rect);</code></pre>
+                        </td>
+                        <td class="new-code">
+                            <pre><code>import { Canvas } from 'fabric';
+import { useCanvasManager, shapeFactory } from 'fabricjs-design-tool';
+
+const canvas = new Canvas('canvas');
+const canvasManager = useCanvasManager(canvas);
+const rect = shapeFactory.createRectangle({
+  left: 100,
+  top: 100,
+  width: 50,
+  height: 50,
+  fill: 'red'
+});
+canvas.add(rect);</code></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>React Integration</h3>
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <pre><code>import React, { useRef, useEffect } from 'react';
+import { fabric } from 'fabric';
+
+function MyCanvas() {
+  const canvasRef = useRef(null);
+  
+  useEffect(() => {
+    const canvas = new fabric.Canvas(canvasRef.current, {
+      width: 800,
+      height: 600
+    });
+    
+    return () => canvas.dispose();
+  }, []);
+  
+  return &lt;canvas ref={canvasRef} /&gt;;
+}</code></pre>
+                        </td>
+                        <td class="new-code">
+                            <pre><code>import React from 'react';
+import { CanvasWrapper } from 'fabricjs-design-tool/ui';
+
+function MyCanvas() {
+  return (
+    &lt;CanvasWrapper
+      width={800}
+      height={600}
+      onCanvasReady={(canvas) =&gt; {
+        // Canvas is ready to use
+        console.log('Canvas ready:', canvas);
+      }}
+    /&gt;
+  );
+}</code></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><span class="emoji">🔧</span>Feature Migration</h2>
+
+            <h3>Shape Creation</h3>
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <pre><code>// Creating shapes manually
+const rect = new fabric.Rect({
+  left: 100,
+  top: 100,
+  width: 100,
+  height: 100,
+  fill: 'blue'
+});
+
+const circle = new fabric.Circle({
+  left: 200,
+  top: 100,
+  radius: 50,
+  fill: 'red'
+});
+
+const text = new fabric.Text('Hello', {
+  left: 300,
+  top: 100,
+  fontSize: 20
+});
+
+canvas.add(rect, circle, text);</code></pre>
+                        </td>
+                        <td class="new-code">
+                            <pre><code>// Using shape factory
+import { shapeFactory } from 'fabricjs-design-tool';
+
+const rect = shapeFactory.createRectangle({
+  left: 100,
+  top: 100,
+  width: 100,
+  height: 100,
+  fill: 'blue'
+});
+
+const circle = shapeFactory.createCircle({
+  left: 200,
+  top: 100,
+  radius: 50,
+  fill: 'red'
+});
+
+const text = shapeFactory.createText('Hello', {
+  left: 300,
+  top: 100,
+  fontSize: 20
+});
+
+canvas.add(rect, circle, text);</code></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Event Handling</h3>
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <pre><code>// Manual event handling
+canvas.on('selection:created', (e) => {
+  console.log('Selected:', e.selected);
+});
+
+canvas.on('object:modified', (e) => {
+  console.log('Modified:', e.target);
+});
+
+canvas.on('mouse:wheel', (opt) => {
+  const delta = opt.e.deltaY;
+  let zoom = canvas.getZoom();
+  zoom *= 0.999 ** delta;
+  if (zoom > 20) zoom = 20;
+  if (zoom < 0.01) zoom = 0.01;
+  canvas.setZoom(zoom);
+  opt.e.preventDefault();
+  opt.e.stopPropagation();
+});</code></pre>
+                        </td>
+                        <td class="new-code">
+                            <pre><code>// Built-in event handling with hooks
+import { useCanvasManager } from 'fabricjs-design-tool';
+
+const canvasManager = useCanvasManager(canvas, {
+  onSelectionChange: (selected) => {
+    console.log('Selected:', selected);
+  },
+  onObjectModified: (object) => {
+    console.log('Modified:', object);
+  },
+  enableZoom: true, // Auto-handles mouse wheel zoom
+  zoomToPoint: true
+});</code></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Keyboard Shortcuts</h3>
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <pre><code>// Manual keyboard handling
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    switch (e.key) {
+      case 'z':
+        e.preventDefault();
+        // Implement undo
+        break;
+      case 'y':
+        e.preventDefault();
+        // Implement redo
+        break;
+      case 'c':
+        e.preventDefault();
+        // Implement copy
+        break;
+      case 'v':
+        e.preventDefault();
+        // Implement paste
+        break;
+    }
+  }
+  
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    const activeObject = canvas.getActiveObject();
+    if (activeObject) {
+      canvas.remove(activeObject);
+    }
+  }
+});</code></pre>
+                        </td>
+                        <td class="new-code">
+                            <pre><code>// Built-in keyboard shortcuts
+import { useCanvasKeyboardShortcuts } from 'fabricjs-design-tool';
+
+const shortcuts = useCanvasKeyboardShortcuts(canvas);
+
+// All standard shortcuts are automatically handled:
+// Ctrl+Z/Cmd+Z - Undo
+// Ctrl+Y/Cmd+Y - Redo  
+// Ctrl+C/Cmd+C - Copy
+// Ctrl+V/Cmd+V - Paste
+// Delete/Backspace - Delete selected
+// Ctrl+A/Cmd+A - Select all
+// Escape - Deselect all</code></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><span class="emoji">⚡</span>Performance Improvements</h2>
+
+            <h3>Optimization</h3>
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <pre><code>// Manual optimization
+canvas.on('object:moving', () => {
+  canvas.renderAll();
+});
+
+canvas.on('object:scaling', () => {
+  canvas.renderAll();
+});
+
+// Manual performance tweaks
+canvas.selection = true;
+canvas.skipTargetFind = false;
+canvas.perPixelTargetFind = true;</code></pre>
+                        </td>
+                        <td class="new-code">
+                            <pre><code>// Built-in optimization
+import { useOptimization } from 'fabricjs-design-tool';
+
+const optimization = useOptimization(canvas, {
+  enableAutoRender: true,
+  enableObjectCaching: true,
+  skipTargetFind: false,
+  perPixelTargetFind: true
+});
+
+// Automatic performance optimizations based on:
+// - Canvas size
+// - Number of objects
+// - Device capabilities
+// - User interactions</code></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><span class="emoji">🎨</span>UI Components Migration</h2>
+
+            <h3>Custom UI to Pre-built Components</h3>
+            <table class="migration-table">
+                <thead>
+                    <tr>
+                        <th>Before (Custom UI)</th>
+                        <th>After (Pre-built Components)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="old-code">
+                            <pre><code>// Custom toolbar
+function CustomToolbar({ onAddRect, onAddCircle }) {
+  return (
+    &lt;div className="toolbar"&gt;
+      &lt;button onClick={onAddRect}&gt;Rectangle&lt;/button&gt;
+      &lt;button onClick={onAddCircle}&gt;Circle&lt;/button&gt;
+      {/* More custom buttons */}
+    &lt;/div&gt;
+  );
+}
+
+// Custom properties panel
+function CustomProperties({ selectedObject }) {
+  return (
+    &lt;div className="properties"&gt;
+      &lt;input 
+        type="color" 
+        value={selectedObject?.fill} 
+        onChange={handleColorChange}
+      /&gt;
+      {/* More custom inputs */}
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        </td>
+                        <td class="new-code">
+                            <pre><code>// Pre-built components
+import { 
+  Header,
+  LeftSidebar, 
+  RightSidebar,
+  BottomToolbar 
+} from 'fabricjs-design-tool/ui';
+
+function App() {
+  return (
+    &lt;div className="app"&gt;
+      &lt;Header /&gt;
+      &lt;div className="app-body"&gt;
+        &lt;LeftSidebar /&gt;
+        &lt;CanvasWrapper /&gt;
+        &lt;RightSidebar /&gt;
+      &lt;/div&gt;
+      &lt;BottomToolbar /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><span class="emoji">🔄</span>Step-by-Step Migration</h2>
+
+            <ol>
+                <li><strong>Install the package:</strong>
+                    <pre><code>npm uninstall fabric
+npm install fabricjs-design-tool</code></pre>
+                </li>
+                
+                <li><strong>Update imports:</strong>
+                    <pre><code>// Replace fabric imports
+import { useCanvasManager, shapeFactory } from 'fabricjs-design-tool';</code></pre>
+                </li>
+                
+                <li><strong>Replace manual canvas setup:</strong>
+                    <pre><code>// Use CanvasWrapper for React or useCanvasManager for vanilla JS</code></pre>
+                </li>
+                
+                <li><strong>Migrate shape creation:</strong>
+                    <pre><code>// Replace new fabric.Rect() with shapeFactory.createRectangle()</code></pre>
+                </li>
+                
+                <li><strong>Update event handling:</strong>
+                    <pre><code>// Use built-in hooks instead of manual event listeners</code></pre>
+                </li>
+                
+                <li><strong>Replace custom UI:</strong>
+                    <pre><code>// Use pre-built components from 'fabricjs-design-tool/ui'</code></pre>
+                </li>
+                
+                <li><strong>Test and optimize:</strong>
+                    <pre><code>// Verify all functionality works and remove redundant code</code></pre>
+                </li>
+            </ol>
+
+            <h2><span class="emoji">⚠️</span>Breaking Changes</h2>
+
+            <ul>
+                <li><strong>Import paths:</strong> Some imports have changed from <code>fabric</code> to <code>fabricjs-design-tool</code></li>
+                <li><strong>Event signatures:</strong> Some event callbacks have slightly different parameters</li>
+                <li><strong>Configuration:</strong> Some canvas options are now handled by the canvas manager</li>
+                <li><strong>Dependencies:</strong> React components require React 16.8+ for hooks support</li>
+            </ul>
+
+            <h2><span class="emoji">💡</span>Migration Tips</h2>
+
+            <ul>
+                <li><strong>Gradual migration:</strong> You can migrate piece by piece, starting with core functionality</li>
+                <li><strong>Coexistence:</strong> The library can coexist with existing Fabric.js code during transition</li>
+                <li><strong>Testing:</strong> Thoroughly test interactive features after migration</li>
+                <li><strong>Performance:</strong> Monitor performance improvements with built-in optimizations</li>
+                <li><strong>Documentation:</strong> Refer to examples for complex migration scenarios</li>
+            </ul>
+
+            <h2><span class="emoji">🎯</span>Next Steps</h2>
+            <ul>
+                <li><a href="getting-started.html"><strong>🚀 Getting Started</strong></a> - Complete setup guide</li>
+                <li><a href="examples.html"><strong>📋 Examples</strong></a> - See migration examples in action</li>
+                <li><a href="troubleshooting.html"><strong>🔧 Troubleshooting</strong></a> - Common migration issues</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
+        </div>
+    </div>
+</body>
+</html>
