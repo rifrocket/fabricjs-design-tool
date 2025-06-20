@@ -163,10 +163,11 @@ MIT © [Your Name]
 
 ## 🔗 Links
 
-- [📖 Documentation](./docs/)
-- [🐛 Report Issues](https://github.com/yourusername/fabricjs-design-tool/issues)
-- [💬 Discussions](https://github.com/yourusername/fabricjs-design-tool/discussions)
-- [📦 NPM Package](https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool)
+- [📖 Documentation](https://rifrocket.github.io/fabricjs-design-tool/docs/)
+- [🌐 Live Demo](https://rifrocket.github.io/fabricjs-design-tool/)
+- [🐛 Report Issues](https://github.com/rifrocket/fabricjs-design-tool/issues)
+- [💬 Discussions](https://github.com/rifrocket/fabricjs-design-tool/discussions)
+- [📦 NPM Package](https://www.npmjs.com/package/@rifrocket/fabric-design-editor)
 
 ---
 

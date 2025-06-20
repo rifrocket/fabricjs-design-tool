@@ -49,11 +49,13 @@
     "build": "rollup -c && vite build",
     "build:lib": "rollup -c",
     "build:web": "vite build",
+    "build:docs": "vite build && cp -r docs dist/docs",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "clean": "rm -rf lib/ dist/ node_modules/.vite",
-    "prepublishOnly": "npm run build:lib"
+    "prepublishOnly": "npm run build:lib",
+    "deploy": "npm run build:docs && gh-pages -d dist"
   },
   "dependencies": {
     "@types/fabric": "^5.3.10",
