@@ -1,6 +1,16 @@
 # FabricJS Design Tool
 
-> A comprehensive, modern design tool built with Fabric.js and React - ready for production use in any JavaScript framework.
+> A comprehensive, modern design tool built with## 📚 Documentation
+
+- [📖 **Getting Started**](https://rifrocket.github.io/fabricjs-design-tool/docs/getting-started.html) - Installation, setup, and basic usage
+- [🎨 **Core API Reference**](https://rifrocket.github.io/fabricjs-design-tool/docs/core-api.html) - Framework-agnostic API documentation
+- [⚛️ **React Components**](https://rifrocket.github.io/fabricjs-design-tool/docs/react-components.html) - React UI components reference
+- [💡 **Examples**](https://rifrocket.github.io/fabricjs-design-tool/docs/examples.html) - Practical usage examples and code snippets
+- [🎨 **Customization Guide**](https://rifrocket.github.io/fabricjs-design-tool/docs/customization.html) - Theming, custom shapes, and plugins
+- [📈 **Migration Guide**](https://rifrocket.github.io/fabricjs-design-tool/docs/migration.html) - Upgrading between versions
+- [🔧 **Troubleshooting**](https://rifrocket.github.io/fabricjs-design-tool/docs/troubleshooting.html) - Common issues and solutions
+- [🤝 **Contributing**](./CONTRIBUTING.md) - How to contribute to the project
+- [📋 **Changelog**](./CHANGELOG.md) - Version history and changesand React - ready for production use in any JavaScript framework.
 
 [![npm version](https://badge.fury.io/js/%40rifrocket%2Ffabric-design-editor.svg)](https://badge.fury.io/js/%40rifrocket%2Ffabric-design-editor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -12,7 +22,7 @@
 - 🔧 **Framework Agnostic Core** - Use with React, Vue, Angular, or vanilla JS
 - ⚛️ **React Components** - Pre-built UI components for React apps
 - 📱 **Responsive Design** - Works on desktop and mobile
-- � **TypeScript Support** - Full type definitions included
+- 🔒 **TypeScript Support** - Full type definitions included
 - 🚀 **Production Ready** - Optimized builds and tree-shaking
 - 📦 **Modular Architecture** - Import only what you need
 
@@ -72,13 +82,13 @@ function DesignApp() {
 
 ## 📚 Documentation
 
-- [📖 **Getting Started**](./docs/getting-started.md) - Installation, setup, and basic usage
-- [🎨 **Core API Reference**](./docs/core-api.md) - Framework-agnostic API documentation
-- [⚛️ **React Components**](./docs/react-components.md) - React UI components reference
-- [� **Examples**](./docs/examples.md) - Practical usage examples and code snippets
-- [🎨 **Customization Guide**](./docs/customization.md) - Theming, custom shapes, and plugins
-- [� **Migration Guide**](./docs/migration.md) - Upgrading between versions
-- [🔧 **Troubleshooting**](./docs/troubleshooting.md) - Common issues and solutions
+- [📖 **Getting Started**](https://rifrocket.github.io/fabricjs-design-tool/docs/getting-started.html) - Installation, setup, and basic usage
+- [🎨 **Core API Reference**](https://rifrocket.github.io/fabricjs-design-tool/docs/core-api.html) - Framework-agnostic API documentation
+- [⚛️ **React Components**](https://rifrocket.github.io/fabricjs-design-tool/docs/react-components.html) - React UI components reference
+- [💡 **Examples**](https://rifrocket.github.io/fabricjs-design-tool/docs/examples.html) - Practical usage examples and code snippets
+- [🎨 **Customization Guide**](https://rifrocket.github.io/fabricjs-design-tool/docs/customization.html) - Theming, custom shapes, and plugins
+- [📈 **Migration Guide**](https://rifrocket.github.io/fabricjs-design-tool/docs/migration.html) - Upgrading between versions
+- [🔧 **Troubleshooting**](https://rifrocket.github.io/fabricjs-design-tool/docs/troubleshooting.html) - Common issues and solutions
 - [🤝 **Contributing**](./CONTRIBUTING.md) - How to contribute to the project
 - [📋 **Changelog**](./CHANGELOG.md) - Version history and changes
 
@@ -150,7 +160,7 @@ function MyDesignTool() {
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Development Guide](./docs/development.md) for details on:
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details on:
 
 - Setting up the development environment
 - Code style and conventions
