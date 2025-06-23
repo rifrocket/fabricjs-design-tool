@@ -1,7 +1,7 @@
 {
   "name": "@rifrocket/fabricjs-design-tool",
   "private": false,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "description": "A comprehensive design tool built with Fabric.js and React - Framework agnostic core with React UI components",
   "keywords": [

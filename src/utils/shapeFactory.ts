@@ -143,7 +143,8 @@ export class ShapeFactory {
     };
 
     const polygon = new Polygon([...coordinates], defaultConfig) as CustomPolygon;
-    polygon.type = shapeType as any; // Type assertion needed due to SHAPE_COORDINATES key differences
+    // Set the shape type for identification
+    (polygon as CustomPolygon & { type: string }).type = shapeType;
     return polygon;
   }
 

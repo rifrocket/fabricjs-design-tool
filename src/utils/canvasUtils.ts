@@ -158,7 +158,7 @@ export class CanvasAligner {
       bottom: Math.max(...objects.map(obj => (obj.top || 0) + (obj.height || 0)))
     };
 
-    objects.forEach((obj: any) => {
+    objects.forEach((obj: FabricObject) => {
       switch (alignment) {
         case 'left':
           obj.set('left', bounds.left);
@@ -224,7 +224,10 @@ export class CanvasGroupManager {
 
     const ungroupedObjects: FabricObject[] = [];
     groupObjects.forEach((obj: FabricObject) => {
-      (group as any)._exitGroup(obj);
+      // Remove object from group properly
+      if ('_exitGroup' in group && typeof group._exitGroup === 'function') {
+        (group._exitGroup as (obj: FabricObject) => void)(obj);
+      }
       obj.set({ selectable: true, evented: true });
       obj.setCoords();
       this.canvas.add(obj);

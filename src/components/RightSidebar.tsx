@@ -105,7 +105,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({
       canvas.off('object:rotating', handleObjectRotating);
       canvas.off('object:modified', handleObjectModified);
     };
-  }, [canvas, selectedObject]);
+  }, [canvas, selectedObject, triggerUpdate]);
 
   // Update canvas dimensions state when canvas or canvasDimensions change
   useEffect(() => {

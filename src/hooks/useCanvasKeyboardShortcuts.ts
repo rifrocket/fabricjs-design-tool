@@ -641,6 +641,7 @@ export const useCanvasKeyboardShortcuts = (
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      // Capture the current value at cleanup time
       const currentShortcuts = shortcutsRef.current;
       if (currentShortcuts) {
         currentShortcuts.clear();

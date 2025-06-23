@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
-import { Canvas } from 'fabric';
+import { Canvas, FabricObject } from 'fabric';
 import { ShapeFactory } from '../utils/shapeFactory';
 import type { QRCodeOptions } from '../types/canvas';
 
 export const useShapeCreator = (
   canvas: Canvas | null,
-  addObjectToCanvas: (object: any, objectType: string) => void
+  addObjectToCanvas: (object: FabricObject, objectType: string) => void
 ) => {
   const addText = useCallback(() => {
     if (!canvas) return;

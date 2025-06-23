@@ -76,7 +76,7 @@ export class SmoothAlignmentGuides {
     this.clearCanvasContext();
   }
 
-  private handleObjectMoving(e: any) {
+  private handleObjectMoving(e: { target: FabricObject; e?: Event }) {
     if (!this.isEnabled) return;
     
     // Throttle updates for performance
@@ -91,7 +91,7 @@ export class SmoothAlignmentGuides {
     this.updateGuidelines();
   }
 
-  private handleSelectionChange(e: any) {
+  private handleSelectionChange(e: { selected?: FabricObject[]; deselected?: FabricObject[] }) {
     this.activeObject = e.selected?.[0] || null;
     if (!this.isMoving) {
       this.clearGuidelines();

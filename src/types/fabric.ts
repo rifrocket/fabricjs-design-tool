@@ -139,3 +139,50 @@ export type CanvasEvent =
   | 'mouse:up'
   | 'mouse:move'
   | 'mouse:wheel';
+
+// Enhanced event handler types
+export interface FabricMouseEvent {
+  e: MouseEvent;
+  target?: FabricObject;
+  pointer?: fabric.Point;
+  absolutePointer?: fabric.Point;
+}
+
+export interface FabricSelectionEvent {
+  e?: MouseEvent;
+  selected?: FabricObject[];
+  deselected?: FabricObject[];
+  target?: FabricObject;
+}
+
+export interface FabricObjectEvent {
+  e?: MouseEvent;
+  target: FabricObject;
+  transform?: fabric.Transform;
+}
+
+// Enhanced canvas management types
+export interface CanvasEventHandlers {
+  onObjectAdded?: (event: FabricObjectEvent) => void;
+  onObjectRemoved?: (event: FabricObjectEvent) => void;
+  onObjectModified?: (event: FabricObjectEvent) => void;
+  onSelectionCreated?: (event: FabricSelectionEvent) => void;
+  onSelectionUpdated?: (event: FabricSelectionEvent) => void;
+  onSelectionCleared?: (event: FabricSelectionEvent) => void;
+  onMouseDown?: (event: FabricMouseEvent) => void;
+  onMouseUp?: (event: FabricMouseEvent) => void;
+  onMouseMove?: (event: FabricMouseEvent) => void;
+}
+
+// QR Code specific types
+export interface QRCodeEventData {
+  type: string;
+  content: string;
+  options: Record<string, unknown>;
+}
+
+// Shape creation event data
+export interface ShapeEventData {
+  shapeType: string;
+  options: ShapeOptions;
+}

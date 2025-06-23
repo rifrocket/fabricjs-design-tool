@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Canvas, FabricObject, Text } from 'fabric';
-import type { CanvasState, CanvasObject, AlignmentGuidesConfig } from '../types/canvas';
+import type { CanvasState, CanvasObject, AlignmentGuidesConfig, ObjectType } from '../types/canvas';
 import { CANVAS_DEFAULTS } from '../utils/constants';
 import { generateId, formatObjectName } from '../utils/helpers';
 import { useAlignmentGuides, type AlignmentGuidesOptions } from './useAlignmentGuides';
@@ -62,22 +62,8 @@ export const useCanvasManager = (canvasRef: React.RefObject<HTMLCanvasElement | 
   const keyboardShortcuts = useCanvasKeyboardShortcuts(canvasState.canvas, {
     enabled: true,
     enableClipboard: true,
-  });
-
-  // Initialize canvas
-  useEffect(() => {
-    if (canvasRef.current && !canvasState.canvas) {
-      initializeCanvas();
-    }
-
-    return () => {
-      if (canvasState.canvas) {
-        canvasState.canvas.dispose();
-      }
-    };
-  }, []);
-
-  const initializeCanvas = () => {
+  });  // Initialize canvas function
+  const initializeCanvas = useCallback(() => {
     if (!canvasRef.current) return;
 
     const canvasEl = canvasRef.current;
@@ -107,7 +93,7 @@ export const useCanvasManager = (canvasRef: React.RefObject<HTMLCanvasElement | 
     setupInitialContent(canvas);
 
     setCanvasState(prev => ({ ...prev, canvas }));
-    
+
     // Initialize undo/redo system with callback
     setTimeout(() => {
       const historyUpdateCallback = () => {
@@ -132,7 +118,20 @@ export const useCanvasManager = (canvasRef: React.RefObject<HTMLCanvasElement | 
       // Initial state update
       historyUpdateCallback();
     }, 100);
-  };
+  }, [canvasRef]);
+
+  // Initialize canvas
+  useEffect(() => {
+    if (canvasRef.current && !canvasState.canvas) {
+      initializeCanvas();
+    }
+
+    return () => {
+      if (canvasState.canvas) {
+        canvasState.canvas.dispose();
+      }
+    };
+  }, [canvasRef, canvasState.canvas, initializeCanvas]);
 
   const setupCanvasEventHandlers = (canvas: Canvas) => {
     canvas.on('selection:created', handleSelectionChange);
@@ -143,7 +142,7 @@ export const useCanvasManager = (canvasRef: React.RefObject<HTMLCanvasElement | 
     // Note: object:modified and path:created are now handled by FabricUndoRedo
   };
 
-  const handleSelectionChange = (e: any) => {
+  const handleSelectionChange = (e: { selected?: FabricObject[]; deselected?: FabricObject[] }) => {
     const selectedObjects = canvasState.canvas?.getActiveObjects() || [];
     const isGrouped = selectedObjects.length === 1 && selectedObjects[0].type === 'group';
     
@@ -164,6 +163,7 @@ export const useCanvasManager = (canvasRef: React.RefObject<HTMLCanvasElement | 
 
   const handleObjectChange = useCallback(() => {
     setTimeout(() => updateCanvasObjects(), 50);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setupInitialContent = (canvas: Canvas) => {
@@ -192,10 +192,10 @@ export const useCanvasManager = (canvasRef: React.RefObject<HTMLCanvasElement | 
   const updateCanvasObjects = useCallback(() => {
     if (!canvasState.canvas) return;
     
-    const objects = canvasState.canvas.getObjects().map((obj: any, index: number) => ({
+    const objects = canvasState.canvas.getObjects().map((obj: FabricObject, index: number) => ({
       id: generateId('object'),
       name: formatObjectName(obj.type || 'object', index),
-      type: (obj as any).type || 'text',
+      type: (obj.type || 'text') as ObjectType,
       object: obj
     }));
     

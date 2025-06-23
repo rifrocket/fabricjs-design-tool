@@ -15,10 +15,10 @@ export * from './utils/historyManager';
 export * from './utils/shapeFactory';
 export * from './utils/performance';
 export * from './utils/helpers';
-export * from './utils/customAlignmentGuides';
 export * from './utils/smoothAlignmentGuides';
 export * from './utils/advancedQRGenerator';
 export * from './utils/fabricUndoRedo';
+export * from './utils/errorHandling';
 
 // Constants
 export { EXPORT_FORMATS } from './utils/constants';
