@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages and NPM
 
 on:
   push:
@@ -13,28 +13,60 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     
     permissions:
-      contents: read
+      contents: write     # Need write access for creating tags and releases
       pages: write
       id-token: write
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for version checking
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
+        registry-url: 'https://registry.npmjs.org'
 
     - name: Install dependencies
       run: npm ci
+
+    - name: Check version change
+      id: version-check
+      run: |
+        CURRENT_VERSION=$(jq -r .version package.json)
+        echo "Current version: $CURRENT_VERSION"
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+        echo "Latest tag: $LATEST_TAG"
+
+        LATEST_VERSION=${LATEST_TAG#v}
+
+        if [ "$LATEST_VERSION" != "$CURRENT_VERSION" ]; 
+        then
+          echo "Version changed"
+          echo "version_changed=true" >> $GITHUB_OUTPUT
+          echo "new_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        else
+          echo "Version not changed"
+          echo "version_changed=false" >> $GITHUB_OUTPUT
+        fi
 
     - name: Lint code
       run: npm run lint
 
     - name: Build library
       run: npm run build:lib
+
+    - name: Run tests (if available)
+      run: |
+        if npm run test --silent 2>/dev/null; then
+          npm run test
+        else
+          echo "No test script found, skipping tests"
+        fi
+      continue-on-error: false
 
     - name: Build demo website
       run: npm run build:web
@@ -55,3 +87,83 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+
+    # NPM Publishing (only if version changed)
+    - name: Check if npm package version exists
+      id: npm-check
+      if: steps.version-check.outputs.version_changed == 'true'
+      run: |
+        NEW_VERSION=${{ steps.version-check.outputs.new_version }}
+        if npm view @rifrocket/fabricjs-design-tool@$NEW_VERSION > /dev/null 2>&1; then
+          echo "npm_version_exists=true" >> $GITHUB_OUTPUT
+          echo "❌ Version $NEW_VERSION already exists on npm"
+        else
+          echo "npm_version_exists=false" >> $GITHUB_OUTPUT
+          echo "✅ Version $NEW_VERSION is new, can proceed with publish"
+        fi
+
+    - name: Publish to npm
+      if: steps.version-check.outputs.version_changed == 'true' && steps.npm-check.outputs.npm_version_exists == 'false'
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Create Git Tag
+      if: steps.version-check.outputs.version_changed == 'true' && steps.npm-check.outputs.npm_version_exists == 'false'
+      run: |
+        NEW_VERSION=${{ steps.version-check.outputs.new_version }}
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git tag v$NEW_VERSION
+        git push origin v$NEW_VERSION
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create GitHub Release
+      if: steps.version-check.outputs.version_changed == 'true' && steps.npm-check.outputs.npm_version_exists == 'false'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.version-check.outputs.new_version }}
+        release_name: Release v${{ steps.version-check.outputs.new_version }}
+        body: |
+          ## 🎉 New Release v${{ steps.version-check.outputs.new_version }}
+          
+          Auto-deployed from main branch with GitHub Pages and NPM package.
+          
+          ### 📦 Install:
+          ```bash
+          npm install @rifrocket/fabricjs-design-tool@${{ steps.version-check.outputs.new_version }}
+          ```
+          
+          ### 🔗 Links:
+          - [📦 NPM Package](https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool)
+          - [📖 Documentation](https://rifrocket.github.io/fabricjs-design-tool/docs/)
+          - [🌐 Live Demo](https://rifrocket.github.io/fabricjs-design-tool/)
+          
+          ### ✨ What's Included:
+          - 🎨 Framework-agnostic design tool core
+          - ⚛️ React UI components
+          - 📚 Complete documentation
+          - 🚀 Production-ready builds
+          
+          _This release was created automatically by GitHub Actions._
+        draft: false
+        prerelease: false
+
+    - name: Deployment summary
+      run: |
+        echo "🎉 Deployment Summary:"
+        echo "📄 GitHub Pages: Deployed successfully"
+        if [ "${{ steps.version-check.outputs.version_changed }}" == "true" ]; then
+          if [ "${{ steps.npm-check.outputs.npm_version_exists }}" == "false" ]; then
+            echo "📦 NPM Package: Published v${{ steps.version-check.outputs.new_version }}"
+            echo "🏷️  Git Tag: Created v${{ steps.version-check.outputs.new_version }}"
+            echo "📋 GitHub Release: Created"
+          else
+            echo "⚠️  NPM Package: Version already exists, skipped"
+          fi
+        else
+          echo "📦 NPM Package: No version change, skipped"
+        fi

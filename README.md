@@ -117,6 +117,18 @@ npm run dev
 - `npm run lint:fix` - Auto-fix linting issues
 - `npm run clean` - Clean build artifacts
 
+### 🚀 Automated Deployment
+This project uses GitHub Actions for automated deployment:
+
+- **GitHub Pages**: Auto-deploys documentation and demo on every push to `main`
+- **NPM Publishing**: Auto-publishes to npm when `package.json` version changes
+- **Releases**: Auto-creates GitHub releases with tags when version changes
+
+To publish a new version:
+1. Update the version in `package.json`
+2. Push to `main` branch
+3. GitHub Actions handles the rest automatically!
+
 ### 🏗️ Development Workflow
 1. Fork the repository
 2. Create a feature branch
