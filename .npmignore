@@ -1,0 +1,75 @@
+# Development files
+src/
+docs/
+public/
+dist/
+node_modules/
+*.log
+*.tgz
+
+# Example files (for documentation only)
+example-*.js
+example-*.tsx
+
+# Development configuration
+.env*
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build configuration
+vite.config.ts
+vitest.config.ts
+rollup.config.js
+tsconfig.json
+tsconfig.lib.json
+eslint.config.js
+tailwind.config.js
+postcss.config.js
+
+# Development scripts and assets
+index.html
+*.md.backup
+
+# Git and CI
+.git/
+.github/
+.gitignore
+
+# Temporary files and directories
+temp/
+tmp/
+*.tmp
+*.temp
+.temp/
+.tmp/
+temp-*
+tmp-*
+*-temp
+*-tmp
+*.bak
+*.backup
+*~
+.#*
+#*#
+*.orig
+*.reject
+*.patch
+.scratch/
+scratch/
+debug/
+.debug/
+test-output/
+experiments/
+playground/
+.eslintcache
+.stylelintcache
+.tscache/
+
+# Keep important files
+!README.md
+!LICENSE
+!CHANGELOG.md
+!lib/

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customization - FabricJS Design Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-tertiary: #edf2f7;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-primary);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { 
+            font-size: 2rem; 
+            margin-top: 3rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        h3 { 
+            font-size: 1.5rem; 
+            margin-top: 2rem;
+            color: var(--primary-color);
+        }
+        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Code Blocks */
+        pre, code {
+            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        }
+
+        code {
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--text-primary);
+        }
+
+        pre {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.9rem;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><span class="emoji">🔧</span>Customization Guide</h1>
+            <p>Learn how to customize and extend the FabricJS Design Tool.</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="container">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="getting-started.html">Getting Started</a>
+                <a href="core-api.html">Core API</a>
+                <a href="react-components.html">React Components</a>
+                <a href="examples.html">Examples</a>
+                <a href="customization.html" class="active">Customization</a>
+                <a href="migration.html">Migration</a>
+                <a href="troubleshooting.html">Troubleshooting</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <h2><span class="emoji">🎨</span>Theming & Styling</h2>
+            
+            <h3>CSS Variables</h3>
+            <p>Customize the appearance using CSS variables:</p>
+            <pre><code>:root {
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --text-primary: #2d3748;
+  --bg-primary: #ffffff;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Override for dark theme */
+[data-theme="dark"] {
+  --text-primary: #f7fafc;
+  --bg-primary: #1a202c;
+  --border-color: #2d3748;
+}</code></pre>
+
+            <h3>Component Styling</h3>
+            <pre><code>/* Custom toolbar styling */
+.fabric-design-toolbar {
+  background: linear-gradient(to right, #667eea, #764ba2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Custom canvas container */
+.fabric-canvas-container {
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  overflow: hidden;
+}</code></pre>
+
+            <h2><span class="emoji">🔧</span>Custom Tools</h2>
+
+            <h3>Creating Custom Shape Tools</h3>
+            <pre><code>import { shapeFactory } from 'fabricjs-design-tool';
+
+// Extend the shape factory
+const customShapeFactory = {
+  ...shapeFactory,
+  
+  createStar(options = {}) {
+    const star = new fabric.Polygon([
+      {x: 0, y: -50},
+      {x: 14, y: -20},
+      {x: 47, y: -15},
+      {x: 23, y: 7},
+      {x: 29, y: 40},
+      {x: 0, y: 25},
+      {x: -29, y: 40},
+      {x: -23, y: 7},
+      {x: -47, y: -15},
+      {x: -14, y: -20}
+    ], {
+      fill: '#ffeb3b',
+      stroke: '#f57f17',
+      strokeWidth: 2,
+      ...options
+    });
+    
+    return star;
+  },
+  
+  createHeart(options = {}) {
+    const heartPath = 'M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5 C2,5.42,4.42,3,7.5,3c1.74,0,3.41,0.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3 C19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35z';
+    
+    const heart = new fabric.Path(heartPath, {
+      fill: '#e91e63',
+      stroke: '#ad1457',
+      strokeWidth: 1,
+      scaleX: 2,
+      scaleY: 2,
+      ...options
+    });
+    
+    return heart;
+  }
+};
+
+export default customShapeFactory;</code></pre>
+
+            <h3>Custom Toolbar Component</h3>
+            <pre><code>import React from 'react';
+import { LeftSidebar } from 'fabricjs-design-tool/ui';
+
+const CustomToolbar = ({ canvas, onToolSelect }) => {
+  const customTools = [
+    {
+      id: 'star',
+      name: 'Star',
+      icon: '⭐',
+      action: () => {
+        const star = customShapeFactory.createStar();
+        canvas.add(star);
+      }
+    },
+    {
+      id: 'heart',
+      name: 'Heart',
+      icon: '❤️',
+      action: () => {
+        const heart = customShapeFactory.createHeart();
+        canvas.add(heart);
+      }
+    }
+  ];
+
+  return (
+    &lt;LeftSidebar
+      tools={customTools}
+      onToolSelect={onToolSelect}
+      className="custom-toolbar"
+    /&gt;
+  );
+};</code></pre>
+
+            <h2><span class="emoji">⚡</span>Custom Hooks</h2>
+
+            <h3>Custom Canvas Hook</h3>
+            <pre><code>import { useState, useEffect } from 'react';
+import { useCanvasManager } from 'fabricjs-design-tool';
+
+export const useCustomCanvas = (canvas, options = {}) => {
+  const canvasManager = useCanvasManager(canvas, options);
+  const [customState, setCustomState] = useState({
+    snapToGrid: false,
+    gridSize: 20,
+    showRulers: false
+  });
+
+  const toggleGridSnap = () => {
+    setCustomState(prev => ({
+      ...prev,
+      snapToGrid: !prev.snapToGrid
+    }));
+  };
+
+  const setGridSize = (size) => {
+    setCustomState(prev => ({
+      ...prev,
+      gridSize: size
+    }));
+  };
+
+  useEffect(() => {
+    if (canvas && customState.snapToGrid) {
+      canvas.on('object:moving', (e) => {
+        const obj = e.target;
+        const gridSize = customState.gridSize;
+        
+        obj.set({
+          left: Math.round(obj.left / gridSize) * gridSize,
+          top: Math.round(obj.top / gridSize) * gridSize
+        });
+      });
+    }
+  }, [canvas, customState.snapToGrid, customState.gridSize]);
+
+  return {
+    ...canvasManager,
+    ...customState,
+    toggleGridSnap,
+    setGridSize
+  };
+};</code></pre>
+
+            <h2><span class="emoji">🎛️</span>Custom Properties Panel</h2>
+
+            <h3>Advanced Properties Component</h3>
+            <pre><code>import React, { useState, useEffect } from 'react';
+
+const CustomPropertiesPanel = ({ selectedObject, canvas }) => {
+  const [properties, setProperties] = useState({});
+
+  useEffect(() => {
+    if (selectedObject) {
+      setProperties({
+        fill: selectedObject.fill,
+        stroke: selectedObject.stroke,
+        strokeWidth: selectedObject.strokeWidth,
+        opacity: selectedObject.opacity,
+        // Custom properties
+        shadow: selectedObject.shadow,
+        gradient: selectedObject.fill?.type === 'gradient'
+      });
+    }
+  }, [selectedObject]);
+
+  const updateProperty = (key, value) => {
+    if (selectedObject) {
+      selectedObject.set(key, value);
+      canvas.renderAll();
+      setProperties(prev => ({ ...prev, [key]: value }));
+    }
+  };
+
+  const addShadow = () => {
+    if (selectedObject) {
+      selectedObject.set('shadow', new fabric.Shadow({
+        color: 'rgba(0,0,0,0.3)',
+        blur: 10,
+        offsetX: 5,
+        offsetY: 5
+      }));
+      canvas.renderAll();
+    }
+  };
+
+  const addGradient = () => {
+    if (selectedObject) {
+      const gradient = new fabric.Gradient({
+        type: 'linear',
+        coords: { x1: 0, y1: 0, x2: selectedObject.width, y2: 0 },
+        colorStops: [
+          { offset: 0, color: '#ff0000' },
+          { offset: 1, color: '#0000ff' }
+        ]
+      });
+      
+      selectedObject.set('fill', gradient);
+      canvas.renderAll();
+    }
+  };
+
+  return (
+    &lt;div className="custom-properties-panel"&gt;
+      &lt;h3&gt;Properties&lt;/h3&gt;
+      
+      {/* Basic properties */}
+      &lt;div className="property-group"&gt;
+        &lt;label&gt;Fill Color&lt;/label&gt;
+        &lt;input
+          type="color"
+          value={properties.fill || '#000000'}
+          onChange={(e) =&gt; updateProperty('fill', e.target.value)}
+        /&gt;
+      &lt;/div&gt;
+
+      &lt;div className="property-group"&gt;
+        &lt;label&gt;Opacity&lt;/label&gt;
+        &lt;input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={properties.opacity || 1}
+          onChange={(e) =&gt; updateProperty('opacity', parseFloat(e.target.value))}
+        /&gt;
+      &lt;/div&gt;
+
+      {/* Advanced properties */}
+      &lt;div className="property-group"&gt;
+        &lt;button onClick={addShadow}&gt;Add Shadow&lt;/button&gt;
+        &lt;button onClick={addGradient}&gt;Add Gradient&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};</code></pre>
+
+            <h2><span class="emoji">🔌</span>Plugin System</h2>
+
+            <h3>Creating Plugins</h3>
+            <pre><code>// plugins/animation-plugin.js
+export const AnimationPlugin = {
+  name: 'Animation',
+  version: '1.0.0',
+  
+  install(canvas, options = {}) {
+    // Add animation methods to canvas
+    canvas.animateObject = (object, properties, duration = 1000) => {
+      return new Promise((resolve) => {
+        object.animate(properties, {
+          duration,
+          onChange: () => canvas.renderAll(),
+          onComplete: resolve
+        });
+      });
+    };
+
+    canvas.fadeIn = (object, duration = 500) => {
+      object.set('opacity', 0);
+      return canvas.animateObject(object, { opacity: 1 }, duration);
+    };
+
+    canvas.fadeOut = (object, duration = 500) => {
+      return canvas.animateObject(object, { opacity: 0 }, duration);
+    };
+
+    canvas.bounce = (object, height = 50, duration = 800) => {
+      const originalTop = object.top;
+      return canvas.animateObject(object, 
+        { top: originalTop - height }, 
+        duration / 2
+      ).then(() => 
+        canvas.animateObject(object, 
+          { top: originalTop }, 
+          duration / 2
+        )
+      );
+    };
+  }
+};
+
+// Usage
+import { AnimationPlugin } from './plugins/animation-plugin';
+
+const canvas = new fabric.Canvas('canvas');
+AnimationPlugin.install(canvas);
+
+// Now you can use animations
+await canvas.fadeIn(myObject);
+await canvas.bounce(myObject);</code></pre>
+
+            <h2><span class="emoji">🚀</span>Performance Optimization</h2>
+
+            <h3>Custom Optimization Hook</h3>
+            <pre><code>import { useOptimization } from 'fabricjs-design-tool';
+
+export const useAdvancedOptimization = (canvas) => {
+  const basicOptimization = useOptimization(canvas);
+  
+  useEffect(() => {
+    if (!canvas) return;
+
+    // Custom optimizations
+    const optimizeForMobile = () => {
+      if (window.innerWidth < 768) {
+        canvas.set({
+          selection: false,
+          hoverCursor: 'default',
+          moveCursor: 'default'
+        });
+        
+        // Reduce render frequency on mobile
+        canvas.renderOnAddRemove = false;
+        canvas.skipTargetFind = true;
+      }
+    };
+
+    const optimizeForLargeCanvas = () => {
+      const objectCount = canvas.getObjects().length;
+      
+      if (objectCount > 100) {
+        canvas.set({
+          renderOnAddRemove: false,
+          skipTargetFind: true
+        });
+        
+        // Batch render updates
+        let renderTimeout;
+        const batchRender = () => {
+          clearTimeout(renderTimeout);
+          renderTimeout = setTimeout(() => {
+            canvas.renderAll();
+          }, 16); // ~60fps
+        };
+        
+        canvas.on('object:modified', batchRender);
+        canvas.on('object:moving', batchRender);
+      }
+    };
+
+    optimizeForMobile();
+    optimizeForLargeCanvas();
+    
+    return () => {
+      canvas.off('object:modified');
+      canvas.off('object:moving');
+    };
+  }, [canvas]);
+
+  return {
+    ...basicOptimization,
+    // Add custom optimization methods
+  };
+};</code></pre>
+
+            <h2><span class="emoji">🎯</span>Best Practices</h2>
+
+            <ul>
+                <li><strong>Performance:</strong> Use object pooling for frequently created/destroyed objects</li>
+                <li><strong>Memory:</strong> Dispose of canvas instances properly to prevent memory leaks</li>
+                <li><strong>Responsiveness:</strong> Implement debounced updates for real-time property changes</li>
+                <li><strong>Accessibility:</strong> Add proper ARIA labels and keyboard navigation</li>
+                <li><strong>Error Handling:</strong> Wrap canvas operations in try-catch blocks</li>
+                <li><strong>State Management:</strong> Use proper state management for complex applications</li>
+            </ul>
+
+            <h2><span class="emoji">📚</span>Next Steps</h2>
+            <ul>
+                <li><a href="examples.html"><strong>📋 Examples</strong></a> - See customization in action</li>
+                <li><a href="core-api.html"><strong>🎨 Core API</strong></a> - Detailed API reference</li>
+                <li><a href="troubleshooting.html"><strong>🔧 Troubleshooting</strong></a> - Common issues and solutions</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
+        </div>
+    </div>
+</body>
+</html>

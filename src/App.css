@@ -1,0 +1,28 @@
+/* App-specific styles */
+.App {
+  text-align: center;
+}
+
+/* Fabric.js canvas container styles */
+.canvas-container {
+  margin: 0 auto;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

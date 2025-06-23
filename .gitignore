@@ -1,0 +1,104 @@
+# Dependencies
+node_modules
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+lib/
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache
+.cache/
+.parcel-cache/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+.temp/
+.tmp/
+temp-*
+tmp-*
+*-temp*
+*-tmp*
+test-temp*
+*.bak
+*.backup
+*~
+.#*
+#*#
+
+# Development artifacts
+*.orig
+*.reject
+*.patch
+.scratch/
+scratch/
+debug/
+.debug/
+test-output/
+experiments/
+playground/
+
+# Editor temporary files
+*~
+.#*
+#*#
+*.swp
+*.swo
+*.swn
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/*.code-workspace
+
+# Development tools output
+.eslintcache
+.stylelintcache
+.tscache/
+*.pid
+*.seed
+*.pid.lock

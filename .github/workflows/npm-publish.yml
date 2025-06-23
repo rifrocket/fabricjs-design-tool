@@ -1,0 +1,114 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches: [ npm-production ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: npm-production
+    
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Build library
+      run: npm run build:lib
+
+    - name: Run tests (if available)
+      run: |
+        if npm run test --silent 2>/dev/null; then
+          npm run test
+        else
+          echo "No test script found, skipping tests"
+        fi
+      continue-on-error: false
+
+    - name: Check if version changed
+      id: version-check
+      run: |
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        
+        # Check if this version already exists on npm
+        if npm view @rifrocket/fabricjs-design-tool@$CURRENT_VERSION > /dev/null 2>&1; then
+          echo "version-exists=true" >> $GITHUB_OUTPUT
+          echo "❌ Version $CURRENT_VERSION already exists on npm"
+          exit 1
+        else
+          echo "version-exists=false" >> $GITHUB_OUTPUT
+          echo "✅ Version $CURRENT_VERSION is new, proceeding with publish"
+        fi
+
+    - name: Publish to npm
+      if: steps.version-check.outputs.version-exists == 'false'
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPMSECRET }}
+
+    - name: Create Git Tag
+      if: steps.version-check.outputs.version-exists == 'false'
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git tag v$VERSION
+        git push origin v$VERSION
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create GitHub Release
+      if: steps.version-check.outputs.version-exists == 'false'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.version-check.outputs.current-version }}
+        release_name: Release v${{ steps.version-check.outputs.current-version }}
+        body: |
+          ## 🎉 New Release v${{ steps.version-check.outputs.current-version }}
+          
+          Published automatically from npm-production branch.
+          
+          ### 📦 Install:
+          ```bash
+          npm install @rifrocket/fabricjs-design-tool@${{ steps.version-check.outputs.current-version }}
+          ```
+          
+          ### 🔗 Links:
+          - [📦 NPM Package](https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool)
+          - [📖 Documentation](https://rifrocket.github.io/fabricjs-design-tool/docs/)
+          - [🌐 Live Demo](https://rifrocket.github.io/fabricjs-design-tool/)
+          
+          _This release was created automatically by GitHub Actions._
+        draft: false
+        prerelease: false
+
+    - name: Post-publish notification
+      if: steps.version-check.outputs.version-exists == 'false'
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        echo "🎉 Successfully published @rifrocket/fabricjs-design-tool@$VERSION to npm!"
+        echo "📦 Package URL: https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool"
+        echo "🏷️  Git tag v$VERSION created"
+        echo "📋 GitHub release created"

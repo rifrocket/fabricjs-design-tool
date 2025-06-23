@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributing Guide - FabricJS Design Tool</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+        }
+        .nav {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .nav a {
+            color: #3182ce;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 500;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        h1 { color: #2d3748; border-bottom: 3px solid #3182ce; padding-bottom: 0.5rem; }
+        h2 { color: #2d3748; margin-top: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        h3 { color: #4a5568; margin-top: 1.5rem; }
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        code {
+            background: #edf2f7;
+            color: #2d3748;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .highlight-box {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .warning-box {
+            background: #fef5e7;
+            border-left: 4px solid #ed8936;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .checklist {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+        .checklist ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            background: #3182ce;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            margin: 0.25rem;
+        }
+        .btn:hover {
+            background: #2c5282;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤝 Contributing to FabricJS Design Tool</h1>
+        <p>Complete development setup guide and contribution workflow</p>
+    </div>
+
+    <div class="nav">
+        <a href="index.html">📚 Documentation Home</a>
+        <a href="getting-started.html">📖 Getting Started</a>
+        <a href="core-api.html">🎨 Core API</a>
+        <a href="react-components.html">⚛️ React Components</a>
+        <a href="../index.html">🌐 Live Demo</a>
+    </div>
+
+    <div class="highlight-box">
+        <strong>🎉 Thank you for your interest in contributing!</strong> This guide will help you get started with the development environment and understand our contribution process.
+    </div>
+
+    <h2>🚀 Quick Start for Contributors</h2>
+
+    <h3>Prerequisites</h3>
+    <ul>
+        <li><strong>Node.js</strong> (v18 or higher)</li>
+        <li><strong>npm</strong> (v9 or higher)</li>
+        <li><strong>Git</strong></li>
+    </ul>
+
+    <h3>Development Setup</h3>
+
+    <p><strong>1. Fork and Clone the Repository</strong></p>
+    <pre><code># Fork the repository on GitHub, then clone your fork
+git clone https://github.com/YOUR_USERNAME/fabricjs-design-tool.git
+cd fabricjs-design-tool
+
+# Add the original repository as upstream
+git remote add upstream https://github.com/rifrocket/fabricjs-design-tool.git</code></pre>
+
+    <p><strong>2. Install Dependencies</strong></p>
+    <pre><code>npm install</code></pre>
+
+    <p><strong>3. Verify Setup</strong></p>
+    <pre><code># Run linting to check code quality
+npm run lint
+
+# Build the library
+npm run build:lib
+
+# Start development server
+npm run dev</code></pre>
+
+    <h2>📋 Available Commands</h2>
+
+    <h3>Development Commands</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Command</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>npm run dev</code></td>
+                <td>Start development server with hot reload</td>
+            </tr>
+            <tr>
+                <td><code>npm run build</code></td>
+                <td>Build both library and demo website</td>
+            </tr>
+            <tr>
+                <td><code>npm run build:lib</code></td>
+                <td>Build library only (for npm distribution)</td>
+            </tr>
+            <tr>
+                <td><code>npm run build:web</code></td>
+                <td>Build demo website only</td>
+            </tr>
+            <tr>
+                <td><code>npm run build:docs</code></td>
+                <td>Build website and copy documentation</td>
+            </tr>
+            <tr>
+                <td><code>npm run preview</code></td>
+                <td>Preview built website locally</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Code Quality Commands</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Command</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>npm run lint</code></td>
+                <td>Run ESLint to check code quality</td>
+            </tr>
+            <tr>
+                <td><code>npm run lint:fix</code></td>
+                <td>Automatically fix linting issues</td>
+            </tr>
+            <tr>
+                <td><code>npm run clean</code></td>
+                <td>Clean build artifacts and cache</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>🏗️ Project Structure</h2>
+    <pre><code>fabricjs-design-tool/
+├── src/                    # Source code
+│   ├── components/         # React UI components
+│   ├── hooks/             # Custom React hooks
+│   ├── utils/             # Utility functions
+│   └── types/             # TypeScript type definitions
+├── lib/                   # Built library output
+│   ├── core/              # Framework-agnostic core
+│   └── ui/                # React UI components
+├── docs/                  # Documentation (HTML)
+├── public/                # Demo website assets
+├── .github/               # GitHub Actions workflows
+├── package.json           # Project configuration
+├── tsconfig.json          # TypeScript configuration
+├── vite.config.ts         # Vite build configuration
+├── rollup.config.js       # Library build configuration
+├── eslint.config.js       # ESLint configuration
+└── tailwind.config.js     # Tailwind CSS configuration</code></pre>
+
+    <h2>🔧 Development Workflow</h2>
+
+    <h3>1. Create a Feature Branch</h3>
+    <pre><code># Update your fork
+git checkout main
+git pull upstream main
+
+# Create a new feature branch
+git checkout -b feature/your-feature-name</code></pre>
+
+    <h3>2. Make Your Changes</h3>
+    <ul>
+        <li>Follow the existing code style and patterns</li>
+        <li>Add TypeScript types for new functions/components</li>
+        <li>Update documentation if needed</li>
+        <li>Test your changes thoroughly</li>
+    </ul>
+
+    <h3>3. Code Quality Checks</h3>
+    <pre><code># Run linting
+npm run lint
+
+# Fix any linting issues
+npm run lint:fix
+
+# Build to ensure no errors
+npm run build:lib</code></pre>
+
+    <h3>4. Commit Your Changes</h3>
+    <pre><code># Stage your changes
+git add .
+
+# Commit with a descriptive message
+git commit -m "feat: add new feature description"
+
+# Push to your fork
+git push origin feature/your-feature-name</code></pre>
+
+    <h3>5. Create a Pull Request</h3>
+    <ol>
+        <li>Go to the original repository on GitHub</li>
+        <li>Click "New Pull Request"</li>
+        <li>Select your feature branch</li>
+        <li>Fill out the PR template with details about your changes</li>
+    </ol>
+
+    <h2>📝 Code Style Guidelines</h2>
+
+    <h3>TypeScript</h3>
+    <ul>
+        <li>Use proper TypeScript types (avoid <code>any</code> when possible)</li>
+        <li>Export interfaces and types from appropriate files</li>
+        <li>Use meaningful variable and function names</li>
+    </ul>
+
+    <h3>React</h3>
+    <ul>
+        <li>Use functional components with hooks</li>
+        <li>Follow React best practices for hooks dependencies</li>
+        <li>Use proper prop types and component interfaces</li>
+    </ul>
+
+    <h3>Naming Conventions</h3>
+    <ul>
+        <li><strong>Files</strong>: Use kebab-case (<code>my-component.tsx</code>)</li>
+        <li><strong>Components</strong>: Use PascalCase (<code>MyComponent</code>)</li>
+        <li><strong>Functions</strong>: Use camelCase (<code>myFunction</code>)</li>
+        <li><strong>Constants</strong>: Use UPPER_SNAKE_CASE (<code>MY_CONSTANT</code>)</li>
+    </ul>
+
+    <h2>📚 Documentation</h2>
+
+    <h3>Code Documentation</h3>
+    <ul>
+        <li>Add JSDoc comments for public functions</li>
+        <li>Document complex algorithms and business logic</li>
+        <li>Keep README and guides up to date</li>
+    </ul>
+
+    <h3>Example JSDoc</h3>
+    <pre><code>/**
+ * Creates a new rectangle shape with specified options
+ * @param options - Configuration options for the rectangle
+ * @returns A new fabric rectangle object
+ */
+function createRectangle(options: RectangleOptions): fabric.Rect {
+  // Implementation
+}</code></pre>
+
+    <h2>📦 Publishing (Maintainers Only)</h2>
+
+    <div class="warning-box">
+        <strong>⚠️ Note:</strong> Publishing is restricted to maintainers only. Contributors should focus on submitting pull requests.
+    </div>
+
+    <h3>Automated Publishing</h3>
+    <p>The project uses GitHub Actions for automated publishing:</p>
+    <ol>
+        <li><strong>Bump Version</strong>: <code>npm version patch|minor|major</code></li>
+        <li><strong>Push to npm-production</strong>: <code>git push origin npm-production</code></li>
+        <li><strong>Action Runs</strong>: Automatically builds, tests, and publishes</li>
+    </ol>
+
+    <h2>🤝 Pull Request Guidelines</h2>
+
+    <div class="checklist">
+        <h3>Before Submitting</h3>
+        <ul>
+            <li>☐ Code follows project style guidelines</li>
+            <li>☐ All tests pass</li>
+            <li>☐ Documentation is updated</li>
+            <li>☐ Linting passes without errors</li>
+            <li>☐ Build succeeds</li>
+        </ul>
+    </div>
+
+    <h3>PR Template</h3>
+    <pre><code>## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation update
+
+## Testing
+- [ ] Added tests for new functionality
+- [ ] All existing tests pass
+- [ ] Manually tested changes
+
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] No new warnings introduced</code></pre>
+
+    <h2>🔍 Debugging</h2>
+
+    <h3>Development Tools</h3>
+    <ul>
+        <li>Use browser developer tools for debugging</li>
+        <li>Check console for errors and warnings</li>
+        <li>Use React Developer Tools for component debugging</li>
+    </ul>
+
+    <h3>Common Issues</h3>
+    <ol>
+        <li><strong>Build Errors</strong>: Check TypeScript types and imports</li>
+        <li><strong>Linting Errors</strong>: Run <code>npm run lint:fix</code> to auto-fix</li>
+        <li><strong>Hot Reload Issues</strong>: Restart development server</li>
+    </ol>
+
+    <h2>🆘 Getting Help</h2>
+
+    <h3>Resources</h3>
+    <ul>
+        <li><a href="https://github.com/rifrocket/fabricjs-design-tool/issues">GitHub Issues</a> - Report bugs or request features</li>
+        <li><a href="https://github.com/rifrocket/fabricjs-design-tool/discussions">GitHub Discussions</a> - Ask questions and share ideas</li>
+        <li><a href="index.html">Documentation</a> - Complete API documentation</li>
+    </ul>
+
+    <h3>Community Guidelines</h3>
+    <ul>
+        <li>Be respectful and inclusive</li>
+        <li>Help others learn and grow</li>
+        <li>Follow the code of conduct</li>
+        <li>Provide constructive feedback</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>🎉 Thank you for contributing to FabricJS Design Tool!</strong><br>
+        Your contributions help make this project better for everyone. If you have any questions, don't hesitate to reach out through GitHub issues or discussions.
+    </div>
+
+    <div class="footer">
+        <p>📄 <strong>License:</strong> By contributing to this project, you agree that your contributions will be licensed under the same MIT License that covers the project.</p>
+        <p>
+            <a href="index.html">📚 Documentation Home</a> • 
+            <a href="https://github.com/rifrocket/fabricjs-design-tool">💻 GitHub Repository</a> • 
+            <a href="https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool">📦 NPM Package</a>
+        </p>
+    </div>
+</body>
+</html>
