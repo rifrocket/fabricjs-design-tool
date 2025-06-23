@@ -4,373 +4,359 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contributing Guide - FabricJS Design Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            500: '#667eea',
+                            600: '#5a67d8',
+                            700: '#4c51bf',
+                        },
+                        secondary: {
+                            500: '#764ba2',
+                            600: '#6b46c1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            line-height: 1.6;
-            color: #333;
+        .dropdown {
+            position: relative;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid #eee;
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 200px;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
         }
-        .nav {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            text-align: center;
+        .dropdown.active .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
-        .nav a {
-            color: #3182ce;
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #374151;
             text-decoration: none;
-            margin: 0 1rem;
-            font-weight: 500;
+            transition: background-color 0.15s ease;
         }
-        .nav a:hover {
-            text-decoration: underline;
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
         }
-        h1 { color: #2d3748; border-bottom: 3px solid #3182ce; padding-bottom: 0.5rem; }
-        h2 { color: #2d3748; margin-top: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
-        h3 { color: #4a5568; margin-top: 1.5rem; }
-        pre {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 1rem;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-size: 0.9rem;
+        .dropdown-item:first-child {
+            border-radius: 0.5rem 0.5rem 0 0;
         }
-        code {
-            background: #edf2f7;
-            color: #2d3748;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.9rem;
-        }
-        pre code {
-            background: none;
-            color: inherit;
-            padding: 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-        th, td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        th {
-            background: #f7fafc;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        .highlight-box {
-            background: #e6fffa;
-            border-left: 4px solid #38b2ac;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 0 6px 6px 0;
-        }
-        .warning-box {
-            background: #fef5e7;
-            border-left: 4px solid #ed8936;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 0 6px 6px 0;
-        }
-        .checklist {
-            background: #f0fff4;
-            border: 1px solid #9ae6b4;
-            padding: 1rem;
-            border-radius: 6px;
-            margin: 1rem 0;
-        }
-        .checklist ul {
-            margin: 0;
-            padding-left: 1.5rem;
-        }
-        .btn {
-            display: inline-block;
-            background: #3182ce;
-            color: white;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 500;
-            margin: 0.25rem;
-        }
-        .btn:hover {
-            background: #2c5282;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e2e8f0;
-            color: #718096;
+        .dropdown-item:last-child {
+            border-radius: 0 0 0.5rem 0.5rem;
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <h1>🤝 Contributing to FabricJS Design Tool</h1>
-        <p>Complete development setup guide and contribution workflow</p>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="logo.svg" alt="FabricJS Design Tool" class="h-8 w-auto"/>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="getting-started.html" class="text-gray-600 hover:text-primary-600 transition-colors">Getting Started</a>
+                    <a href="core-api.html" class="text-gray-600 hover:text-primary-600 transition-colors">Core API</a>
+                    <a href="react-components.html" class="text-gray-600 hover:text-primary-600 transition-colors">React Components</a>
+                    <a href="customization.html" class="text-gray-600 hover:text-primary-600 transition-colors">Customization</a>
+                    <a href="troubleshooting.html" class="text-gray-600 hover:text-primary-600 transition-colors">Troubleshooting</a>
+                    
+                    <!-- Contributor Menu -->
+                    <div class="dropdown">
+                        <button class="flex items-center space-x-1 text-primary-600 font-medium px-3 py-2 rounded-md" onclick="toggleDropdown()">
+                            <span>👥 Contributors</span>
+                            <svg class="w-4 h-4 transition-transform" id="dropdown-arrow" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="contributing.html" class="dropdown-item">
+                                <div class="flex items-center space-x-2">
+                                    <span>📝</span>
+                                    <div>
+                                        <div class="font-medium">Contributing Guide</div>
+                                        <div class="text-sm text-gray-500">How to contribute</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐙</span>
+                                    <div>
+                                        <div class="font-medium">GitHub Repository</div>
+                                        <div class="text-sm text-gray-500">Source code & issues</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐛</span>
+                                    <div>
+                                        <div class="font-medium">Report Issues</div>
+                                        <div class="text-sm text-gray-500">Bug reports & features</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">🤝 Contributing Guide</h1>
+            <p class="text-xl opacity-90 max-w-2xl">Help us make FabricJS Design Tool better! Complete development setup and contribution workflow.</p>
+        </div>
     </div>
 
-    <div class="nav">
-        <a href="index.html">📚 Documentation Home</a>
-        <a href="getting-started.html">📖 Getting Started</a>
-        <a href="core-api.html">🎨 Core API</a>
-        <a href="react-components.html">⚛️ React Components</a>
-        <a href="../index.html">🌐 Live Demo</a>
-    </div>
-
-    <div class="highlight-box">
-        <strong>🎉 Thank you for your interest in contributing!</strong> This guide will help you get started with the development environment and understand our contribution process.
-    </div>
-
-    <h2>🚀 Quick Start for Contributors</h2>
-
-    <h3>Prerequisites</h3>
-    <ul>
-        <li><strong>Node.js</strong> (v18 or higher)</li>
-        <li><strong>npm</strong> (v9 or higher)</li>
-        <li><strong>Git</strong></li>
-    </ul>
-
-    <h3>Development Setup</h3>
-
-    <p><strong>1. Fork and Clone the Repository</strong></p>
-    <pre><code># Fork the repository on GitHub, then clone your fork
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12">
+            
+            <!-- Quick Start -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🚀 Quick Start</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-3">1. Fork & Clone</h3>
+                        <div class="bg-blue-900 text-blue-100 p-4 rounded font-mono text-sm">
+                            <code># Fork the repository on GitHub, then clone your fork
 git clone https://github.com/YOUR_USERNAME/fabricjs-design-tool.git
-cd fabricjs-design-tool
+cd fabricjs-design-tool</code>
+                        </div>
+                    </div>
 
-# Add the original repository as upstream
-git remote add upstream https://github.com/rifrocket/fabricjs-design-tool.git</code></pre>
+                    <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-green-800 mb-3">2. Install Dependencies</h3>
+                        <div class="bg-green-900 text-green-100 p-4 rounded font-mono text-sm">
+                            <code># Install all dependencies
+npm install
 
-    <p><strong>2. Install Dependencies</strong></p>
-    <pre><code>npm install</code></pre>
+# Install global dependencies if needed
+npm install -g typescript rollup</code>
+                        </div>
+                    </div>
 
-    <p><strong>3. Verify Setup</strong></p>
-    <pre><code># Run linting to check code quality
-npm run lint
+                    <div class="bg-purple-50 border-l-4 border-purple-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-purple-800 mb-3">3. Start Development</h3>
+                        <div class="bg-purple-900 text-purple-100 p-4 rounded font-mono text-sm">
+                            <code># Start development server
+npm run dev
 
-# Build the library
-npm run build:lib
+# Build and watch for changes
+npm run build:watch</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-# Start development server
-npm run dev</code></pre>
+            <!-- Development Setup -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🛠️ Development Setup</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-4">Project Structure</h3>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <pre class="text-sm text-gray-800 font-mono">fabricjs-design-tool/
+├── src/                  # Source code
+│   ├── components/       # React components
+│   ├── hooks/           # Custom React hooks
+│   ├── utils/           # Utility functions
+│   └── types/           # TypeScript type definitions
+├── lib/                 # Built library files
+├── docs/                # Documentation
+├── examples/            # Example implementations
+├── tests/               # Test files
+└── scripts/             # Build and deployment scripts</pre>
+                        </div>
+                    </div>
 
-    <h2>📋 Available Commands</h2>
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-4">Available Commands</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-900 mb-2">Development</h4>
+                                <div class="space-y-2 text-sm font-mono">
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm run dev</code> - Start dev server</div>
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm run build:watch</code> - Watch and build</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-900 mb-2">Building</h4>
+                                <div class="space-y-2 text-sm font-mono">
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm run build</code> - Build for production</div>
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm run build:lib</code> - Build library only</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-900 mb-2">Testing</h4>
+                                <div class="space-y-2 text-sm font-mono">
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm test</code> - Run tests</div>
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm run test:watch</code> - Watch tests</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-900 mb-2">Quality</h4>
+                                <div class="space-y-2 text-sm font-mono">
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm run lint</code> - Lint code</div>
+                                    <div><code class="bg-gray-200 px-2 py-1 rounded">npm run type-check</code> - Check types</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <h3>Development Commands</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Command</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><code>npm run dev</code></td>
-                <td>Start development server with hot reload</td>
-            </tr>
-            <tr>
-                <td><code>npm run build</code></td>
-                <td>Build both library and demo website</td>
-            </tr>
-            <tr>
-                <td><code>npm run build:lib</code></td>
-                <td>Build library only (for npm distribution)</td>
-            </tr>
-            <tr>
-                <td><code>npm run build:web</code></td>
-                <td>Build demo website only</td>
-            </tr>
-            <tr>
-                <td><code>npm run build:docs</code></td>
-                <td>Build website and copy documentation</td>
-            </tr>
-            <tr>
-                <td><code>npm run preview</code></td>
-                <td>Preview built website locally</td>
-            </tr>
-        </tbody>
-    </table>
+            <!-- Contribution Guidelines -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">📋 Contribution Guidelines</h2>
+                
+                <div class="space-y-8">
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-yellow-800 mb-4">🎯 What We're Looking For</h3>
+                        <ul class="space-y-2 text-yellow-700">
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">•</span>
+                                <span><strong>Bug fixes:</strong> Help us squash bugs and improve stability</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">•</span>
+                                <span><strong>New features:</strong> Add useful functionality that benefits the community</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">•</span>
+                                <span><strong>Documentation:</strong> Improve docs, add examples, fix typos</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">•</span>
+                                <span><strong>Performance improvements:</strong> Make the library faster and more efficient</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">•</span>
+                                <span><strong>TypeScript improvements:</strong> Better type definitions and safety</span>
+                            </li>
+                        </ul>
+                    </div>
 
-    <h3>Code Quality Commands</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Command</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><code>npm run lint</code></td>
-                <td>Run ESLint to check code quality</td>
-            </tr>
-            <tr>
-                <td><code>npm run lint:fix</code></td>
-                <td>Automatically fix linting issues</td>
-            </tr>
-            <tr>
-                <td><code>npm run clean</code></td>
-                <td>Clean build artifacts and cache</td>
-            </tr>
-        </tbody>
-    </table>
+                    <div>
+                        <h3 class="text-xl font-semibold text-red-600 mb-4">📝 Code Style</h3>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                            <ul class="space-y-2 text-red-700">
+                                <li>✅ Use TypeScript for all new code</li>
+                                <li>✅ Follow existing naming conventions</li>
+                                <li>✅ Add JSDoc comments for public APIs</li>
+                                <li>✅ Keep functions small and focused</li>
+                                <li>✅ Write tests for new functionality</li>
+                                <li>✅ Use meaningful commit messages</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <h2>🏗️ Project Structure</h2>
-    <pre><code>fabricjs-design-tool/
-├── src/                    # Source code
-│   ├── components/         # React UI components
-│   ├── hooks/             # Custom React hooks
-│   ├── utils/             # Utility functions
-│   └── types/             # TypeScript type definitions
-├── lib/                   # Built library output
-│   ├── core/              # Framework-agnostic core
-│   └── ui/                # React UI components
-├── docs/                  # Documentation (HTML)
-├── public/                # Demo website assets
-├── .github/               # GitHub Actions workflows
-├── package.json           # Project configuration
-├── tsconfig.json          # TypeScript configuration
-├── vite.config.ts         # Vite build configuration
-├── rollup.config.js       # Library build configuration
-├── eslint.config.js       # ESLint configuration
-└── tailwind.config.js     # Tailwind CSS configuration</code></pre>
+            <!-- Pull Request Process -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🔄 Pull Request Process</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-4">Step-by-Step Process</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-0.5">1</div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-800">Create a Branch</h4>
+                                    <p class="text-blue-700 text-sm">Create a feature branch from main</p>
+                                    <div class="bg-blue-900 text-blue-100 p-2 rounded font-mono text-xs mt-2">
+                                        <code>git checkout -b feature/your-feature-name</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-0.5">2</div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-800">Make Changes</h4>
+                                    <p class="text-blue-700 text-sm">Implement your feature or fix</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-0.5">3</div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-800">Test Your Changes</h4>
+                                    <p class="text-blue-700 text-sm">Run tests and ensure everything works</p>
+                                    <div class="bg-blue-900 text-blue-100 p-2 rounded font-mono text-xs mt-2">
+                                        <code>npm test && npm run lint && npm run type-check</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-0.5">4</div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-800">Commit & Push</h4>
+                                    <p class="text-blue-700 text-sm">Commit with a clear message and push to your fork</p>
+                                    <div class="bg-blue-900 text-blue-100 p-2 rounded font-mono text-xs mt-2">
+                                        <code>git commit -m "feat: add new shape creation feature"<br>git push origin feature/your-feature-name</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-0.5">5</div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-800">Create Pull Request</h4>
+                                    <p class="text-blue-700 text-sm">Open a PR with a clear description of your changes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <h2>🔧 Development Workflow</h2>
-
-    <h3>1. Create a Feature Branch</h3>
-    <pre><code># Update your fork
-git checkout main
-git pull upstream main
-
-# Create a new feature branch
-git checkout -b feature/your-feature-name</code></pre>
-
-    <h3>2. Make Your Changes</h3>
-    <ul>
-        <li>Follow the existing code style and patterns</li>
-        <li>Add TypeScript types for new functions/components</li>
-        <li>Update documentation if needed</li>
-        <li>Test your changes thoroughly</li>
-    </ul>
-
-    <h3>3. Code Quality Checks</h3>
-    <pre><code># Run linting
-npm run lint
-
-# Fix any linting issues
-npm run lint:fix
-
-# Build to ensure no errors
-npm run build:lib</code></pre>
-
-    <h3>4. Commit Your Changes</h3>
-    <pre><code># Stage your changes
-git add .
-
-# Commit with a descriptive message
-git commit -m "feat: add new feature description"
-
-# Push to your fork
-git push origin feature/your-feature-name</code></pre>
-
-    <h3>5. Create a Pull Request</h3>
-    <ol>
-        <li>Go to the original repository on GitHub</li>
-        <li>Click "New Pull Request"</li>
-        <li>Select your feature branch</li>
-        <li>Fill out the PR template with details about your changes</li>
-    </ol>
-
-    <h2>📝 Code Style Guidelines</h2>
-
-    <h3>TypeScript</h3>
-    <ul>
-        <li>Use proper TypeScript types (avoid <code>any</code> when possible)</li>
-        <li>Export interfaces and types from appropriate files</li>
-        <li>Use meaningful variable and function names</li>
-    </ul>
-
-    <h3>React</h3>
-    <ul>
-        <li>Use functional components with hooks</li>
-        <li>Follow React best practices for hooks dependencies</li>
-        <li>Use proper prop types and component interfaces</li>
-    </ul>
-
-    <h3>Naming Conventions</h3>
-    <ul>
-        <li><strong>Files</strong>: Use kebab-case (<code>my-component.tsx</code>)</li>
-        <li><strong>Components</strong>: Use PascalCase (<code>MyComponent</code>)</li>
-        <li><strong>Functions</strong>: Use camelCase (<code>myFunction</code>)</li>
-        <li><strong>Constants</strong>: Use UPPER_SNAKE_CASE (<code>MY_CONSTANT</code>)</li>
-    </ul>
-
-    <h2>📚 Documentation</h2>
-
-    <h3>Code Documentation</h3>
-    <ul>
-        <li>Add JSDoc comments for public functions</li>
-        <li>Document complex algorithms and business logic</li>
-        <li>Keep README and guides up to date</li>
-    </ul>
-
-    <h3>Example JSDoc</h3>
-    <pre><code>/**
- * Creates a new rectangle shape with specified options
- * @param options - Configuration options for the rectangle
- * @returns A new fabric rectangle object
- */
-function createRectangle(options: RectangleOptions): fabric.Rect {
-  // Implementation
-}</code></pre>
-
-    <h2>📦 Publishing (Maintainers Only)</h2>
-
-    <div class="warning-box">
-        <strong>⚠️ Note:</strong> Publishing is restricted to maintainers only. Contributors should focus on submitting pull requests.
-    </div>
-
-    <h3>Automated Publishing</h3>
-    <p>The project uses GitHub Actions for automated publishing:</p>
-    <ol>
-        <li><strong>Bump Version</strong>: <code>npm version patch|minor|major</code></li>
-        <li><strong>Push to npm-production</strong>: <code>git push origin npm-production</code></li>
-        <li><strong>Action Runs</strong>: Automatically builds, tests, and publishes</li>
-    </ol>
-
-    <h2>🤝 Pull Request Guidelines</h2>
-
-    <div class="checklist">
-        <h3>Before Submitting</h3>
-        <ul>
-            <li>☐ Code follows project style guidelines</li>
-            <li>☐ All tests pass</li>
-            <li>☐ Documentation is updated</li>
-            <li>☐ Linting passes without errors</li>
-            <li>☐ Build succeeds</li>
-        </ul>
-    </div>
-
-    <h3>PR Template</h3>
-    <pre><code>## Description
-Brief description of changes
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-green-800 mb-4">📝 PR Template</h3>
+                        <div class="bg-green-900 text-green-100 p-4 rounded font-mono text-sm">
+                            <code>## Description
+Brief description of what this PR does
 
 ## Type of Change
 - [ ] Bug fix
@@ -379,61 +365,132 @@ Brief description of changes
 - [ ] Documentation update
 
 ## Testing
-- [ ] Added tests for new functionality
-- [ ] All existing tests pass
-- [ ] Manually tested changes
+- [ ] Tests pass
+- [ ] Added new tests
+- [ ] Manual testing completed
 
 ## Checklist
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
-- [ ] No new warnings introduced</code></pre>
+- [ ] No console errors</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <h2>🔍 Debugging</h2>
+            <!-- Development Tips -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">💡 Development Tips</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-purple-800 mb-3">🔧 Debugging</h3>
+                        <ul class="space-y-2 text-purple-700 text-sm">
+                            <li>• Use browser dev tools for canvas debugging</li>
+                            <li>• Add console.log statements in development</li>
+                            <li>• Use Fabric.js dev build for better error messages</li>
+                            <li>• Test in multiple browsers</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-orange-800 mb-3">⚡ Performance</h3>
+                        <ul class="space-y-2 text-orange-700 text-sm">
+                            <li>• Profile canvas operations with dev tools</li>
+                            <li>• Test with many objects on canvas</li>
+                            <li>• Consider object caching for static shapes</li>
+                            <li>• Avoid unnecessary re-renders</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-cyan-800 mb-3">📱 Testing</h3>
+                        <ul class="space-y-2 text-cyan-700 text-sm">
+                            <li>• Test on different screen sizes</li>
+                            <li>• Verify touch interactions on mobile</li>
+                            <li>• Check accessibility with screen readers</li>
+                            <li>• Test keyboard navigation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-pink-50 border border-pink-200 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-pink-800 mb-3">📚 Documentation</h3>
+                        <ul class="space-y-2 text-pink-700 text-sm">
+                            <li>• Update API docs for new features</li>
+                            <li>• Add code examples</li>
+                            <li>• Update TypeScript definitions</li>
+                            <li>• Keep changelog updated</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-    <h3>Development Tools</h3>
-    <ul>
-        <li>Use browser developer tools for debugging</li>
-        <li>Check console for errors and warnings</li>
-        <li>Use React Developer Tools for component debugging</li>
-    </ul>
-
-    <h3>Common Issues</h3>
-    <ol>
-        <li><strong>Build Errors</strong>: Check TypeScript types and imports</li>
-        <li><strong>Linting Errors</strong>: Run <code>npm run lint:fix</code> to auto-fix</li>
-        <li><strong>Hot Reload Issues</strong>: Restart development server</li>
-    </ol>
-
-    <h2>🆘 Getting Help</h2>
-
-    <h3>Resources</h3>
-    <ul>
-        <li><a href="https://github.com/rifrocket/fabricjs-design-tool/issues">GitHub Issues</a> - Report bugs or request features</li>
-        <li><a href="https://github.com/rifrocket/fabricjs-design-tool/discussions">GitHub Discussions</a> - Ask questions and share ideas</li>
-        <li><a href="index.html">Documentation</a> - Complete API documentation</li>
-    </ul>
-
-    <h3>Community Guidelines</h3>
-    <ul>
-        <li>Be respectful and inclusive</li>
-        <li>Help others learn and grow</li>
-        <li>Follow the code of conduct</li>
-        <li>Provide constructive feedback</li>
-    </ul>
-
-    <div class="highlight-box">
-        <strong>🎉 Thank you for contributing to FabricJS Design Tool!</strong><br>
-        Your contributions help make this project better for everyone. If you have any questions, don't hesitate to reach out through GitHub issues or discussions.
+            <!-- Getting Help -->
+            <section>
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🆘 Getting Help</h2>
+                
+                <div class="bg-gradient-to-r from-gray-50 to-blue-50 border border-gray-200 rounded-lg p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-3">💬 Discussion</h3>
+                            <ul class="space-y-2 text-gray-600">
+                                <li><a href="https://github.com/rifrocket/fabricjs-design-tool/discussions" class="text-primary-600 hover:underline">GitHub Discussions</a></li>
+                                <li><a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="text-primary-600 hover:underline">Report Issues</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-3">📖 Resources</h3>
+                            <ul class="space-y-2 text-gray-600">
+                                <li><a href="http://fabricjs.com/" class="text-primary-600 hover:underline">Fabric.js Documentation</a></li>
+                                <li><a href="https://reactjs.org/" class="text-primary-600 hover:underline">React Documentation</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-blue-100 rounded-lg">
+                        <p class="text-blue-800">
+                            <strong>👥 New Contributor?</strong> Don't hesitate to ask questions! 
+                            We're here to help and appreciate all contributions, no matter how small.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 
-    <div class="footer">
-        <p>📄 <strong>License:</strong> By contributing to this project, you agree that your contributions will be licensed under the same MIT License that covers the project.</p>
-        <p>
-            <a href="index.html">📚 Documentation Home</a> • 
-            <a href="https://github.com/rifrocket/fabricjs-design-tool">💻 GitHub Repository</a> • 
-            <a href="https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool">📦 NPM Package</a>
-        </p>
-    </div>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
+            <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        });
+    </script>
 </body>
 </html>

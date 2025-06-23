@@ -4,391 +4,277 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Getting Started - FabricJS Design Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            500: '#667eea',
+                            600: '#5a67d8',
+                            700: '#4c51bf',
+                        },
+                        secondary: {
+                            500: '#764ba2',
+                            600: '#6b46c1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --text-muted: #718096;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7fafc;
-            --bg-tertiary: #edf2f7;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .code-block {
+            position: relative;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
-            color: var(--text-primary);
-            background-color: var(--bg-secondary);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 2rem 0;
-            margin-bottom: 3rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Navigation */
-        .nav {
-            background: var(--bg-primary);
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            background: var(--bg-tertiary);
-            color: var(--primary-color);
-        }
-
-        .nav-links a.active {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        /* Main Content */
-        .main-content {
-            background: var(--bg-primary);
-            border-radius: 12px;
-            padding: 3rem;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 3rem;
-        }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--text-primary);
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
-        }
-
-        h1 { font-size: 2.5rem; }
-        h2 { 
-            font-size: 2rem; 
-            margin-top: 3rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-        h3 { 
-            font-size: 1.5rem; 
-            margin-top: 2rem;
-            color: var(--primary-color);
-        }
-        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
-
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        /* Code Blocks */
-        pre, code {
-            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
-        }
-
-        code {
-            background: var(--bg-tertiary);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: var(--text-primary);
-        }
-
-        pre {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            box-shadow: var(--shadow-sm);
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-            color: inherit;
-            font-size: 0.9rem;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin: 1.5rem 0;
-            padding-left: 2rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        /* Blockquotes */
-        blockquote {
-            border-left: 4px solid var(--primary-color);
-            padding: 1rem 1.5rem;
-            margin: 1.5rem 0;
-            background: var(--bg-secondary);
-            border-radius: 0 8px 8px 0;
-        }
-
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            background: var(--bg-primary);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            background: var(--bg-tertiary);
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
             cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            opacity: 0.8;
+            backdrop-filter: blur(4px);
         }
-
-        .btn:hover {
+        .copy-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
         }
-
-        /* Alerts */
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border-left: 4px solid;
+        .copy-btn.copied {
+            background: rgba(34, 197, 94, 0.8);
+            color: white;
+            border-color: rgba(34, 197, 94, 0.3);
         }
-
-        .alert-info {
-            background: #ebf8ff;
-            border-color: #3182ce;
-            color: #2c5282;
+        pre {
+            margin: 0;
+            padding: 1rem 1rem 1rem 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
         }
-
-        .alert-warning {
-            background: #fffbeb;
-            border-color: #f6ad55;
-            color: #c05621;
+        .dropdown {
+            position: relative;
         }
-
-        .alert-success {
-            background: #f0fff4;
-            border-color: #48bb78;
-            color: #276749;
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 200px;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
         }
-
-        /* Emoji */
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 0.5rem;
+        .dropdown.active .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            margin-top: 4rem;
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.15s ease;
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .main-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            pre {
-                padding: 1rem;
-                font-size: 0.8rem;
-            }
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
         }
-
-        /* Syntax Highlighting */
-        .hljs-comment { color: #6a737d; }
-        .hljs-keyword { color: #d73a49; font-weight: 600; }
-        .hljs-string { color: #032f62; }
-        .hljs-number { color: #005cc5; }
-        .hljs-function { color: #6f42c1; }
-        .hljs-variable { color: #e36209; }
+        .dropdown-item:first-child {
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .dropdown-item:last-child {
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
     </style>
 </head>
-<body>
-    <div class="header">
-        <div class="container">
-            <h1><span class="emoji">🚀</span>Getting Started</h1>
-            <p>Welcome to FabricJS Design Tool! This guide will help you get up and running quickly.</p>
-        </div>
-    </div>
-
-    <div class="nav">
-        <div class="container">
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="getting-started.html" class="active">Getting Started</a>
-                <a href="core-api.html">Core API</a>
-                <a href="react-components.html">React Components</a>
-                <a href="examples.html">Examples</a>
-                <a href="customization.html">Customization</a>
-                <a href="migration.html">Migration</a>
-                <a href="troubleshooting.html">Troubleshooting</a>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="logo.svg" alt="FabricJS Design Tool" class="h-8 w-auto"/>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="getting-started.html" class="text-primary-600 font-medium">Getting Started</a>
+                    <a href="core-api.html" class="text-gray-600 hover:text-primary-600 transition-colors">Core API</a>
+                    <a href="react-components.html" class="text-gray-600 hover:text-primary-600 transition-colors">React Components</a>
+                    <a href="customization.html" class="text-gray-600 hover:text-primary-600 transition-colors">Customization</a>
+                    <a href="troubleshooting.html" class="text-gray-600 hover:text-primary-600 transition-colors">Troubleshooting</a>
+                    
+                    <!-- Contributor Menu -->
+                    <div class="dropdown">
+                        <button class="flex items-center space-x-1 text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-md" onclick="toggleDropdown()">
+                            <span>👥 Contributors</span>
+                            <svg class="w-4 h-4 transition-transform" id="dropdown-arrow" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="contributing.html" class="dropdown-item">
+                                <div class="flex items-center space-x-2">
+                                    <span>📝</span>
+                                    <div>
+                                        <div class="font-medium">Contributing Guide</div>
+                                        <div class="text-sm text-gray-500">How to contribute</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐙</span>
+                                    <div>
+                                        <div class="font-medium">GitHub Repository</div>
+                                        <div class="text-sm text-gray-500">Source code & issues</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐛</span>
+                                    <div>
+                                        <div class="font-medium">Report Issues</div>
+                                        <div class="text-sm text-gray-500">Bug reports & features</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">🚀 Getting Started</h1>
+            <p class="text-xl opacity-90 max-w-2xl">Welcome to FabricJS Design Tool! This guide will help you get up and running quickly.</p>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="main-content">
-            <h2><span class="emoji">📦</span>Installation</h2>
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12">
             
-            <h3>NPM</h3>
-            <pre><code>npm install fabricjs-design-tool</code></pre>
+            <!-- Installation Section -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">📦 Installation</h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">NPM</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'npm install @rifrocket/fabricjs-design-tool')">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>npm install @rifrocket/fabricjs-design-tool</code></pre>
+                        </div>
+                    </div>
 
-            <h3>Yarn</h3>
-            <pre><code>yarn add fabricjs-design-tool</code></pre>
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">Yarn</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'yarn add @rifrocket/fabricjs-design-tool')">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>yarn add @rifrocket/fabricjs-design-tool</code></pre>
+                        </div>
+                    </div>
 
-            <h3>PNPM</h3>
-            <pre><code>pnpm add fabricjs-design-tool</code></pre>
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">PNPM</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'pnpm add @rifrocket/fabricjs-design-tool')">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>pnpm add @rifrocket/fabricjs-design-tool</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <h2><span class="emoji">🚀</span>Quick Setup</h2>
-
-            <h3>For Any Framework (Core Only)</h3>
-            <p>If you're using Vue, Angular, Svelte, or vanilla JavaScript:</p>
-
-            <pre><code>import { useCanvasManager, shapeFactory } from 'fabricjs-design-tool';
-
-// Initialize canvas
-const canvasElement = document.getElementById('my-canvas');
-const canvas = new fabric.Canvas(canvasElement);
-
-// Use utilities
-const rect = shapeFactory.createRectangle({
-  left: 50,
-  top: 50,
-  width: 100,
-  height: 100,
-  fill: 'blue'
-});
-
-canvas.add(rect);</code></pre>
-
-            <h3>For React Applications (Full UI)</h3>
-            <p>If you're using React and want the complete interface:</p>
-
-            <pre><code>import React from 'react';
-import { 
-  CanvasWrapper, 
-  Header, 
-  LeftSidebar, 
-  RightSidebar 
-} from 'fabricjs-design-tool/ui';
+            <!-- Quick Setup Section -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">⚡ Quick Setup</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">React App Setup</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `import React from 'react';
+import { CanvasWrapper, LeftSidebar, RightSidebar } from '@rifrocket/fabricjs-design-tool/ui';
 
 function App() {
   return (
-    &lt;div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}&gt;
-      &lt;Header /&gt;
-      &lt;div style={{ flex: 1, display: 'flex' }}&gt;
-        &lt;LeftSidebar /&gt;
-        &lt;CanvasWrapper /&gt;
-        &lt;RightSidebar /&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
+    <div className='flex h-screen'>
+      <LeftSidebar />
+      <div className='flex-1'>
+        <CanvasWrapper />
+      </div>
+      <RightSidebar />
+    </div>
   );
 }
 
-export default App;</code></pre>
+export default App;`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>import React from 'react';
+import { CanvasWrapper, LeftSidebar, RightSidebar } from '@rifrocket/fabricjs-design-tool/ui';
 
-            <h2><span class="emoji">🎨</span>Basic Canvas Setup</h2>
+function App() {
+  return (
+    &lt;div className="flex h-screen"&gt;
+      &lt;LeftSidebar /&gt;
+      &lt;div className="flex-1"&gt;
+        &lt;CanvasWrapper /&gt;
+      &lt;/div&gt;
+      &lt;RightSidebar /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <h3>1. HTML Structure</h3>
-            <pre><code>&lt;!DOCTYPE html&gt;
+            <!-- Basic Canvas Setup -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🎨 Basic Canvas Setup</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">1. HTML Structure</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<!DOCTYPE html>
+<html>
+<head>
+  <title>My Design Tool</title>
+</head>
+<body>
+  <div id='app'>
+    <canvas id='design-canvas' width='800' height='600'></canvas>
+  </div>
+</body>
+</html>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
   &lt;title&gt;My Design Tool&lt;/title&gt;
@@ -399,10 +285,38 @@ export default App;</code></pre>
   &lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+                        </div>
+                    </div>
 
-            <h3>2. JavaScript Setup</h3>
-            <pre><code>import { Canvas } from 'fabric';
-import { useCanvasManager, shapeFactory } from 'fabricjs-design-tool';
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">2. JavaScript Setup</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `import { Canvas } from 'fabric';
+import { useCanvasManager, shapeFactory } from '@rifrocket/fabricjs-design-tool';
+
+// Initialize Fabric.js canvas
+const canvas = new Canvas('design-canvas');
+
+// Use the canvas manager for enhanced functionality
+const canvasManager = useCanvasManager(canvas);
+
+// Add some shapes
+const circle = shapeFactory.createCircle({
+  left: 100,
+  top: 100,
+  radius: 50,
+  fill: 'red'
+});
+
+const text = shapeFactory.createText('Hello World!', {
+  left: 200,
+  top: 100,
+  fontSize: 24
+});
+
+canvas.add(circle, text);`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>import { Canvas } from 'fabric';
+import { useCanvasManager, shapeFactory } from '@rifrocket/fabricjs-design-tool';
 
 // Initialize Fabric.js canvas
 const canvas = new Canvas('design-canvas');
@@ -425,101 +339,145 @@ const text = shapeFactory.createText('Hello World!', {
 });
 
 canvas.add(circle, text);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <h2><span class="emoji">⚛️</span>React Integration</h2>
-
-            <h3>Basic React Component</h3>
-            <pre><code>import React, { useRef, useEffect } from 'react';
+            <!-- React Integration -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">⚛️ React Integration</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">Basic React Component</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `import React, { useRef, useEffect } from 'react';
 import { Canvas } from 'fabric';
-import { useCanvasManager, useShapeCreator } from 'fabricjs-design-tool';
+import { useCanvasManager } from '@rifrocket/fabricjs-design-tool';
 
-function BasicDesignTool() {
+function DesignCanvas() {
   const canvasRef = useRef(null);
-  const [canvas, setCanvas] = React.useState(null);
-  
+  const [canvas, setCanvas] = useState(null);
+
   useEffect(() => {
-    if (canvasRef.current) {
-      const fabricCanvas = new Canvas(canvasRef.current);
-      setCanvas(fabricCanvas);
-      
-      return () => {
-        fabricCanvas.dispose();
-      };
-    }
+    const fabricCanvas = new Canvas(canvasRef.current);
+    const manager = useCanvasManager(fabricCanvas);
+    setCanvas(fabricCanvas);
+
+    return () => {
+      fabricCanvas.dispose();
+    };
   }, []);
-  
-  const canvasManager = useCanvasManager(canvas);
-  const shapeCreator = useShapeCreator(canvas);
-  
+
   return (
-    &lt;div&gt;
-      &lt;div&gt;
-        &lt;button onClick={() => shapeCreator.addRectangle()}&gt;
-          Add Rectangle
-        &lt;/button&gt;
-        &lt;button onClick={() => shapeCreator.addCircle()}&gt;
-          Add Circle
-        &lt;/button&gt;
-        &lt;button onClick={() => shapeCreator.addText('Sample Text')}&gt;
-          Add Text
-        &lt;/button&gt;
+    <div className='canvas-container'>
+      <canvas ref={canvasRef} width={800} height={600} />
+    </div>
+  );
+}`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>import React, { useRef, useEffect } from 'react';
+import { Canvas } from 'fabric';
+import { useCanvasManager } from '@rifrocket/fabricjs-design-tool';
+
+function DesignCanvas() {
+  const canvasRef = useRef(null);
+  const [canvas, setCanvas] = useState(null);
+
+  useEffect(() => {
+    const fabricCanvas = new Canvas(canvasRef.current);
+    const manager = useCanvasManager(fabricCanvas);
+    setCanvas(fabricCanvas);
+
+    return () => {
+      fabricCanvas.dispose();
+    };
+  }, []);
+
+  return (
+    &lt;div className="canvas-container"&gt;
+      &lt;canvas ref={canvasRef} width={800} height={600} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">Using Pre-built Components</h3>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `import React from 'react';
+import { 
+  CanvasWrapper, 
+  LeftSidebar, 
+  RightSidebar, 
+  Header 
+} from '@rifrocket/fabricjs-design-tool/ui';
+
+function DesignTool() {
+  return (
+    <div className='h-screen flex flex-col'>
+      <Header />
+      <div className='flex flex-1'>
+        <LeftSidebar />
+        <CanvasWrapper className='flex-1' />
+        <RightSidebar />
+      </div>
+    </div>
+  );
+}`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>import React from 'react';
+import { 
+  CanvasWrapper, 
+  LeftSidebar, 
+  RightSidebar, 
+  Header 
+} from '@rifrocket/fabricjs-design-tool/ui';
+
+function DesignTool() {
+  return (
+    &lt;div className="h-screen flex flex-col"&gt;
+      &lt;Header /&gt;
+      &lt;div className="flex flex-1"&gt;
+        &lt;LeftSidebar /&gt;
+        &lt;CanvasWrapper className="flex-1" /&gt;
+        &lt;RightSidebar /&gt;
       &lt;/div&gt;
-      &lt;canvas 
-        ref={canvasRef} 
-        width={800} 
-        height={600}
-        style={{ border: '1px solid #ccc' }}
-      /&gt;
     &lt;/div&gt;
   );
 }</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <h3>Using Pre-built Components</h3>
-            <pre><code>import React from 'react';
-import { CanvasWrapper } from 'fabricjs-design-tool/ui';
+            <!-- Responsive Design -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">📱 Responsive Design</h2>
+                
+                <div>
+                    <h3 class="text-xl font-semibold text-primary-600 mb-3">Making Canvas Responsive</h3>
+                    <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                        <button class="copy-btn" onclick="copyToClipboard(this, `import { canvasUtils } from '@rifrocket/fabricjs-design-tool';
 
-function SimpleApp() {
-  return (
-    &lt;div style={{ width: '100vw', height: '100vh' }}&gt;
-      &lt;CanvasWrapper 
-        width={800}
-        height={600}
-        backgroundColor="#f5f5f5"
-      /&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
-
-            <h2><span class="emoji">🔧</span>Configuration Options</h2>
-
-            <h3>Canvas Configuration</h3>
-            <pre><code>import { useCanvasManager } from 'fabricjs-design-tool';
-
-const canvasManager = useCanvasManager(canvas, {
-  // Enable grid
-  showGrid: true,
-  gridSize: 20,
+function makeCanvasResponsive(canvas) {
+  function resizeCanvas() {
+    const container = canvas.getElement().parentElement;
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    
+    canvas.setDimensions({
+      width: containerWidth,
+      height: containerHeight
+    });
+    
+    canvas.renderAll();
+  }
   
-  // Enable alignment guides
-  alignmentGuides: true,
-  
-  // Enable keyboard shortcuts
-  keyboardShortcuts: true,
-  
-  // Canvas settings
-  backgroundColor: '#ffffff',
-  selection: true,
-  preserveObjectStacking: true
-});</code></pre>
-
-            <div class="alert alert-info">
-                <strong>💡 Pro Tip:</strong> The configuration options allow you to customize the behavior and appearance of your design tool to match your specific needs.
-            </div>
-
-            <h2><span class="emoji">📱</span>Responsive Design</h2>
-
-            <h3>Making Canvas Responsive</h3>
-            <pre><code>import { canvasUtils } from 'fabricjs-design-tool';
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas(); // Initial resize
+}`)">Copy</button>
+                        <pre class="text-gray-100 font-mono text-sm"><code>import { canvasUtils } from '@rifrocket/fabricjs-design-tool';
 
 function makeCanvasResponsive(canvas) {
   function resizeCanvas() {
@@ -538,49 +496,134 @@ function makeCanvasResponsive(canvas) {
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas(); // Initial resize
 }</code></pre>
+                    </div>
+                </div>
+            </section>
 
-            <h2><span class="emoji">🎯</span>Next Steps</h2>
-            <p>Now that you have the basics set up, explore these guides:</p>
+            <!-- Next Steps -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🎯 Next Steps</h2>
+                <p class="text-gray-600 mb-6">Now that you have the basics set up, explore these guides:</p>
 
-            <ul>
-                <li><a href="core-api.html"><strong>🎨 Core API Reference</strong></a> - All available functions and hooks</li>
-                <li><a href="react-components.html"><strong>⚛️ React Components</strong></a> - Complete UI components</li>
-                <li><a href="examples.html"><strong>📋 Examples</strong></a> - Real-world implementation examples</li>
-                <li><a href="customization.html"><strong>🔧 Customization Guide</strong></a> - Customization and extension</li>
-            </ul>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="core-api.html" class="block p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 class="font-semibold text-gray-900 mb-2">🎨 Core API Reference</h4>
+                        <p class="text-sm text-gray-600">All available functions and hooks</p>
+                    </a>
+                    <a href="react-components.html" class="block p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 class="font-semibold text-gray-900 mb-2">⚛️ React Components</h4>
+                        <p class="text-sm text-gray-600">Complete UI components</p>
+                    </a>
+                    <a href="customization.html" class="block p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 class="font-semibold text-gray-900 mb-2">🔧 Customization Guide</h4>
+                        <p class="text-sm text-gray-600">Customization and extension</p>
+                    </a>
+                    <a href="troubleshooting.html" class="block p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 class="font-semibold text-gray-900 mb-2">🔧 Troubleshooting</h4>
+                        <p class="text-sm text-gray-600">Common issues and solutions</p>
+                    </a>
+                </div>
+            </section>
 
-            <h2><span class="emoji">❓</span>Common Issues</h2>
+            <!-- Common Issues -->
+            <section>
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">❓ Common Issues</h2>
 
-            <div class="alert alert-warning">
-                <h4>Canvas Not Rendering</h4>
-                <pre><code>// Make sure to call renderAll() after adding objects
+                <div class="space-y-6">
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                        <h4 class="font-semibold text-yellow-800 mb-2">Canvas Not Rendering</h4>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `// Make sure to call renderAll() after adding objects
+canvas.add(object);
+canvas.renderAll(); // ← Important!`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>// Make sure to call renderAll() after adding objects
 canvas.add(object);
 canvas.renderAll(); // ← Important!</code></pre>
-            </div>
+                        </div>
+                    </div>
 
-            <div class="alert alert-warning">
-                <h4>TypeScript Errors</h4>
-                <pre><code># Install type definitions if needed
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                        <h4 class="font-semibold text-yellow-800 mb-2">TypeScript Errors</h4>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `# Install type definitions if needed
+npm install --save-dev @types/fabric`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code># Install type definitions if needed
 npm install --save-dev @types/fabric</code></pre>
-            </div>
+                        </div>
+                    </div>
 
-            <div class="alert alert-warning">
-                <h4>Module Not Found</h4>
-                <pre><code>// Make sure you're importing from the correct path
-import { useCanvasManager } from 'fabricjs-design-tool'; // ✅ Core
-import { CanvasWrapper } from 'fabricjs-design-tool/ui';  // ✅ UI Components</code></pre>
-            </div>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                        <h4 class="font-semibold text-yellow-800 mb-2">Module Not Found</h4>
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `// Make sure you're importing from the correct path
+import { useCanvasManager } from '@rifrocket/fabricjs-design-tool'; // ✅ Core
+import { CanvasWrapper } from '@rifrocket/fabricjs-design-tool/ui';  // ✅ UI Components`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>// Make sure you're importing from the correct path
+import { useCanvasManager } from '@rifrocket/fabricjs-design-tool'; // ✅ Core
+import { CanvasWrapper } from '@rifrocket/fabricjs-design-tool/ui';  // ✅ UI Components</code></pre>
+                        </div>
+                    </div>
 
-            <div class="alert alert-success">
-                <strong>Need help?</strong> Check our <a href="examples.html">Examples</a> or <a href="https://github.com/rifrocket/fabricjs-design-tool/issues">open an issue</a>!
-            </div>
+                    <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                        <p class="text-green-700">
+                            <strong>Need help?</strong> Check our <a href="troubleshooting.html" class="text-green-800 underline">Troubleshooting Guide</a> or <a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="text-green-800 underline">open an issue</a>!
+                        </p>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <div class="footer">
-        <div class="container">
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
             <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy text: ', err);
+                button.textContent = 'Error';
+                setTimeout(function() {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        });
+    </script>
 </body>
 </html>

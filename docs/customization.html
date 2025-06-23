@@ -3,647 +3,649 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customization - FabricJS Design Tool</title>
+    <title>Customization Guide - FabricJS Design Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            500: '#667eea',
+                            600: '#5a67d8',
+                            700: '#4c51bf',
+                        },
+                        secondary: {
+                            500: '#764ba2',
+                            600: '#6b46c1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --text-muted: #718096;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7fafc;
-            --bg-tertiary: #edf2f7;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .dropdown {
+            position: relative;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
-            color: var(--text-primary);
-            background-color: var(--bg-secondary);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 3rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Navigation */
-        .nav {
-            background: var(--bg-primary);
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 200px;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
             transition: all 0.2s ease;
         }
-
-        .nav-links a:hover {
-            background: var(--bg-tertiary);
-            color: var(--primary-color);
+        .dropdown.active .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
-
-        .nav-links a.active {
-            background: var(--primary-color);
-            color: white;
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.15s ease;
         }
-
-        /* Main Content */
-        .main-content {
-            background: var(--bg-primary);
-            border-radius: 12px;
-            padding: 3rem;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 3rem;
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
         }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--text-primary);
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
+        .dropdown-item:first-child {
+            border-radius: 0.5rem 0.5rem 0 0;
         }
-
-        h1 { font-size: 2.5rem; }
-        h2 { 
-            font-size: 2rem; 
-            margin-top: 3rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-        h3 { 
-            font-size: 1.5rem; 
-            margin-top: 2rem;
-            color: var(--primary-color);
-        }
-        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
-
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        /* Code Blocks */
-        pre, code {
-            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
-        }
-
-        code {
-            background: var(--bg-tertiary);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: var(--text-primary);
-        }
-
-        pre {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            box-shadow: var(--shadow-sm);
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-            color: inherit;
-            font-size: 0.9rem;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin: 1.5rem 0;
-            padding-left: 2rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 0.5rem;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            margin-top: 4rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .main-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            pre {
-                padding: 1rem;
-                font-size: 0.8rem;
-            }
+        .dropdown-item:last-child {
+            border-radius: 0 0 0.5rem 0.5rem;
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <div class="container">
-            <h1><span class="emoji">🔧</span>Customization Guide</h1>
-            <p>Learn how to customize and extend the FabricJS Design Tool.</p>
-        </div>
-    </div>
-
-    <div class="nav">
-        <div class="container">
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="getting-started.html">Getting Started</a>
-                <a href="core-api.html">Core API</a>
-                <a href="react-components.html">React Components</a>
-                <a href="examples.html">Examples</a>
-                <a href="customization.html" class="active">Customization</a>
-                <a href="migration.html">Migration</a>
-                <a href="troubleshooting.html">Troubleshooting</a>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="logo.svg" alt="FabricJS Design Tool" class="h-8 w-auto"/>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="getting-started.html" class="text-gray-600 hover:text-primary-600 transition-colors">Getting Started</a>
+                    <a href="core-api.html" class="text-gray-600 hover:text-primary-600 transition-colors">Core API</a>
+                    <a href="react-components.html" class="text-gray-600 hover:text-primary-600 transition-colors">React Components</a>
+                    <a href="customization.html" class="text-primary-600 font-medium">Customization</a>
+                    <a href="troubleshooting.html" class="text-gray-600 hover:text-primary-600 transition-colors">Troubleshooting</a>
+                    
+                    <!-- Contributor Menu -->
+                    <div class="dropdown">
+                        <button class="flex items-center space-x-1 text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-md" onclick="toggleDropdown()">
+                            <span>👥 Contributors</span>
+                            <svg class="w-4 h-4 transition-transform" id="dropdown-arrow" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="contributing.html" class="dropdown-item">
+                                <div class="flex items-center space-x-2">
+                                    <span>📝</span>
+                                    <div>
+                                        <div class="font-medium">Contributing Guide</div>
+                                        <div class="text-sm text-gray-500">How to contribute</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐙</span>
+                                    <div>
+                                        <div class="font-medium">GitHub Repository</div>
+                                        <div class="text-sm text-gray-500">Source code & issues</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐛</span>
+                                    <div>
+                                        <div class="font-medium">Report Issues</div>
+                                        <div class="text-sm text-gray-500">Bug reports & features</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">🎨 Customization Guide</h1>
+            <p class="text-xl opacity-90 max-w-2xl">Learn how to customize themes, create custom shapes, and extend the design tool functionality.</p>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="main-content">
-            <h2><span class="emoji">🎨</span>Theming & Styling</h2>
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12">
             
-            <h3>CSS Variables</h3>
-            <p>Customize the appearance using CSS variables:</p>
-            <pre><code>:root {
+            <!-- Theming Section -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🎨 Theming</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">Custom CSS Variables</h3>
+                        <p class="text-gray-600 mb-4">Override the default theme by defining custom CSS variables:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>:root {
   --primary-color: #667eea;
   --secondary-color: #764ba2;
-  --text-primary: #2d3748;
-  --bg-primary: #ffffff;
+  --background-color: #ffffff;
+  --text-color: #2d3748;
   --border-color: #e2e8f0;
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-}
+  --success-color: #48bb78;
+  --warning-color: #ed8936;
+  --error-color: #f56565;
+}</code>
+                        </div>
+                    </div>
 
-/* Override for dark theme */
-[data-theme="dark"] {
-  --text-primary: #f7fafc;
-  --bg-primary: #1a202c;
-  --border-color: #2d3748;
-}</code></pre>
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">Dark Mode Support</h3>
+                        <p class="text-gray-600 mb-4">The design tool includes built-in dark mode support:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>import { useCanvasManager } from '@rifrocket/fabricjs-design-tool';
 
-            <h3>Component Styling</h3>
-            <pre><code>/* Custom toolbar styling */
-.fabric-design-toolbar {
-  background: linear-gradient(to right, #667eea, #764ba2);
-  border-radius: 8px;
-  padding: 1rem;
-}
+const canvasManager = useCanvasManager(canvas, {
+  darkMode: true,
+  backgroundColor: '#1a202c'
+});
 
-/* Custom canvas container */
-.fabric-canvas-container {
-  border: 2px solid var(--primary-color);
-  border-radius: 12px;
-  overflow: hidden;
-}</code></pre>
+// Toggle dark mode programmatically
+canvasManager.toggleDarkMode();</code>
+                        </div>
+                    </div>
 
-            <h2><span class="emoji">🔧</span>Custom Tools</h2>
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary-600 mb-3">Custom Toolbar</h3>
+                        <p class="text-gray-600 mb-4">Customize the toolbar with your own components:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>import { Header } from '@rifrocket/fabricjs-design-tool/ui';
 
-            <h3>Creating Custom Shape Tools</h3>
-            <pre><code>import { shapeFactory } from 'fabricjs-design-tool';
+function CustomHeader() {
+  return (
+    &lt;Header
+      logo={&lt;img src="/my-logo.png" alt="Logo" /&gt;}
+      customActions={[
+        { label: 'Custom Action', onClick: handleCustomAction },
+        { label: 'Export PDF', onClick: handlePDFExport }
+      ]}
+    /&gt;
+  );
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-// Extend the shape factory
-const customShapeFactory = {
-  ...shapeFactory,
+            <!-- Custom Shapes Section -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">✨ Custom Shapes</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-green-600 mb-3">Creating Custom Shape Classes</h3>
+                        <p class="text-gray-600 mb-4">Extend Fabric.js to create your own shape types:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>import { fabric } from 'fabric';
+
+// Create a custom star shape
+const StarShape = fabric.util.createClass(fabric.Polygon, {
+  type: 'star',
   
-  createStar(options = {}) {
-    const star = new fabric.Polygon([
-      {x: 0, y: -50},
-      {x: 14, y: -20},
-      {x: 47, y: -15},
-      {x: 23, y: 7},
-      {x: 29, y: 40},
-      {x: 0, y: 25},
-      {x: -29, y: 40},
-      {x: -23, y: 7},
-      {x: -47, y: -15},
-      {x: -14, y: -20}
-    ], {
-      fill: '#ffeb3b',
-      stroke: '#f57f17',
-      strokeWidth: 2,
-      ...options
-    });
-    
-    return star;
+  initialize: function(options) {
+    const points = this.createStarPoints(options.points || 5, options.radius || 50);
+    this.callSuper('initialize', points, options);
   },
   
-  createHeart(options = {}) {
-    const heartPath = 'M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5 C2,5.42,4.42,3,7.5,3c1.74,0,3.41,0.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3 C19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35z';
+  createStarPoints: function(numPoints, radius) {
+    const points = [];
+    const angle = Math.PI / numPoints;
     
-    const heart = new fabric.Path(heartPath, {
-      fill: '#e91e63',
-      stroke: '#ad1457',
-      strokeWidth: 1,
-      scaleX: 2,
-      scaleY: 2,
-      ...options
-    });
-    
-    return heart;
+    for (let i = 0; i < numPoints * 2; i++) {
+      const r = i % 2 === 0 ? radius : radius / 2;
+      points.push({
+        x: Math.cos(i * angle) * r,
+        y: Math.sin(i * angle) * r
+      });
+    }
+    return points;
+  }
+});
+
+// Register the shape
+fabric.StarShape = StarShape;</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-green-600 mb-3">Using Custom Shapes with ShapeFactory</h3>
+                        <p class="text-gray-600 mb-4">Integrate custom shapes into the shape factory:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>import { shapeFactory } from '@rifrocket/fabricjs-design-tool';
+
+// Extend the shape factory
+shapeFactory.createStar = function(options = {}) {
+  return new fabric.StarShape({
+    left: options.left || 100,
+    top: options.top || 100,
+    points: options.points || 5,
+    radius: options.radius || 50,
+    fill: options.fill || '#ffcc00',
+    stroke: options.stroke || '#ff6600',
+    strokeWidth: options.strokeWidth || 2,
+    ...options
+  });
+};
+
+// Use in your application
+const star = shapeFactory.createStar({
+  left: 200,
+  top: 150,
+  points: 6,
+  fill: 'gold'
+});
+
+canvas.add(star);</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-green-600 mb-3">Custom Shape Presets</h3>
+                        <p class="text-gray-600 mb-4">Define presets for commonly used shapes:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>const shapePresets = {
+  logo: {
+    type: 'rectangle',
+    width: 200,
+    height: 60,
+    fill: '#667eea',
+    rx: 8,
+    ry: 8
+  },
+  
+  button: {
+    type: 'rectangle',
+    width: 120,
+    height: 40,
+    fill: '#48bb78',
+    rx: 20,
+    ry: 20
+  },
+  
+  icon: {
+    type: 'circle',
+    radius: 20,
+    fill: '#ed8936'
   }
 };
 
-export default customShapeFactory;</code></pre>
+// Apply presets
+function addPresetShape(presetName, position) {
+  const preset = shapePresets[presetName];
+  const shape = shapeFactory[`create${preset.type.charAt(0).toUpperCase() + preset.type.slice(1)}`]({
+    ...preset,
+    left: position.x,
+    top: position.y
+  });
+  canvas.add(shape);
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <h3>Custom Toolbar Component</h3>
-            <pre><code>import React from 'react';
-import { LeftSidebar } from 'fabricjs-design-tool/ui';
+            <!-- Custom Tools Section -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🛠️ Custom Tools</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-purple-600 mb-3">Creating Custom Tool Buttons</h3>
+                        <p class="text-gray-600 mb-4">Add custom functionality to the toolbar:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>import { LeftSidebar } from '@rifrocket/fabricjs-design-tool/ui';
 
-const CustomToolbar = ({ canvas, onToolSelect }) => {
+function CustomLeftSidebar({ canvas }) {
+  const handleAddWatermark = () => {
+    const watermark = new fabric.Text('CONFIDENTIAL', {
+      left: canvas.width / 2,
+      top: canvas.height / 2,
+      fontSize: 60,
+      fill: 'rgba(255, 0, 0, 0.3)',
+      angle: -45,
+      selectable: false
+    });
+    canvas.add(watermark);
+  };
+
   const customTools = [
     {
-      id: 'star',
-      name: 'Star',
-      icon: '⭐',
-      action: () => {
-        const star = customShapeFactory.createStar();
-        canvas.add(star);
-      }
+      icon: '💧',
+      label: 'Add Watermark',
+      onClick: handleAddWatermark
     },
     {
-      id: 'heart',
-      name: 'Heart',
-      icon: '❤️',
-      action: () => {
-        const heart = customShapeFactory.createHeart();
-        canvas.add(heart);
-      }
+      icon: '📏',
+      label: 'Add Ruler',
+      onClick: () => addRulerTool(canvas)
     }
   ];
 
   return (
     &lt;LeftSidebar
-      tools={customTools}
-      onToolSelect={onToolSelect}
-      className="custom-toolbar"
+      customTools={customTools}
+      showDefaultTools={true}
     /&gt;
   );
-};</code></pre>
+}</code>
+                        </div>
+                    </div>
 
-            <h2><span class="emoji">⚡</span>Custom Hooks</h2>
+                    <div>
+                        <h3 class="text-xl font-semibold text-purple-600 mb-3">Custom Export Formats</h3>
+                        <p class="text-gray-600 mb-4">Add support for additional export formats:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>import { canvasUtils } from '@rifrocket/fabricjs-design-tool';
+import jsPDF from 'jspdf';
 
-            <h3>Custom Canvas Hook</h3>
-            <pre><code>import { useState, useEffect } from 'react';
-import { useCanvasManager } from 'fabricjs-design-tool';
-
-export const useCustomCanvas = (canvas, options = {}) => {
-  const canvasManager = useCanvasManager(canvas, options);
-  const [customState, setCustomState] = useState({
-    snapToGrid: false,
-    gridSize: 20,
-    showRulers: false
+// Extend export functionality
+canvasUtils.exportToPDF = function(canvas, options = {}) {
+  const pdf = new jsPDF({
+    orientation: options.orientation || 'landscape',
+    unit: 'px',
+    format: [canvas.width, canvas.height]
   });
+  
+  const imgData = canvas.toDataURL('image/png');
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  
+  if (options.download) {
+    pdf.save(options.filename || 'design.pdf');
+  }
+  
+  return pdf;
+};
 
-  const toggleGridSnap = () => {
-    setCustomState(prev => ({
-      ...prev,
-      snapToGrid: !prev.snapToGrid
-    }));
-  };
+// Use custom export
+const exportToPDF = () => {
+  canvasUtils.exportToPDF(canvas, {
+    filename: 'my-design.pdf',
+    download: true
+  });
+};</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-  const setGridSize = (size) => {
-    setCustomState(prev => ({
-      ...prev,
-      gridSize: size
-    }));
-  };
-
-  useEffect(() => {
-    if (canvas && customState.snapToGrid) {
-      canvas.on('object:moving', (e) => {
-        const obj = e.target;
-        const gridSize = customState.gridSize;
-        
-        obj.set({
-          left: Math.round(obj.left / gridSize) * gridSize,
-          top: Math.round(obj.top / gridSize) * gridSize
-        });
-      });
-    }
-  }, [canvas, customState.snapToGrid, customState.gridSize]);
-
-  return {
-    ...canvasManager,
-    ...customState,
-    toggleGridSnap,
-    setGridSize
-  };
-};</code></pre>
-
-            <h2><span class="emoji">🎛️</span>Custom Properties Panel</h2>
-
-            <h3>Advanced Properties Component</h3>
-            <pre><code>import React, { useState, useEffect } from 'react';
-
-const CustomPropertiesPanel = ({ selectedObject, canvas }) => {
-  const [properties, setProperties] = useState({});
-
-  useEffect(() => {
-    if (selectedObject) {
-      setProperties({
-        fill: selectedObject.fill,
-        stroke: selectedObject.stroke,
-        strokeWidth: selectedObject.strokeWidth,
-        opacity: selectedObject.opacity,
-        // Custom properties
-        shadow: selectedObject.shadow,
-        gradient: selectedObject.fill?.type === 'gradient'
-      });
-    }
-  }, [selectedObject]);
-
-  const updateProperty = (key, value) => {
-    if (selectedObject) {
-      selectedObject.set(key, value);
-      canvas.renderAll();
-      setProperties(prev => ({ ...prev, [key]: value }));
-    }
-  };
-
-  const addShadow = () => {
-    if (selectedObject) {
-      selectedObject.set('shadow', new fabric.Shadow({
-        color: 'rgba(0,0,0,0.3)',
-        blur: 10,
-        offsetX: 5,
-        offsetY: 5
-      }));
-      canvas.renderAll();
-    }
-  };
-
-  const addGradient = () => {
-    if (selectedObject) {
-      const gradient = new fabric.Gradient({
-        type: 'linear',
-        coords: { x1: 0, y1: 0, x2: selectedObject.width, y2: 0 },
-        colorStops: [
-          { offset: 0, color: '#ff0000' },
-          { offset: 1, color: '#0000ff' }
-        ]
-      });
-      
-      selectedObject.set('fill', gradient);
-      canvas.renderAll();
-    }
-  };
-
-  return (
-    &lt;div className="custom-properties-panel"&gt;
-      &lt;h3&gt;Properties&lt;/h3&gt;
-      
-      {/* Basic properties */}
-      &lt;div className="property-group"&gt;
-        &lt;label&gt;Fill Color&lt;/label&gt;
-        &lt;input
-          type="color"
-          value={properties.fill || '#000000'}
-          onChange={(e) =&gt; updateProperty('fill', e.target.value)}
-        /&gt;
-      &lt;/div&gt;
-
-      &lt;div className="property-group"&gt;
-        &lt;label&gt;Opacity&lt;/label&gt;
-        &lt;input
-          type="range"
-          min="0"
-          max="1"
-          step="0.1"
-          value={properties.opacity || 1}
-          onChange={(e) =&gt; updateProperty('opacity', parseFloat(e.target.value))}
-        /&gt;
-      &lt;/div&gt;
-
-      {/* Advanced properties */}
-      &lt;div className="property-group"&gt;
-        &lt;button onClick={addShadow}&gt;Add Shadow&lt;/button&gt;
-        &lt;button onClick={addGradient}&gt;Add Gradient&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  );
-};</code></pre>
-
-            <h2><span class="emoji">🔌</span>Plugin System</h2>
-
-            <h3>Creating Plugins</h3>
-            <pre><code>// plugins/animation-plugin.js
-export const AnimationPlugin = {
-  name: 'Animation',
+            <!-- Plugin System Section -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🔌 Plugin System</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-red-600 mb-3">Creating a Plugin</h3>
+                        <p class="text-gray-600 mb-4">Build reusable plugins for specific functionality:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>// Create a grid plugin
+const GridPlugin = {
+  name: 'grid',
   version: '1.0.0',
   
   install(canvas, options = {}) {
-    // Add animation methods to canvas
-    canvas.animateObject = (object, properties, duration = 1000) => {
-      return new Promise((resolve) => {
-        object.animate(properties, {
-          duration,
-          onChange: () => canvas.renderAll(),
-          onComplete: resolve
-        });
-      });
+    const gridSize = options.gridSize || 20;
+    const gridColor = options.gridColor || '#e0e0e0';
+    
+    canvas.on('after:render', () => {
+      this.drawGrid(canvas, gridSize, gridColor);
+    });
+    
+    return {
+      toggleGrid: () => this.toggleGrid(canvas),
+      setGridSize: (size) => this.setGridSize(canvas, size)
     };
-
-    canvas.fadeIn = (object, duration = 500) => {
-      object.set('opacity', 0);
-      return canvas.animateObject(object, { opacity: 1 }, duration);
-    };
-
-    canvas.fadeOut = (object, duration = 500) => {
-      return canvas.animateObject(object, { opacity: 0 }, duration);
-    };
-
-    canvas.bounce = (object, height = 50, duration = 800) => {
-      const originalTop = object.top;
-      return canvas.animateObject(object, 
-        { top: originalTop - height }, 
-        duration / 2
-      ).then(() => 
-        canvas.animateObject(object, 
-          { top: originalTop }, 
-          duration / 2
-        )
-      );
-    };
+  },
+  
+  drawGrid(canvas, size, color) {
+    const ctx = canvas.getContext();
+    const width = canvas.width;
+    const height = canvas.height;
+    
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    
+    // Draw vertical lines
+    for (let x = 0; x <= width; x += size) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+    
+    // Draw horizontal lines
+    for (let y = 0; y <= height; y += size) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    }
   }
 };
 
-// Usage
-import { AnimationPlugin } from './plugins/animation-plugin';
+// Use the plugin
+const gridControls = GridPlugin.install(canvas, {
+  gridSize: 25,
+  gridColor: '#f0f0f0'
+});</code>
+                        </div>
+                    </div>
 
-const canvas = new fabric.Canvas('canvas');
-AnimationPlugin.install(canvas);
-
-// Now you can use animations
-await canvas.fadeIn(myObject);
-await canvas.bounce(myObject);</code></pre>
-
-            <h2><span class="emoji">🚀</span>Performance Optimization</h2>
-
-            <h3>Custom Optimization Hook</h3>
-            <pre><code>import { useOptimization } from 'fabricjs-design-tool';
-
-export const useAdvancedOptimization = (canvas) => {
-  const basicOptimization = useOptimization(canvas);
+                    <div>
+                        <h3 class="text-xl font-semibold text-red-600 mb-3">Plugin Manager</h3>
+                        <p class="text-gray-600 mb-4">Manage multiple plugins with a plugin manager:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>class PluginManager {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.plugins = new Map();
+  }
   
+  install(plugin, options = {}) {
+    if (this.plugins.has(plugin.name)) {
+      console.warn(`Plugin ${plugin.name} is already installed`);
+      return;
+    }
+    
+    const api = plugin.install(this.canvas, options);
+    this.plugins.set(plugin.name, { plugin, api, options });
+    
+    return api;
+  }
+  
+  uninstall(pluginName) {
+    const pluginData = this.plugins.get(pluginName);
+    if (pluginData && pluginData.plugin.uninstall) {
+      pluginData.plugin.uninstall(this.canvas);
+    }
+    this.plugins.delete(pluginName);
+  }
+  
+  getPlugin(pluginName) {
+    const pluginData = this.plugins.get(pluginName);
+    return pluginData ? pluginData.api : null;
+  }
+}
+
+// Usage
+const pluginManager = new PluginManager(canvas);
+const gridAPI = pluginManager.install(GridPlugin);
+const rulerAPI = pluginManager.install(RulerPlugin);
+
+// Use plugin APIs
+gridAPI.toggleGrid();
+rulerAPI.showRulers();</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Event System Section -->
+            <section>
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">📡 Custom Events</h2>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-orange-600 mb-3">Custom Event Listeners</h3>
+                        <p class="text-gray-600 mb-4">Listen to canvas events and add custom behavior:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>import { useCanvasManager } from '@rifrocket/fabricjs-design-tool';
+
+function useCustomEvents(canvas) {
   useEffect(() => {
     if (!canvas) return;
-
-    // Custom optimizations
-    const optimizeForMobile = () => {
-      if (window.innerWidth < 768) {
-        canvas.set({
-          selection: false,
-          hoverCursor: 'default',
-          moveCursor: 'default'
-        });
-        
-        // Reduce render frequency on mobile
-        canvas.renderOnAddRemove = false;
-        canvas.skipTargetFind = true;
-      }
-    };
-
-    const optimizeForLargeCanvas = () => {
-      const objectCount = canvas.getObjects().length;
+    
+    // Custom object selection handler
+    const handleSelection = (e) => {
+      const obj = e.target;
+      console.log('Object selected:', obj.type);
       
-      if (objectCount > 100) {
-        canvas.set({
-          renderOnAddRemove: false,
-          skipTargetFind: true
-        });
-        
-        // Batch render updates
-        let renderTimeout;
-        const batchRender = () => {
-          clearTimeout(renderTimeout);
-          renderTimeout = setTimeout(() => {
-            canvas.renderAll();
-          }, 16); // ~60fps
-        };
-        
-        canvas.on('object:modified', batchRender);
-        canvas.on('object:moving', batchRender);
+      // Add custom behavior
+      if (obj.type === 'text') {
+        showTextEditingPanel(obj);
       }
     };
-
-    optimizeForMobile();
-    optimizeForLargeCanvas();
+    
+    // Auto-save on modifications
+    const handleModified = () => {
+      debounce(() => {
+        const canvasData = canvas.toJSON();
+        localStorage.setItem('canvas-backup', JSON.stringify(canvasData));
+      }, 1000)();
+    };
+    
+    canvas.on('selection:created', handleSelection);
+    canvas.on('object:modified', handleModified);
     
     return () => {
-      canvas.off('object:modified');
-      canvas.off('object:moving');
+      canvas.off('selection:created', handleSelection);
+      canvas.off('object:modified', handleModified);
     };
   }, [canvas]);
+}</code>
+                        </div>
+                    </div>
 
-  return {
-    ...basicOptimization,
-    // Add custom optimization methods
-  };
-};</code></pre>
+                    <div>
+                        <h3 class="text-xl font-semibold text-orange-600 mb-3">Custom Event Emitters</h3>
+                        <p class="text-gray-600 mb-4">Create custom events for plugin communication:</p>
+                        <div class="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <code>class EventEmitter {
+  constructor() {
+    this.events = {};
+  }
+  
+  on(eventName, callback) {
+    if (!this.events[eventName]) {
+      this.events[eventName] = [];
+    }
+    this.events[eventName].push(callback);
+  }
+  
+  emit(eventName, data) {
+    const callbacks = this.events[eventName];
+    if (callbacks) {
+      callbacks.forEach(callback => callback(data));
+    }
+  }
+  
+  off(eventName, callback) {
+    if (this.events[eventName]) {
+      this.events[eventName] = this.events[eventName].filter(cb => cb !== callback);
+    }
+  }
+}
 
-            <h2><span class="emoji">🎯</span>Best Practices</h2>
+// Usage
+const designToolEvents = new EventEmitter();
 
-            <ul>
-                <li><strong>Performance:</strong> Use object pooling for frequently created/destroyed objects</li>
-                <li><strong>Memory:</strong> Dispose of canvas instances properly to prevent memory leaks</li>
-                <li><strong>Responsiveness:</strong> Implement debounced updates for real-time property changes</li>
-                <li><strong>Accessibility:</strong> Add proper ARIA labels and keyboard navigation</li>
-                <li><strong>Error Handling:</strong> Wrap canvas operations in try-catch blocks</li>
-                <li><strong>State Management:</strong> Use proper state management for complex applications</li>
-            </ul>
+// Plugin A listens for events
+designToolEvents.on('shape:created', (shapeData) => {
+  console.log('New shape created:', shapeData);
+});
 
-            <h2><span class="emoji">📚</span>Next Steps</h2>
-            <ul>
-                <li><a href="examples.html"><strong>📋 Examples</strong></a> - See customization in action</li>
-                <li><a href="core-api.html"><strong>🎨 Core API</strong></a> - Detailed API reference</li>
-                <li><a href="troubleshooting.html"><strong>🔧 Troubleshooting</strong></a> - Common issues and solutions</li>
-            </ul>
+// Plugin B emits events
+designToolEvents.emit('shape:created', {
+  type: 'rectangle',
+  id: 'rect-1',
+  timestamp: Date.now()
+});</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <div class="footer">
-        <div class="container">
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
             <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        });
+    </script>
 </body>
 </html>

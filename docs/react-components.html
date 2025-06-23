@@ -4,274 +4,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React Components - FabricJS Design Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            500: '#667eea',
+                            600: '#5a67d8',
+                            700: '#4c51bf',
+                        },
+                        secondary: {
+                            500: '#764ba2',
+                            600: '#6b46c1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --text-muted: #718096;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7fafc;
-            --bg-tertiary: #edf2f7;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .code-block {
+            position: relative;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
-            color: var(--text-primary);
-            background-color: var(--bg-secondary);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 2rem 0;
-            margin-bottom: 3rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Navigation */
-        .nav {
-            background: var(--bg-primary);
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.75rem;
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            transition: all 0.2s ease;
+            opacity: 0.8;
+            backdrop-filter: blur(4px);
+        }
+        .copy-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        .copy-btn.copied {
+            background: rgba(34, 197, 94, 0.8);
+            color: white;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        pre {
+            margin: 0;
+            padding: 1rem 1rem 1rem 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 200px;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
             transition: all 0.2s ease;
         }
-
-        .nav-links a:hover {
-            background: var(--bg-tertiary);
-            color: var(--primary-color);
+        .dropdown.active .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
-
-        .nav-links a.active {
-            background: var(--primary-color);
-            color: white;
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.15s ease;
         }
-
-        /* Main Content */
-        .main-content {
-            background: var(--bg-primary);
-            border-radius: 12px;
-            padding: 3rem;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 3rem;
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
         }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--text-primary);
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
+        .dropdown-item:first-child {
+            border-radius: 0.5rem 0.5rem 0 0;
         }
-
-        h1 { font-size: 2.5rem; }
-        h2 { 
-            font-size: 2rem; 
-            margin-top: 3rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-        h3 { 
-            font-size: 1.5rem; 
-            margin-top: 2rem;
-            color: var(--primary-color);
-        }
-        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
-
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        /* Code Blocks */
-        pre, code {
-            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
-        }
-
-        code {
-            background: var(--bg-tertiary);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: var(--text-primary);
-        }
-
-        pre {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            box-shadow: var(--shadow-sm);
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-            color: inherit;
-            font-size: 0.9rem;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin: 1.5rem 0;
-            padding-left: 2rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        /* API sections */
-        .api-section {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            background: var(--bg-secondary);
-        }
-
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 0.5rem;
-        }
-
-        /* Component showcase */
-        .component-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .component-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .component-card h4 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            margin-top: 4rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .main-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            pre {
-                padding: 1rem;
-                font-size: 0.8rem;
-            }
+        .dropdown-item:last-child {
+            border-radius: 0 0 0.5rem 0.5rem;
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <div class="container">
-            <h1><span class="emoji">⚛️</span>React Components</h1>
-            <p>Pre-built React UI components for rapid development.</p>
-        </div>
-    </div>
-
-    <div class="nav">
-        <div class="container">
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="getting-started.html">Getting Started</a>
-                <a href="core-api.html">Core API</a>
-                <a href="react-components.html" class="active">React Components</a>
-                <a href="examples.html">Examples</a>
-                <a href="customization.html">Customization</a>
-                <a href="migration.html">Migration</a>
-                <a href="troubleshooting.html">Troubleshooting</a>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="logo.svg" alt="FabricJS Design Tool" class="h-8 w-auto"/>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="getting-started.html" class="text-gray-600 hover:text-primary-600 transition-colors">Getting Started</a>
+                    <a href="core-api.html" class="text-gray-600 hover:text-primary-600 transition-colors">Core API</a>
+                    <a href="react-components.html" class="text-primary-600 font-medium">React Components</a>
+                    <a href="customization.html" class="text-gray-600 hover:text-primary-600 transition-colors">Customization</a>
+                    <a href="troubleshooting.html" class="text-gray-600 hover:text-primary-600 transition-colors">Troubleshooting</a>
+                    
+                    <!-- Contributor Menu -->
+                    <div class="dropdown">
+                        <button class="flex items-center space-x-1 text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-md" onclick="toggleDropdown()">
+                            <span>👥 Contributors</span>
+                            <svg class="w-4 h-4 transition-transform" id="dropdown-arrow" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="contributing.html" class="dropdown-item">
+                                <div class="flex items-center space-x-2">
+                                    <span>📝</span>
+                                    <div>
+                                        <div class="font-medium">Contributing Guide</div>
+                                        <div class="text-sm text-gray-500">How to contribute</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐙</span>
+                                    <div>
+                                        <div class="font-medium">GitHub Repository</div>
+                                        <div class="text-sm text-gray-500">View source code</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐛</span>
+                                    <div>
+                                        <div class="font-medium">Report Issues</div>
+                                        <div class="text-sm text-gray-500">Bug reports & features</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                
+                </div>
             </div>
         </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">⚛️ React Components</h1>
+            <p class="text-xl opacity-90 max-w-2xl">Pre-built React UI components for rapid development of design tools.</p>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="main-content">
-            <h2><span class="emoji">📦</span>Import</h2>
-            <pre><code>import { 
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12">
+            
+            <!-- Import Section -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">📦 Import</h2>
+                <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                    <button class="copy-btn" onclick="copyToClipboard(this, `import { 
   CanvasWrapper,
   Header,
   LeftSidebar,
@@ -280,55 +196,60 @@
   QRCodeDialog,
   ShapeDialog,
   KeyboardShortcutsModal
-} from 'fabricjs-design-tool/ui';</code></pre>
+} from '@rifrocket/fabricjs-design-tool/ui';`)">Copy</button>
+                    <pre class="text-gray-100 font-mono text-sm"><code>import { 
+  CanvasWrapper,
+  Header,
+  LeftSidebar,
+  RightSidebar,
+  BottomToolbar,
+  QRCodeDialog,
+  ShapeDialog,
+  KeyboardShortcutsModal
+} from '@rifrocket/fabricjs-design-tool/ui';</code></pre>
+                </div>
+            </section>
 
-            <h2><span class="emoji">🖼️</span>Main Components</h2>
+            <!-- Main Components -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🖼️ Main Components</h2>
 
-            <div class="component-showcase">
-                <div class="component-card">
-                    <h4>&lt;CanvasWrapper /&gt;</h4>
-                    <p>The core canvas component that wraps Fabric.js functionality with enhanced features.</p>
-                    <pre><code>&lt;CanvasWrapper
+                <div class="space-y-8">
+                    <!-- CanvasWrapper -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <h3 class="text-2xl font-semibold text-blue-900 mb-3">&lt;CanvasWrapper /&gt;</h3>
+                        <p class="text-blue-700 mb-4">The core canvas component that wraps Fabric.js functionality with enhanced features.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<CanvasWrapper
+  width={1000}
+  height={700}
+  backgroundColor='#f5f5f5'
+  onCanvasReady={setCanvas}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;CanvasWrapper
   width={1000}
   height={700}
   backgroundColor="#f5f5f5"
   onCanvasReady={setCanvas}
 /&gt;</code></pre>
-                </div>
+                        </div>
 
-                <div class="component-card">
-                    <h4>&lt;Header /&gt;</h4>
-                    <p>Application header with file operations, zoom controls, and settings.</p>
-                    <pre><code>&lt;Header
-  title="My Design Tool"
-  showLogo={true}
-  onExport={handleExport}
-/&gt;</code></pre>
-                </div>
-
-                <div class="component-card">
-                    <h4>&lt;LeftSidebar /&gt;</h4>
-                    <p>Tool palette with shapes, drawing tools, and templates.</p>
-                    <pre><code>&lt;LeftSidebar
-  collapsed={false}
-  tools={customTools}
-  onToolSelect={handleTool}
-/&gt;</code></pre>
-                </div>
-
-                <div class="component-card">
-                    <h4>&lt;RightSidebar /&gt;</h4>
-                    <p>Properties panel for selected objects with styling options.</p>
-                    <pre><code>&lt;RightSidebar
-  selectedObject={selected}
-  onPropertyChange={handleChange}
-/&gt;</code></pre>
-                </div>
-            </div>
-
-            <div class="api-section">
-                <h3>CanvasWrapper Props</h3>
-                <pre><code>interface CanvasWrapperProps {
+                        <div class="mt-4">
+                            <h4 class="font-semibold text-blue-900 mb-2">Props:</h4>
+                            <div class="bg-white rounded border p-4">
+                                <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                                    <button class="copy-btn" onclick="copyToClipboard(this, `interface CanvasWrapperProps {
+  width?: number;           // Canvas width (default: 800)
+  height?: number;          // Canvas height (default: 600)
+  backgroundColor?: string; // Canvas background (default: '#ffffff')
+  className?: string;       // CSS class
+  style?: React.CSSProperties;
+  onCanvasReady?: (canvas: fabric.Canvas) => void;
+  onSelectionChange?: (selected: fabric.Object[]) => void;
+  onObjectModified?: (object: fabric.Object) => void;
+}`)">Copy</button>
+                                    <pre class="text-gray-100 font-mono text-sm"><code>interface CanvasWrapperProps {
   width?: number;           // Canvas width (default: 800)
   height?: number;          // Canvas height (default: 600)
   backgroundColor?: string; // Canvas background (default: '#ffffff')
@@ -338,174 +259,354 @@
   onSelectionChange?: (selected: fabric.Object[]) => void;
   onObjectModified?: (object: fabric.Object) => void;
 }</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <h4>Complete Example</h4>
-                <pre><code>import React, { useState } from 'react';
-import { CanvasWrapper } from 'fabricjs-design-tool/ui';
+                    <!-- Header -->
+                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                        <h3 class="text-2xl font-semibold text-purple-900 mb-3">&lt;Header /&gt;</h3>
+                        <p class="text-purple-700 mb-4">Application header with file operations, zoom controls, and settings.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<Header
+  title='My Design Tool'
+  showLogo={true}
+  onExport={handleExport}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;Header
+  title="My Design Tool"
+  showLogo={true}
+  onExport={handleExport}
+/&gt;</code></pre>
+                        </div>
+                    </div>
 
-function MyApp() {
+                    <!-- LeftSidebar -->
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                        <h3 class="text-2xl font-semibold text-green-900 mb-3">&lt;LeftSidebar /&gt;</h3>
+                        <p class="text-green-700 mb-4">Tool palette with shapes, drawing tools, and templates.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<LeftSidebar
+  collapsed={false}
+  tools={customTools}
+  onToolSelect={handleTool}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;LeftSidebar
+  collapsed={false}
+  tools={customTools}
+  onToolSelect={handleTool}
+/&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- RightSidebar -->
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                        <h3 class="text-2xl font-semibold text-yellow-900 mb-3">&lt;RightSidebar /&gt;</h3>
+                        <p class="text-yellow-700 mb-4">Properties panel for selected objects with styling options.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<RightSidebar
+  selectedObject={selected}
+  onPropertyChange={handleChange}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;RightSidebar
+  selectedObject={selected}
+  onPropertyChange={handleChange}
+/&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Example -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🚀 Complete Example</h2>
+                
+                <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                    <button class="copy-btn" onclick="copyToClipboard(this, `import React, { useState } from 'react';
+import { 
+  CanvasWrapper, 
+  Header, 
+  LeftSidebar, 
+  RightSidebar 
+} from '@rifrocket/fabricjs-design-tool/ui';
+
+function MyDesignTool() {
   const [canvas, setCanvas] = useState(null);
   const [selected, setSelected] = useState(null);
   
+  const handleExport = (format) => {
+    if (canvas) {
+      const dataURL = canvas.toDataURL(format);
+      // Handle export logic
+    }
+  };
+
+  const handleToolSelect = (tool) => {
+    console.log('Selected tool:', tool);
+  };
+
+  const handlePropertyChange = (property, value) => {
+    if (selected) {
+      selected.set(property, value);
+      canvas.renderAll();
+    }
+  };
+  
   return (
-    &lt;div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}&gt;
-      &lt;CanvasWrapper
-        width={1000}
-        height={700}
-        backgroundColor="#f8f9fa"
-        onCanvasReady={setCanvas}
-        onSelectionChange={(objects) =&gt; setSelected(objects[0])}
-        onObjectModified={(obj) =&gt; console.log('Modified:', obj)}
-      /&gt;
-    &lt;/div&gt;
+    <div className='h-screen flex flex-col'>
+      <Header
+        title='My Design Tool'
+        onExport={handleExport}
+      />
+      <div className='flex flex-1'>
+        <LeftSidebar
+          onToolSelect={handleToolSelect}
+        />
+        <div className='flex-1'>
+          <CanvasWrapper
+            width={1000}
+            height={700}
+            backgroundColor='#f8f9fa'
+            onCanvasReady={setCanvas}
+            onSelectionChange={(objects) => setSelected(objects[0])}
+          />
+        </div>
+        <RightSidebar
+          selectedObject={selected}
+          onPropertyChange={handlePropertyChange}
+        />
+      </div>
+    </div>
   );
-}</code></pre>
-            </div>
+}
 
-            <h2><span class="emoji">🔧</span>Utility Components</h2>
-
-            <div class="component-showcase">
-                <div class="component-card">
-                    <h4>&lt;QRCodeDialog /&gt;</h4>
-                    <p>Advanced QR code generator with customization options.</p>
-                    <pre><code>&lt;QRCodeDialog
-  open={showQR}
-  onClose={() =&gt; setShowQR(false)}
-  onGenerate={handleQRGenerate}
-/&gt;</code></pre>
-                </div>
-
-                <div class="component-card">
-                    <h4>&lt;ShapeDialog /&gt;</h4>
-                    <p>Shape creation dialog with preset options and custom configurations.</p>
-                    <pre><code>&lt;ShapeDialog
-  open={showShapes}
-  onClose={() =&gt; setShowShapes(false)}
-  onShapeCreate={handleShapeCreate}
-/&gt;</code></pre>
-                </div>
-
-                <div class="component-card">
-                    <h4>&lt;KeyboardShortcutsModal /&gt;</h4>
-                    <p>Help modal displaying all available keyboard shortcuts.</p>
-                    <pre><code>&lt;KeyboardShortcutsModal
-  open={showHelp}
-  onClose={() =&gt; setShowHelp(false)}
-/&gt;</code></pre>
-                </div>
-
-                <div class="component-card">
-                    <h4>&lt;BottomToolbar /&gt;</h4>
-                    <p>Status bar with zoom controls, coordinates, and quick actions.</p>
-                    <pre><code>&lt;BottomToolbar
-  zoom={zoom}
-  onZoomChange={setZoom}
-  coordinates={mousePos}
-/&gt;</code></pre>
-                </div>
-            </div>
-
-            <h2><span class="emoji">🎨</span>Complete Layout Example</h2>
-            <pre><code>import React, { useState } from 'react';
+export default MyDesignTool;`)">Copy</button>
+                    <pre class="text-gray-100 font-mono text-sm"><code>import React, { useState } from 'react';
 import { 
-  CanvasWrapper,
-  Header,
-  LeftSidebar,
-  RightSidebar,
-  BottomToolbar,
-  QRCodeDialog,
-  ShapeDialog,
-  KeyboardShortcutsModal
-} from 'fabricjs-design-tool/ui';
+  CanvasWrapper, 
+  Header, 
+  LeftSidebar, 
+  RightSidebar 
+} from '@rifrocket/fabricjs-design-tool/ui';
 
-function DesignApp() {
+function MyDesignTool() {
   const [canvas, setCanvas] = useState(null);
-  const [selectedObject, setSelectedObject] = useState(null);
-  const [zoom, setZoom] = useState(1);
-  const [showQR, setShowQR] = useState(false);
-  const [showShapes, setShowShapes] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
+  const [selected, setSelected] = useState(null);
+  
+  const handleExport = (format) => {
+    if (canvas) {
+      const dataURL = canvas.toDataURL(format);
+      // Handle export logic
+    }
+  };
 
+  const handleToolSelect = (tool) => {
+    console.log('Selected tool:', tool);
+  };
+
+  const handlePropertyChange = (property, value) => {
+    if (selected) {
+      selected.set(property, value);
+      canvas.renderAll();
+    }
+  };
+  
   return (
-    &lt;div className="design-app"&gt;
-      &lt;Header 
-        onExport={() =&gt; console.log('Export')}
-        onShowQR={() =&gt; setShowQR(true)}
-        onShowShapes={() =&gt; setShowShapes(true)}
-        onShowHelp={() =&gt; setShowHelp(true)}
+    &lt;div className="h-screen flex flex-col"&gt;
+      &lt;Header
+        title="My Design Tool"
+        onExport={handleExport}
       /&gt;
-      
-      &lt;div className="design-body"&gt;
-        &lt;LeftSidebar 
-          canvas={canvas}
-          onToolSelect={(tool) =&gt; console.log('Tool:', tool)}
+      &lt;div className="flex flex-1"&gt;
+        &lt;LeftSidebar
+          onToolSelect={handleToolSelect}
         /&gt;
-        
-        &lt;CanvasWrapper
-          onCanvasReady={setCanvas}
-          onSelectionChange={(objs) =&gt; setSelectedObject(objs[0])}
-          width={1200}
-          height={800}
-        /&gt;
-        
-        &lt;RightSidebar 
-          selectedObject={selectedObject}
-          onPropertyChange={(prop, value) =&gt; {
-            if (selectedObject) {
-              selectedObject.set(prop, value);
-              canvas?.renderAll();
-            }
-          }}
+        &lt;div className="flex-1"&gt;
+          &lt;CanvasWrapper
+            width={1000}
+            height={700}
+            backgroundColor="#f8f9fa"
+            onCanvasReady={setCanvas}
+            onSelectionChange={(objects) =&gt; setSelected(objects[0])}
+          /&gt;
+        &lt;/div&gt;
+        &lt;RightSidebar
+          selectedObject={selected}
+          onPropertyChange={handlePropertyChange}
         /&gt;
       &lt;/div&gt;
-      
-      &lt;BottomToolbar 
-        zoom={zoom}
-        onZoomChange={setZoom}
-      /&gt;
-
-      &lt;QRCodeDialog 
-        open={showQR}
-        onClose={() =&gt; setShowQR(false)}
-      /&gt;
-      
-      &lt;ShapeDialog 
-        open={showShapes}
-        onClose={() =&gt; setShowShapes(false)}
-      /&gt;
-      
-      &lt;KeyboardShortcutsModal 
-        open={showHelp}
-        onClose={() =&gt; setShowHelp(false)}
-      /&gt;
     &lt;/div&gt;
   );
 }
 
-export default DesignApp;</code></pre>
+export default MyDesignTool;</code></pre>
+                </div>
+            </section>
 
-            <h2><span class="emoji">💡</span>Pro Tips</h2>
-            <ul>
-                <li><strong>Responsive Design:</strong> Components automatically adapt to different screen sizes</li>
-                <li><strong>Theme Support:</strong> Built-in dark/light theme switching</li>
-                <li><strong>Keyboard Shortcuts:</strong> All components support keyboard navigation</li>
-                <li><strong>Accessibility:</strong> Components follow WCAG guidelines</li>
-                <li><strong>Customization:</strong> Easy to theme and extend with CSS variables</li>
-            </ul>
+            <!-- Dialog Components -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">💬 Dialog Components</h2>
 
-            <h2><span class="emoji">🎯</span>Next Steps</h2>
-            <ul>
-                <li><a href="examples.html"><strong>📋 Examples</strong></a> - See complete implementation examples</li>
-                <li><a href="customization.html"><strong>🔧 Customization</strong></a> - Learn how to customize components</li>
-                <li><a href="core-api.html"><strong>🎨 Core API</strong></a> - Understand the underlying functionality</li>
-            </ul>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-indigo-900 mb-3">&lt;QRCodeDialog /&gt;</h3>
+                        <p class="text-indigo-700 mb-4">Dialog for generating and customizing QR codes.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<QRCodeDialog
+  isOpen={showQRDialog}
+  onClose={() => setShowQRDialog(false)}
+  onGenerate={handleQRGenerate}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;QRCodeDialog
+  isOpen={showQRDialog}
+  onClose={() =&gt; setShowQRDialog(false)}
+  onGenerate={handleQRGenerate}
+/&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-pink-50 border border-pink-200 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-pink-900 mb-3">&lt;ShapeDialog /&gt;</h3>
+                        <p class="text-pink-700 mb-4">Dialog for creating custom shapes with properties.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<ShapeDialog
+  isOpen={showShapeDialog}
+  onClose={() => setShowShapeDialog(false)}
+  onCreateShape={handleCreateShape}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;ShapeDialog
+  isOpen={showShapeDialog}
+  onClose={() =&gt; setShowShapeDialog(false)}
+  onCreateShape={handleCreateShape}
+/&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-teal-50 border border-teal-200 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-teal-900 mb-3">&lt;KeyboardShortcutsModal /&gt;</h3>
+                        <p class="text-teal-700 mb-4">Modal displaying available keyboard shortcuts.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<KeyboardShortcutsModal
+  isOpen={showShortcuts}
+  onClose={() => setShowShortcuts(false)}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;KeyboardShortcutsModal
+  isOpen={showShortcuts}
+  onClose={() =&gt; setShowShortcuts(false)}
+/&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-orange-900 mb-3">&lt;BottomToolbar /&gt;</h3>
+                        <p class="text-orange-700 mb-4">Bottom toolbar with zoom controls and status information.</p>
+                        
+                        <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                            <button class="copy-btn" onclick="copyToClipboard(this, `<BottomToolbar
+  zoom={zoomLevel}
+  onZoomChange={setZoomLevel}
+  objectCount={canvas?.getObjects().length || 0}
+/>`)">Copy</button>
+                            <pre class="text-gray-100 font-mono text-sm"><code>&lt;BottomToolbar
+  zoom={zoomLevel}
+  onZoomChange={setZoomLevel}
+  objectCount={canvas?.getObjects().length || 0}
+/&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Styling -->
+            <section>
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🎨 Styling & Customization</h2>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">CSS Classes</h3>
+                    <p class="text-gray-600 mb-4">All components accept standard React props including <code class="bg-gray-200 px-2 py-1 rounded">className</code> and <code class="bg-gray-200 px-2 py-1 rounded">style</code> for custom styling.</p>
+                    
+                    <div class="code-block relative bg-gray-900 rounded-lg overflow-hidden">
+                        <button class="copy-btn" onclick="copyToClipboard(this, `<CanvasWrapper
+  className='custom-canvas-wrapper'
+  style={{ border: '2px solid #3498db' }}
+/>
+
+<LeftSidebar
+  className='w-64 bg-gray-100'
+  style={{ boxShadow: '2px 0 4px rgba(0,0,0,0.1)' }}
+/>`)">Copy</button>
+                        <pre class="text-gray-100 font-mono text-sm"><code>&lt;CanvasWrapper
+  className="custom-canvas-wrapper"
+  style={{ border: '2px solid #3498db' }}
+/&gt;
+
+&lt;LeftSidebar
+  className="w-64 bg-gray-100"
+  style={{ boxShadow: '2px 0 4px rgba(0,0,0,0.1)' }}
+/&gt;</code></pre>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <div class="footer">
-        <div class="container">
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
             <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy text: ', err);
+                button.textContent = 'Error';
+                setTimeout(function() {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -4,151 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FabricJS Design Tool - Documentation</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            line-height: 1.6;
-            color: #333;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            500: '#667eea',
+                            600: '#5a67d8',
+                            700: '#4c51bf',
+                        },
+                        secondary: {
+                            500: '#764ba2',
+                            600: '#6b46c1',
+                        }
+                    }
+                }
+            }
         }
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid #eee;
-        }
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 12px;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-        .docs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-        .doc-card {
-            border: 1px solid #e1e5e9;
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .doc-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        .doc-card h3 {
-            margin-top: 0;
-            color: #2d3748;
-        }
-        .demo-section {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            margin: 2rem 0;
-        }
-        .btn {
-            display: inline-block;
-            background: #3182ce;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            margin: 0.5rem;
-            transition: background 0.2s;
-        }
-        .btn:hover {
-            background: #2c5282;
-        }
-        .btn-secondary {
-            background: #718096;
-        }
-        .btn-secondary:hover {
-            background: #4a5568;
-        }
-    </style>
+    </script>
 </head>
-<body>
-    <div class="header">
-        <h1>🎨 FabricJS Design Tool</h1>
-        <p>Comprehensive, modern design tool built with Fabric.js and React</p>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="logo.svg" alt="FabricJS Design Tool" class="h-8 w-auto"/>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://github.com/rifrocket/fabricjs-design-tool" class="text-gray-600 hover:text-gray-900 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.42.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool" class="text-gray-600 hover:text-gray-900 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="text-center mb-16 py-8 border-b border-gray-200">
+            <div class="flex justify-center mb-4">
+                <img src="logo-large.svg" alt="FabricJS Design Tool" class="h-16 w-auto"/>
+            </div>
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">FabricJS Design Tool</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Comprehensive, modern design tool built with Fabric.js and React</p>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-2xl p-12 mb-12 text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready for Production Use</h2>
+            <p class="text-lg mb-8 opacity-90">Framework-agnostic core • React UI components • TypeScript support • Zero vulnerabilities</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="../index.html" class="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center">
+                    🚀 Try Live Demo
+                </a>
+                <a href="https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool" class="bg-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors inline-flex items-center">
+                    📦 NPM Package
+                </a>
+            </div>
+        </div>
+
+        <!-- Demo Section -->
+        <div class="bg-white rounded-xl p-8 mb-12 text-center shadow-sm border border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">🌟 Interactive Demo</h2>
+            <p class="text-gray-600 mb-6">Experience the full design tool with all features enabled</p>
+            <a href="../index.html" class="bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors inline-block">
+                Launch Demo
+            </a>
+        </div>
+
+        <!-- Documentation Grid -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">📚 Documentation</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">🚀 Getting Started</h3>
+                    <p class="text-gray-600 mb-4">Installation, setup, and basic usage guide to get you up and running quickly.</p>
+                    <a href="getting-started.html" class="text-primary-600 font-medium hover:text-primary-700">Read Guide →</a>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">🎨 Core API Reference</h3>
+                    <p class="text-gray-600 mb-4">Framework-agnostic API documentation for canvas management and shape creation.</p>
+                    <a href="core-api.html" class="text-primary-600 font-medium hover:text-primary-700">View API →</a>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">⚛️ React Components</h3>
+                    <p class="text-gray-600 mb-4">Pre-built React UI components for rapid development.</p>
+                    <a href="react-components.html" class="text-primary-600 font-medium hover:text-primary-700">Explore Components →</a>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">🎨 Customization</h3>
+                    <p class="text-gray-600 mb-4">Theming, custom shapes, and extending the design tool.</p>
+                    <a href="customization.html" class="text-primary-600 font-medium hover:text-primary-700">Learn More →</a>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">🤝 Contributors Guide</h3>
+                    <p class="text-gray-600 mb-4">Complete development setup, available commands, and contribution workflow.</p>
+                    <a href="contributing.html" class="text-primary-600 font-medium hover:text-primary-700">Start Contributing →</a>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">🔧 Troubleshooting</h3>
+                    <p class="text-gray-600 mb-4">Common issues and solutions to help you resolve problems quickly.</p>
+                    <a href="troubleshooting.html" class="text-primary-600 font-medium hover:text-primary-700">Get Help →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Install Section -->
+        <div class="bg-gray-100 rounded-xl p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">🚀 Quick Install</h2>
+            <div class="bg-gray-900 text-gray-100 p-4 rounded-lg mb-6 overflow-x-auto">
+                <code class="text-sm font-mono">npm install @rifrocket/fabricjs-design-tool</code>
+            </div>
+            
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Basic Usage:</h3>
+            <div class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+                <code class="text-sm font-mono">import { ShapeFactory } from '@rifrocket/fabricjs-design-tool';<br>import { Header, CanvasWrapper } from '@rifrocket/fabricjs-design-tool/ui';</code>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 border-t border-gray-200 text-gray-600">
+            <p class="mb-2">Built with ❤️ using <a href="http://fabricjs.com/" class="text-primary-600 hover:text-primary-700">Fabric.js</a> and <a href="https://reactjs.org/" class="text-primary-600 hover:text-primary-700">React</a></p>
+            <p>
+                <a href="https://github.com/rifrocket/fabricjs-design-tool" class="text-primary-600 hover:text-primary-700">GitHub Repository</a> • 
+                <a href="https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool" class="text-primary-600 hover:text-primary-700">NPM Package</a>
+            </p>
+        </footer>
     </div>
-
-    <div class="hero">
-        <h2>Ready for Production Use</h2>
-        <p>Framework-agnostic core • React UI components • TypeScript support • Zero vulnerabilities</p>
-        <a href="../index.html" class="btn">🚀 Try Live Demo</a>
-        <a href="https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool" class="btn btn-secondary">📦 NPM Package</a>
-    </div>
-
-    <div class="demo-section">
-        <h2>🌟 Interactive Demo</h2>
-        <p>Experience the full design tool with all features enabled</p>
-        <a href="../index.html" class="btn">Launch Demo</a>
-    </div>
-
-    <h2>📚 Documentation</h2>
-    <div class="docs-grid">
-        <div class="doc-card">
-            <h3>🚀 Getting Started</h3>
-            <p>Installation, setup, and basic usage guide to get you up and running quickly.</p>
-            <a href="getting-started.html">Read Guide →</a>
-        </div>
-
-        <div class="doc-card">
-            <h3>🎨 Core API Reference</h3>
-            <p>Framework-agnostic API documentation for canvas management and shape creation.</p>
-            <a href="core-api.html">View API →</a>
-        </div>
-
-        <div class="doc-card">
-            <h3>⚛️ React Components</h3>
-            <p>Pre-built React UI components for rapid development.</p>
-            <a href="react-components.html">Explore Components →</a>
-        </div>
-
-        <div class="doc-card">
-            <h3>🎨 Customization</h3>
-            <p>Theming, custom shapes, and extending the design tool.</p>
-            <a href="customization.html">Learn More →</a>
-        </div>
-
-        <div class="doc-card">
-            <h3>🤝 Contributors Guide</h3>
-            <p>Complete development setup, available commands, and contribution workflow.</p>
-            <a href="contributing.html">Start Contributing →</a>
-        </div>
-
-        <div class="doc-card">
-            <h3>🔧 Troubleshooting</h3>
-            <p>Common issues and solutions to help you resolve problems quickly.</p>
-            <a href="troubleshooting.html">Get Help →</a>
-        </div>
-    </div>
-
-    <div style="background: #edf2f7; padding: 2rem; border-radius: 8px; margin: 3rem 0;">
-        <h2>🚀 Quick Install</h2>
-        <pre style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>npm install @rifrocket/fabricjs-design-tool</code></pre>
-        
-        <h3>Basic Usage:</h3>
-        <pre style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 4px; overflow-x: auto;"><code>import { ShapeFactory } from '@rifrocket/fabricjs-design-tool';
-import { Header, CanvasWrapper } from '@rifrocket/fabricjs-design-tool/ui';</code></pre>
-    </div>
-
-    <footer style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e1e5e9; color: #718096;">
-        <p>Built with ❤️ using <a href="http://fabricjs.com/">Fabric.js</a> and <a href="https://reactjs.org/">React</a></p>
-        <p>
-            <a href="https://github.com/rifrocket/fabricjs-design-tool">GitHub Repository</a> • 
-            <a href="https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool">NPM Package</a>
-        </p>
-    </footer>
 </body>
 </html>

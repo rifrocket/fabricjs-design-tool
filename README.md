@@ -1,5 +1,9 @@
 # FabricJS Design Tool
 
+<div align="center">
+  <img src="./docs/logo-large.svg" alt="FabricJS Design Tool" width="500"/>
+</div>
+
 > A comprehensive, modern design tool built with Fabric.js and React - ready for production use in any JavaScript framework.
 
 [![npm version](https://badge.fury.io/js/%40rifrocket%2Ffabricjs-design-tool.svg)](https://badge.fury.io/js/%40rifrocket%2Ffabricjs-design-tool)

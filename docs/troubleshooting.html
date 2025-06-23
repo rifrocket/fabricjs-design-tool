@@ -4,626 +4,574 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Troubleshooting - FabricJS Design Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            500: '#667eea',
+                            600: '#5a67d8',
+                            700: '#4c51bf',
+                        },
+                        secondary: {
+                            500: '#764ba2',
+                            600: '#6b46c1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --text-muted: #718096;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7fafc;
-            --bg-tertiary: #edf2f7;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .dropdown {
+            position: relative;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
-            color: var(--text-primary);
-            background-color: var(--bg-secondary);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 3rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Navigation */
-        .nav {
-            background: var(--bg-primary);
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 200px;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
             transition: all 0.2s ease;
         }
-
-        .nav-links a:hover {
-            background: var(--bg-tertiary);
-            color: var(--primary-color);
+        .dropdown.active .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
-
-        .nav-links a.active {
-            background: var(--primary-color);
-            color: white;
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.15s ease;
         }
-
-        /* Main Content */
-        .main-content {
-            background: var(--bg-primary);
-            border-radius: 12px;
-            padding: 3rem;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 3rem;
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
         }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--text-primary);
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
+        .dropdown-item:first-child {
+            border-radius: 0.5rem 0.5rem 0 0;
         }
-
-        h1 { font-size: 2.5rem; }
-        h2 { 
-            font-size: 2rem; 
-            margin-top: 3rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-        h3 { 
-            font-size: 1.5rem; 
-            margin-top: 2rem;
-            color: var(--primary-color);
-        }
-        h4 { font-size: 1.25rem; margin-top: 1.5rem; }
-
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        /* Code Blocks */
-        pre, code {
-            font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
-        }
-
-        code {
-            background: var(--bg-tertiary);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: var(--text-primary);
-        }
-
-        pre {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            box-shadow: var(--shadow-sm);
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-            color: inherit;
-            font-size: 0.9rem;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin: 1.5rem 0;
-            padding-left: 2rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 0.5rem;
-        }
-
-        /* Issue cards */
-        .issue-card {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            background: var(--bg-secondary);
-        }
-
-        .issue-card h4 {
-            color: #dc2626;
-            margin-bottom: 1rem;
-        }
-
-        .solution {
-            background: #f0fdf4;
-            border: 1px solid #16a34a;
-            border-radius: 6px;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-
-        .solution h5 {
-            color: #16a34a;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            margin-top: 4rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .main-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            pre {
-                padding: 1rem;
-                font-size: 0.8rem;
-            }
+        .dropdown-item:last-child {
+            border-radius: 0 0 0.5rem 0.5rem;
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <div class="container">
-            <h1><span class="emoji">🔧</span>Troubleshooting</h1>
-            <p>Common issues and their solutions.</p>
-        </div>
-    </div>
-
-    <div class="nav">
-        <div class="container">
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="getting-started.html">Getting Started</a>
-                <a href="core-api.html">Core API</a>
-                <a href="react-components.html">React Components</a>
-                <a href="examples.html">Examples</a>
-                <a href="customization.html">Customization</a>
-                <a href="migration.html">Migration</a>
-                <a href="troubleshooting.html" class="active">Troubleshooting</a>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="logo.svg" alt="FabricJS Design Tool" class="h-8 w-auto"/>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="getting-started.html" class="text-gray-600 hover:text-primary-600 transition-colors">Getting Started</a>
+                    <a href="core-api.html" class="text-gray-600 hover:text-primary-600 transition-colors">Core API</a>
+                    <a href="react-components.html" class="text-gray-600 hover:text-primary-600 transition-colors">React Components</a>
+                    <a href="customization.html" class="text-gray-600 hover:text-primary-600 transition-colors">Customization</a>
+                    <a href="troubleshooting.html" class="text-primary-600 font-medium">Troubleshooting</a>
+                    
+                    <!-- Contributor Menu -->
+                    <div class="dropdown">
+                        <button class="flex items-center space-x-1 text-gray-600 hover:text-primary-600 transition-colors px-3 py-2 rounded-md" onclick="toggleDropdown()">
+                            <span>👥 Contributors</span>
+                            <svg class="w-4 h-4 transition-transform" id="dropdown-arrow" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="contributing.html" class="dropdown-item">
+                                <div class="flex items-center space-x-2">
+                                    <span>📝</span>
+                                    <div>
+                                        <div class="font-medium">Contributing Guide</div>
+                                        <div class="text-sm text-gray-500">How to contribute</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐙</span>
+                                    <div>
+                                        <div class="font-medium">GitHub Repository</div>
+                                        <div class="text-sm text-gray-500">Source code & issues</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="dropdown-item" target="_blank">
+                                <div class="flex items-center space-x-2">
+                                    <span>🐛</span>
+                                    <div>
+                                        <div class="font-medium">Report Issues</div>
+                                        <div class="text-sm text-gray-500">Bug reports & features</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">🔧 Troubleshooting</h1>
+            <p class="text-xl opacity-90 max-w-2xl">Common issues and solutions to help you resolve problems quickly.</p>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="main-content">
-            <h2><span class="emoji">🚫</span>Installation Issues</h2>
-
-            <div class="issue-card">
-                <h4>❌ Module not found: 'fabricjs-design-tool'</h4>
-                <p>The package isn't installed or the import path is incorrect.</p>
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12">
+            
+            <!-- Installation Issues -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">📦 Installation Issues</h2>
                 
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code># Install the package
-npm install fabricjs-design-tool
+                <div class="space-y-8">
+                    <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-red-800 mb-3">Module Not Found Error</h3>
+                        <p class="text-red-700 mb-4"><strong>Error:</strong> <code>Cannot resolve module '@rifrocket/fabricjs-design-tool'</code></p>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-red-800 mb-2">Solution 1: Verify Installation</h4>
+                                <div class="bg-red-900 text-red-100 p-3 rounded font-mono text-sm">
+                                    <code># Check if package is installed
+npm list @rifrocket/fabricjs-design-tool
 
-# Verify installation
-npm list fabricjs-design-tool
-
-# Clear cache if needed
+# Reinstall if missing
+npm install @rifrocket/fabricjs-design-tool</code>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-red-800 mb-2">Solution 2: Clear Cache</h4>
+                                <div class="bg-red-900 text-red-100 p-3 rounded font-mono text-sm">
+                                    <code># Clear npm cache
 npm cache clean --force
+
+# Remove node_modules and reinstall
 rm -rf node_modules package-lock.json
-npm install</code></pre>
+npm install</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-yellow-800 mb-3">Peer Dependency Warnings</h3>
+                        <p class="text-yellow-700 mb-4"><strong>Warning:</strong> <code>fabric@UNMET PEER DEPENDENCY</code></p>
+                        
+                        <div>
+                            <h4 class="font-semibold text-yellow-800 mb-2">Solution:</h4>
+                            <div class="bg-yellow-900 text-yellow-100 p-3 rounded font-mono text-sm">
+                                <code># Install required peer dependencies
+npm install fabric react react-dom
+
+# For TypeScript projects
+npm install --save-dev @types/fabric</code>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="issue-card">
-                <h4>❌ TypeScript errors with fabric types</h4>
-                <p>TypeScript can't find type definitions for Fabric.js.</p>
+            <!-- Canvas Issues -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🎨 Canvas Issues</h2>
                 
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code># Install Fabric.js types
-npm install --save-dev @types/fabric
+                <div class="space-y-8">
+                    <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-red-800 mb-3">Canvas Not Rendering</h3>
+                        <p class="text-red-700 mb-4">Canvas appears blank or shapes don't show up</p>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-red-800 mb-2">Check Canvas Initialization</h4>
+                                <div class="bg-red-900 text-red-100 p-3 rounded font-mono text-sm">
+                                    <code>// ❌ Wrong - element might not exist yet
+const canvas = new fabric.Canvas('my-canvas');
 
-# Or add to tsconfig.json
-{
-  "compilerOptions": {
-    "skipLibCheck": true
-  }
-}</code></pre>
-                </div>
-            </div>
-
-            <h2><span class="emoji">🖼️</span>Canvas Issues</h2>
-
-            <div class="issue-card">
-                <h4>❌ Canvas not rendering or appears empty</h4>
-                <p>Canvas element isn't properly initialized or has zero dimensions.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>// Ensure canvas has dimensions
-&lt;CanvasWrapper
-  width={800}
-  height={600}
-  style={{ minHeight: '400px' }}
-/&gt;
-
-// Or check if canvas element exists
+// ✅ Correct - wait for DOM
 useEffect(() => {
-  const canvasElement = document.getElementById('canvas');
-  if (!canvasElement) {
-    console.error('Canvas element not found');
-    return;
-  }
-  
-  const canvas = new Canvas(canvasElement);
-  canvas.renderAll(); // Force render
-}, []);</code></pre>
-                </div>
-            </div>
+  const canvas = new fabric.Canvas('my-canvas');
+  // ... rest of setup
+}, []);</code>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-red-800 mb-2">Call renderAll() After Adding Objects</h4>
+                                <div class="bg-red-900 text-red-100 p-3 rounded font-mono text-sm">
+                                    <code>// Always call renderAll after adding objects
+canvas.add(rectangle);
+canvas.add(circle);
+canvas.renderAll(); // ← Important!</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="issue-card">
-                <h4>❌ Objects not appearing on canvas</h4>
-                <p>Objects are added but not visible.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>// Always call renderAll() after adding objects
-canvas.add(object);
-canvas.renderAll(); // ← Important!
-
-// Check object properties
-console.log('Object:', object);
-console.log('Canvas objects:', canvas.getObjects());
-
-// Ensure object has valid dimensions
-const rect = shapeFactory.createRectangle({
-  left: 50,
-  top: 50,
-  width: 100, // Must be > 0
-  height: 100, // Must be > 0
-  fill: 'red' // Must have visible fill or stroke
-});</code></pre>
-                </div>
-            </div>
-
-            <div class="issue-card">
-                <h4>❌ Canvas events not working</h4>
-                <p>Mouse clicks, selections, or other interactions aren't responding.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>// Check if canvas is properly initialized
-if (!canvas) {
-  console.error('Canvas not initialized');
-  return;
-}
-
-// Ensure canvas has proper event listeners
-canvas.on('mouse:down', (e) => {
-  console.log('Mouse down:', e);
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-yellow-800 mb-3">Canvas Size Issues</h3>
+                        <p class="text-yellow-700 mb-4">Canvas appears too small or doesn't fit container</p>
+                        
+                        <div>
+                            <h4 class="font-semibold text-yellow-800 mb-2">Solution:</h4>
+                            <div class="bg-yellow-900 text-yellow-100 p-3 rounded font-mono text-sm">
+                                <code>// Set canvas dimensions properly
+canvas.setDimensions({
+  width: container.clientWidth,
+  height: container.clientHeight
 });
 
-// Check if objects are selectable
-canvas.forEachObject((obj) => {
-  obj.set({
-    selectable: true,
-    evented: true
-  });
-});
-
-canvas.renderAll();</code></pre>
-                </div>
-            </div>
-
-            <h2><span class="emoji">⚛️</span>React Issues</h2>
-
-            <div class="issue-card">
-                <h4>❌ React hooks error: "Cannot read property of undefined"</h4>
-                <p>Hooks are called with null or undefined canvas reference.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>const [canvas, setCanvas] = useState(null);
-
-// Wait for canvas to be ready
-const canvasManager = useCanvasManager(canvas); // Pass null safely
-
-// Or use conditional hook calling
-useEffect(() => {
-  if (!canvas) return; // Guard clause
-  
-  const manager = useCanvasManager(canvas);
-  // Use manager here
-}, [canvas]);
-
-// In CanvasWrapper
-&lt;CanvasWrapper
-  onCanvasReady={(fabricCanvas) => {
-    setCanvas(fabricCanvas); // Set canvas when ready
-  }}
-/&gt;</code></pre>
-                </div>
-            </div>
-
-            <div class="issue-card">
-                <h4>❌ Component re-rendering issues</h4>
-                <p>Canvas components re-render excessively or lose state.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>// Memoize expensive operations
-const canvasManager = useMemo(() => {
-  if (!canvas) return null;
-  return useCanvasManager(canvas, options);
-}, [canvas]);
-
-// Use useCallback for event handlers
-const handleSelectionChange = useCallback((objects) => {
-  setSelectedObjects(objects);
-}, []);
-
-// Prevent unnecessary re-renders
-const MemoizedCanvas = React.memo(CanvasWrapper);</code></pre>
-                </div>
-            </div>
-
-            <h2><span class="emoji">🎨</span>Styling Issues</h2>
-
-            <div class="issue-card">
-                <h4>❌ Canvas appears pixelated or blurry</h4>
-                <p>Canvas resolution doesn't match display size.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>// Set proper DPI scaling
-const setCanvasDPI = (canvas) => {
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getElement().getBoundingClientRect();
-  
+// For responsive canvas
+function resizeCanvas() {
+  const container = canvas.getElement().parentElement;
   canvas.setDimensions({
-    width: rect.width * dpr,
-    height: rect.height * dpr
-  }, {
-    cssOnly: false
+    width: container.clientWidth,
+    height: container.clientHeight
   });
-  
-  canvas.getElement().style.width = rect.width + 'px';
-  canvas.getElement().style.height = rect.height + 'px';
-  
-  canvas.setZoom(canvas.getZoom() * dpr);
-};
-
-// Call after canvas initialization
-setCanvasDPI(canvas);</code></pre>
-                </div>
-            </div>
-
-            <div class="issue-card">
-                <h4>❌ Components don't match design system</h4>
-                <p>Default styling conflicts with your application's theme.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>/* Override CSS variables */
-:root {
-  --fabric-primary-color: #your-brand-color;
-  --fabric-bg-primary: #your-bg-color;
-  --fabric-text-primary: #your-text-color;
 }
 
-/* Or use CSS classes */
-.my-custom-theme .fabric-design-toolbar {
-  background: linear-gradient(to right, #667eea, #764ba2);
-  border-radius: 8px;
-}
+window.addEventListener('resize', resizeCanvas);</code>
+                            </div>
+                        </div>
+                    </div>
 
-.my-custom-theme .fabric-canvas-container {
-  border: 2px solid #667eea;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}</code></pre>
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-3">Objects Not Selectable</h3>
+                        <p class="text-blue-700 mb-4">Can't select or interact with canvas objects</p>
+                        
+                        <div>
+                            <h4 class="font-semibold text-blue-800 mb-2">Solution:</h4>
+                            <div class="bg-blue-900 text-blue-100 p-3 rounded font-mono text-sm">
+                                <code>// Check canvas selection is enabled
+canvas.selection = true;
+
+// Check object selectability
+object.selectable = true;
+object.evented = true;
+
+// For text objects
+textObject.editable = true;</code>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <h2><span class="emoji">⚡</span>Performance Issues</h2>
-
-            <div class="issue-card">
-                <h4>❌ Canvas is slow with many objects</h4>
-                <p>Performance degrades with large numbers of canvas objects.</p>
+            <!-- Performance Issues -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">⚡ Performance Issues</h2>
                 
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>// Use optimization hook
-import { useOptimization } from 'fabricjs-design-tool';
-
-const optimization = useOptimization(canvas, {
-  enableObjectCaching: true,
-  skipTargetFind: true,
-  renderOnAddRemove: false
-});
-
-// Manual optimizations
+                <div class="space-y-8">
+                    <div class="bg-orange-50 border-l-4 border-orange-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-orange-800 mb-3">Slow Rendering with Many Objects</h3>
+                        <p class="text-orange-700 mb-4">Canvas becomes sluggish with many objects</p>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-orange-800 mb-2">Use Object Caching</h4>
+                                <div class="bg-orange-900 text-orange-100 p-3 rounded font-mono text-sm">
+                                    <code>// Enable object caching for static objects
+object.set({
+  objectCaching: true,
+  statefullCache: true
+});</code>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-orange-800 mb-2">Disable Unnecessary Features</h4>
+                                <div class="bg-orange-900 text-orange-100 p-3 rounded font-mono text-sm">
+                                    <code>// Disable features you don't need
 canvas.set({
-  selection: false, // Disable selection for read-only
-  hoverCursor: 'default',
-  moveCursor: 'default'
+  skipTargetFind: true, // For non-interactive canvases
+  renderOnAddRemove: false // Manually control rendering
 });
 
 // Batch operations
-canvas.discardActiveObject();
-objects.forEach(obj => canvas.add(obj));
-canvas.renderAll(); // Single render</code></pre>
-                </div>
-            </div>
+canvas.renderOnAddRemove = false;
+canvas.add(obj1, obj2, obj3);
+canvas.renderOnAddRemove = true;
+canvas.renderAll();</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="issue-card">
-                <h4>❌ Memory leaks in React components</h4>
-                <p>Canvas instances aren't properly cleaned up.</p>
-                
-                <div class="solution">
-                    <h5>✅ Solution:</h5>
-                    <pre><code>useEffect(() => {
-  const canvas = new Canvas('canvas');
+                    <div class="bg-purple-50 border-l-4 border-purple-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-purple-800 mb-3">Memory Leaks</h3>
+                        <p class="text-purple-700 mb-4">Application memory usage keeps growing</p>
+                        
+                        <div>
+                            <h4 class="font-semibold text-purple-800 mb-2">Solution:</h4>
+                            <div class="bg-purple-900 text-purple-100 p-3 rounded font-mono text-sm">
+                                <code>// Properly dispose canvas
+useEffect(() => {
+  const canvas = new fabric.Canvas('my-canvas');
   
-  // Cleanup function
   return () => {
-    canvas.dispose(); // Important!
-    // Remove event listeners
-    canvas.off();
+    canvas.dispose(); // Clean up event listeners
   };
 }, []);
 
-// In class components
-componentWillUnmount() {
-  if (this.canvas) {
-    this.canvas.dispose();
-    this.canvas = null;
-  }
-}</code></pre>
+// Remove event listeners
+canvas.off('mouse:down', handler);
+
+// Clear canvas properly
+canvas.clear();
+canvas.renderAll();</code>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <h2><span class="emoji">🔍</span>Debugging Tips</h2>
+            <!-- TypeScript Issues -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">📝 TypeScript Issues</h2>
+                
+                <div class="space-y-8">
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-3">Type Definition Errors</h3>
+                        <p class="text-blue-700 mb-4"><strong>Error:</strong> <code>Property 'canvas' does not exist on type</code></p>
+                        
+                        <div>
+                            <h4 class="font-semibold text-blue-800 mb-2">Solution:</h4>
+                            <div class="bg-blue-900 text-blue-100 p-3 rounded font-mono text-sm">
+                                <code># Install type definitions
+npm install --save-dev @types/fabric
 
-            <h3>Enable Debug Mode</h3>
-            <pre><code>// Enable fabric debug mode
-fabric.Object.prototype.set({
-  borderColor: 'red',
-  cornerColor: 'green',
-  cornerSize: 6,
-  transparentCorners: false
-});
+# Add to tsconfig.json
+{
+  "compilerOptions": {
+    "types": ["fabric"]
+  }
+}</code>
+                            </div>
+                        </div>
+                    </div>
 
-// Log canvas state
-console.log('Canvas objects:', canvas.getObjects());
-console.log('Active object:', canvas.getActiveObject());
-console.log('Canvas dimensions:', canvas.getWidth(), canvas.getHeight());
+                    <div class="bg-indigo-50 border-l-4 border-indigo-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-indigo-800 mb-3">Module Resolution Issues</h3>
+                        <p class="text-indigo-700 mb-4">TypeScript can't find module declarations</p>
+                        
+                        <div>
+                            <h4 class="font-semibold text-indigo-800 mb-2">Solution:</h4>
+                            <div class="bg-indigo-900 text-indigo-100 p-3 rounded font-mono text-sm">
+                                <code>// Create a types.d.ts file in your src folder
+declare module '@rifrocket/fabricjs-design-tool' {
+  export * from '@rifrocket/fabricjs-design-tool/lib/core';
+}
 
-// Monitor events
-canvas.on('after:render', () => {
-  console.log('Canvas rendered');
-});</code></pre>
+declare module '@rifrocket/fabricjs-design-tool/ui' {
+  export * from '@rifrocket/fabricjs-design-tool/lib/ui';
+}</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <h3>Common Console Commands</h3>
-            <pre><code>// In browser console
-// Get canvas instance (if available globally)
-console.log(window.fabricCanvas);
+            <!-- React Integration Issues -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">⚛️ React Integration Issues</h2>
+                
+                <div class="space-y-8">
+                    <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-green-800 mb-3">Canvas Re-initialization on Re-render</h3>
+                        <p class="text-green-700 mb-4">Canvas gets recreated on every render</p>
+                        
+                        <div>
+                            <h4 class="font-semibold text-green-800 mb-2">Solution:</h4>
+                            <div class="bg-green-900 text-green-100 p-3 rounded font-mono text-sm">
+                                <code>// Use useRef to maintain canvas instance
+const canvasRef = useRef(null);
+const [canvas, setCanvas] = useState(null);
 
-// Check fabric version
-console.log(fabric.version);
+useEffect(() => {
+  if (canvasRef.current && !canvas) {
+    const fabricCanvas = new fabric.Canvas(canvasRef.current);
+    setCanvas(fabricCanvas);
+  }
+}, [canvas]);
 
-// Inspect canvas objects
-canvas.getObjects().forEach((obj, i) => {
-  console.log(`Object ${i}:`, obj);
-});
+// Don't recreate canvas in render
+return &lt;canvas ref={canvasRef} /&gt;;</code>
+                            </div>
+                        </div>
+                    </div>
 
-// Check canvas events
-canvas.__eventListeners;</code></pre>
+                    <div class="bg-teal-50 border-l-4 border-teal-400 p-6 rounded-r-lg">
+                        <h3 class="text-xl font-semibold text-teal-800 mb-3">Hook Dependencies Warning</h3>
+                        <p class="text-teal-700 mb-4">React Hook useEffect has missing dependencies</p>
+                        
+                        <div>
+                            <h4 class="font-semibold teal-orange-800 mb-2">Solution:</h4>
+                            <div class="bg-teal-900 text-teal-100 p-3 rounded font-mono text-sm">
+                                <code>// Use useCallback for event handlers
+const handleObjectModified = useCallback((e) => {
+  // Handle modification
+}, [/* dependencies */]);
 
-            <h2><span class="emoji">🆘</span>Getting Help</h2>
+useEffect(() => {
+  if (!canvas) return;
+  
+  canvas.on('object:modified', handleObjectModified);
+  
+  return () => {
+    canvas.off('object:modified', handleObjectModified);
+  };
+}, [canvas, handleObjectModified]);</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <ul>
-                <li><strong>GitHub Issues:</strong> <a href="https://github.com/rifrocket/fabricjs-design-tool/issues">Report bugs and request features</a></li>
-                <li><strong>Stack Overflow:</strong> Tag questions with <code>fabricjs-design-tool</code></li>
-                <li><strong>Documentation:</strong> Check our <a href="examples.html">examples</a> and <a href="core-api.html">API reference</a></li>
-                <li><strong>Community:</strong> Join discussions in our GitHub repository</li>
-            </ul>
+            <!-- Common Error Messages -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">❌ Common Error Messages</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="font-semibold text-gray-900 mb-2">Error: fabric is not defined</h3>
+                        <p class="text-gray-600 mb-3">Fabric.js is not properly imported or loaded</p>
+                        <div class="bg-gray-900 text-gray-100 p-3 rounded font-mono text-sm">
+                            <code>// ✅ Correct import
+import { fabric } from 'fabric';
 
-            <h3>When Reporting Issues</h3>
-            <ul>
-                <li>Include your browser and version</li>
-                <li>Provide a minimal reproducible example</li>
-                <li>Include relevant console errors</li>
-                <li>Mention your framework (React, Vue, etc.)</li>
-                <li>List package versions</li>
-            </ul>
+// ✅ Or for older versions
+import * as fabric from 'fabric';</code>
+                        </div>
+                    </div>
 
-            <h2><span class="emoji">🎯</span>Next Steps</h2>
-            <ul>
-                <li><a href="getting-started.html"><strong>🚀 Getting Started</strong></a> - Setup guide</li>
-                <li><a href="examples.html"><strong>📋 Examples</strong></a> - Working examples</li>
-                <li><a href="core-api.html"><strong>🎨 Core API</strong></a> - API reference</li>
-            </ul>
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="font-semibold text-gray-900 mb-2">Error: Cannot read property 'add' of null</h3>
+                        <p class="text-gray-600 mb-3">Canvas is null when trying to add objects</p>
+                        <div class="bg-gray-900 text-gray-100 p-3 rounded font-mono text-sm">
+                            <code>// ✅ Always check canvas exists
+if (canvas) {
+  canvas.add(object);
+}
+
+// ✅ Or use optional chaining
+canvas?.add(object);</code>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="font-semibold text-gray-900 mb-2">Error: Object doesn't support property or method 'getBoundingRect'</h3>
+                        <p class="text-gray-600 mb-3">Using wrong Fabric.js version or method</p>
+                        <div class="bg-gray-900 text-gray-100 p-3 rounded font-mono text-sm">
+                            <code>// ✅ Check Fabric.js version compatibility
+npm list fabric
+
+// ✅ Use correct method name
+const bounds = object.getBoundingRect(); // v5+
+// or
+const bounds = object.getBounds(); // older versions</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Getting Help -->
+            <section>
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">🆘 Getting Help</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-primary-50 rounded-lg p-6 border border-primary-200">
+                        <h3 class="text-xl font-semibold text-primary-700 mb-3">📚 Documentation</h3>
+                        <ul class="space-y-2 text-primary-600">
+                            <li><a href="getting-started.html" class="hover:underline">Getting Started Guide</a></li>
+                            <li><a href="core-api.html" class="hover:underline">Core API Reference</a></li>
+                            <li><a href="react-components.html" class="hover:underline">React Components</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-green-50 rounded-lg p-6 border border-green-200">
+                        <h3 class="text-xl font-semibold text-green-700 mb-3">💬 Community Support</h3>
+                        <ul class="space-y-2 text-green-600">
+                            <li><a href="https://github.com/rifrocket/fabricjs-design-tool/issues" class="hover:underline">GitHub Issues</a></li>
+                            <li><a href="https://github.com/rifrocket/fabricjs-design-tool/discussions" class="hover:underline">GitHub Discussions</a></li>
+                            <li><a href="http://fabricjs.com/" class="hover:underline">Fabric.js Documentation</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-blue-50 rounded-lg p-6 border border-blue-200">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-3">🐛 Reporting Bugs</h3>
+                    <p class="text-blue-600 mb-4">When reporting a bug, please include:</p>
+                    <ul class="list-disc pl-6 space-y-1 text-blue-600">
+                        <li>FabricJS Design Tool version</li>
+                        <li>Fabric.js version</li>
+                        <li>Browser and version</li>
+                        <li>Steps to reproduce</li>
+                        <li>Expected vs actual behavior</li>
+                        <li>Code sample or CodeSandbox link</li>
+                    </ul>
+                </div>
+            </section>
         </div>
     </div>
 
-    <div class="footer">
-        <div class="container">
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
             <p>&copy; 2025 FabricJS Design Tool. Made with ❤️ for the developer community.</p>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        });
+    </script>
 </body>
 </html>
