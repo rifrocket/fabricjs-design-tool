@@ -1,0 +1,65 @@
+name: Docs CI
+
+# Covers apps/docs (the Docusaurus site). Separate from packages-ci.yml on purpose: docs changes
+# are higher-frequency and fail for different reasons (broken links, MDX errors) than the
+# public-API build/test gate, and shouldn't block or be blocked by it. Also re-triggers on any
+# package's src/** changing, since a package's public exports changing should re-verify the docs
+# site (and its future generated API reference) still builds against current source.
+#
+# Build/typecheck verification only — actual GitHub Pages deployment (docs + demo together)
+# lives in deploy.yml, triggered by the same push-to-main so it doesn't race this workflow's
+# own Pages upload.
+
+on:
+  pull_request:
+    paths:
+      - "apps/docs/**"
+      - "packages/**/src/**"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - "pnpm-lock.yaml"
+      - "tsconfig.base.json"
+      - ".github/workflows/docs-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "apps/docs/**"
+      - "packages/**/src/**"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - "pnpm-lock.yaml"
+      - "tsconfig.base.json"
+      - ".github/workflows/docs-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace packages (apps/docs imports several as workspace:* deps)
+        run: pnpm packages:build
+
+      - name: Typecheck docs site
+        run: pnpm docs:typecheck
+
+      # Also exercises onBrokenLinks: 'throw' in docusaurus.config.ts, and any MDX/remark-code-import
+      # failures (e.g. the Quick Start page's embed of packages/react/src/quickstart.example.tsx).
+      - name: Build docs site
+        run: pnpm docs:build

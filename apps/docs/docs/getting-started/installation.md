@@ -1,0 +1,83 @@
+---
+sidebar_position: 1
+title: Installation
+---
+
+# Installation
+
+:::info Not yet on npm
+Every `@rifrocket/fdt-*` package is currently `private: true` in the [monorepo](https://github.com/rifrocket/fabricjs-design-tool) and has not been published yet. The install commands below describe the package layout you'll use once v2.0.0 ships — see the [migration guide](/docs/migration/v1-to-v2) for the previously-published v1 package.
+:::
+
+## Choose a starting point
+
+| You want... | Install |
+|---|---|
+| A batteries-included React editor | `@rifrocket/fdt-react` (pulls in `@rifrocket/fdt-core` and the plugins its `"default"` preset bundles) |
+| The React adapter with your own hand-picked plugins | `@rifrocket/fdt-core` + `@rifrocket/fdt-react` + whichever `@rifrocket/fdt-plugin-*` packages you need |
+| Just the framework-agnostic canvas engine, no React | `@rifrocket/fdt-core` + whichever plugins you need |
+| Themed light/dark CSS variables | `@rifrocket/fdt-theme` (optional — plain CSS, no JS runtime) |
+
+## React consumers
+
+```bash
+npm install @rifrocket/fdt-core @rifrocket/fdt-react @rifrocket/fdt-theme
+```
+
+`fabric` is a **peer dependency** of `@rifrocket/fdt-core`, and `react`/`react-dom` are peer dependencies of `@rifrocket/fdt-react` — install them yourself if your app doesn't already have them:
+
+```bash
+npm install fabric react react-dom
+```
+
+This gets you `<DesignEditor>`/`<Editor>` and every hook, but **no plugins are installed automatically** unless you use a named preset (`<DesignEditor preset="default">`) — see [Choosing your entry point](/docs/getting-started/choosing-your-entry-point). To add specific plugins yourself:
+
+```bash
+npm install @rifrocket/fdt-plugin-shapes-basic @rifrocket/fdt-plugin-qrcode
+```
+
+Each plugin declares its own peer dependencies (always `fabric`; plugins with UI panels also peer-depend on `react`/`react-dom`) — see the [plugin overview](/docs/plugins/overview) for the full list and which of the 13 plugins need React.
+
+## Framework-agnostic (no React) consumers
+
+```bash
+npm install @rifrocket/fdt-core fabric
+```
+
+`@rifrocket/fdt-core` has zero React dependency — enforced in CI via a `dependency-cruiser` rule, not just convention — so this install works in a vanilla-JS, Vue, Svelte, or any other app. Reach for `createEngine()`:
+
+```ts
+import { createEngine } from "@rifrocket/fdt-core";
+
+const engine = createEngine(document.querySelector("canvas"), { width: 800, height: 600 });
+```
+
+## Theme
+
+`@rifrocket/fdt-theme` ships plain CSS custom properties, no JavaScript runtime:
+
+```bash
+npm install @rifrocket/fdt-theme
+```
+
+```ts
+import "@rifrocket/fdt-theme/tokens.css";
+```
+
+`<Editor theme="light" | "dark" | "system">` sets `data-fdt-theme` on its root element for you automatically if you're using the React adapter. Framework-agnostic consumers set `data-fdt-theme="light"` (or `"dark"`) on whichever element wraps their canvas — see [Custom Theme](/docs/guides/custom-theme) for the full token list and override pattern.
+
+## Package export subpaths
+
+`@rifrocket/fdt-core` ships three subpath exports alongside its main barrel, so bundlers can tree-shake code you don't use (e.g. the PDF/history/effects machinery) out of your bundle:
+
+```ts
+import { HistoryManager } from "@rifrocket/fdt-core/history";
+import { getEffectStack } from "@rifrocket/fdt-core/effects";
+import { CanvasExporter } from "@rifrocket/fdt-core/export";
+```
+
+Importing the same symbols from the main `@rifrocket/fdt-core` entry point works too — the subpaths exist for bundle-size control, not because anything is exclusive to them.
+
+## Next steps
+
+Continue to the [Quick Start](/docs/getting-started/quick-start) for a working example, or read [Choosing your entry point](/docs/getting-started/choosing-your-entry-point) if you're not sure whether `<DesignEditor>`, `<Editor>`, or `createEngine()` is the right fit.

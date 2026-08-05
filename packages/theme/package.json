@@ -1,0 +1,16 @@
+{
+  "name": "@rifrocket/fdt-theme",
+  "version": "1.0.0",
+  "private": false,
+  "description": "CSS design tokens and light/dark theme for the FabricJS Design Tool v2.",
+  "type": "module",
+  "style": "./src/tokens.css",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "echo \"no build step — tokens.css is consumed directly from src/\"",
+    "test": "echo \"no tests — pure CSS package\"",
+    "lint": "echo \"no lint configured yet\""
+  }
+}

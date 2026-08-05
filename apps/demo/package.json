@@ -1,0 +1,49 @@
+{
+  "name": "@rifrocket/fdt-demo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reference implementation and feature showcase for the v2 public API (@rifrocket/fdt-react + plugins) — a full application shell built entirely against the documented public API, demonstrating best-practice integration for developers evaluating the library.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@rifrocket/fdt-core": "workspace:*",
+    "@rifrocket/fdt-plugin-clipboard": "workspace:*",
+    "@rifrocket/fdt-plugin-effects": "workspace:*",
+    "@rifrocket/fdt-plugin-export-pdf": "workspace:*",
+    "@rifrocket/fdt-plugin-image": "workspace:*",
+    "@rifrocket/fdt-plugin-import-json": "workspace:*",
+    "@rifrocket/fdt-plugin-devtools": "workspace:*",
+    "@rifrocket/fdt-plugin-local-storage": "workspace:*",
+    "@rifrocket/fdt-plugin-pan-zoom": "workspace:*",
+    "@rifrocket/fdt-plugin-qrcode": "workspace:*",
+    "@rifrocket/fdt-plugin-shapes-basic": "workspace:*",
+    "@rifrocket/fdt-plugin-svg-import": "workspace:*",
+    "@rifrocket/fdt-react": "workspace:*",
+    "@rifrocket/fdt-theme": "workspace:*",
+    "fabric": "^6.6.7",
+    "lucide-react": "^0.487.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5"
+  }
+}

@@ -1,0 +1,68 @@
+name: Packages CI (v2 monorepo)
+
+# Covers the packages/* library scaffold and apps/demo, the real consumer that proves the
+# public API. Runs only when files under packages/, apps/demo/, or the workspace config change.
+
+on:
+  pull_request:
+    paths:
+      - "packages/**"
+      - "apps/demo/**"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - "pnpm-lock.yaml"
+      - "tsconfig.base.json"
+      - ".github/workflows/packages-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/**"
+      - "apps/demo/**"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - "pnpm-lock.yaml"
+      - "tsconfig.base.json"
+      - ".github/workflows/packages-ci.yml"
+
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint packages
+        run: pnpm packages:lint
+
+      - name: Enforce core has zero react/UI dependency
+        run: pnpm packages:depcruise
+
+      - name: Build packages
+        run: pnpm packages:build
+
+      - name: Typecheck packages (also validates documented usage examples, e.g. quickstart.example.tsx)
+        run: pnpm packages:typecheck
+
+      - name: Test packages
+        run: pnpm packages:test
+
+      - name: Lint demo app
+        run: pnpm apps:lint
+
+      - name: Typecheck demo app
+        run: pnpm apps:typecheck
+
+      - name: Build demo app
+        run: pnpm apps:build

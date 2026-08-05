@@ -1,0 +1,80 @@
+/* True globals Tailwind utilities don't cover well: scrollbars, keyframes, canvas dot-grid backdrop. */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fdt-border);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fdt-fg-muted);
+}
+
+.fdt-canvas-dot-grid {
+  background-image: radial-gradient(circle, var(--fdt-border) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@keyframes fdt-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fdt-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fdt-animate-fade-in {
+  animation: fdt-fade-in 150ms ease-out;
+}
+
+.fdt-animate-scale-in {
+  animation: fdt-scale-in 120ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fdt-animate-fade-in,
+  .fdt-animate-scale-in {
+    animation: none;
+  }
+}

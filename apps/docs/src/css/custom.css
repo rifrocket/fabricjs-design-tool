@@ -1,0 +1,72 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* Base link/accent color still matches @rifrocket/fdt-theme's own --fdt-accent tokens
+   (packages/theme/src/tokens.css) — the product itself is blue, not purple. The violet→blue
+   --fdt-landing-gradient below is a marketing-only flourish (hero headline, primary button,
+   icon badges) layered on top of that, not a rebrand of the component library's accent color. */
+:root {
+  --ifm-color-primary: #3b82f6;
+  --ifm-color-primary-dark: #256ef5;
+  --ifm-color-primary-darker: #1765f4;
+  --ifm-color-primary-darkest: #1050ca;
+  --ifm-color-primary-light: #5896f8;
+  --ifm-color-primary-lighter: #66a0f8;
+  --ifm-color-primary-lightest: #8fb9fa;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(59, 130, 246, 0.1);
+
+  --fdt-landing-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+  --fdt-landing-violet: #8b5cf6;
+  --fdt-landing-cyan: #22d3ee;
+  --fdt-landing-bg-elevated: #f8fafc;
+  --fdt-landing-border: #e2e8f0;
+  --fdt-landing-fg-muted: #475569;
+  --fdt-landing-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --fdt-landing-code-bg: #0f172a;
+}
+
+/* Dark mode leans into the reference theme's deep navy — noticeably darker/bluer than Infima's
+   default dark gray so the violet/blue gradient accents have room to read as vivid, not muddy. */
+[data-theme='dark'] {
+  --ifm-color-primary: #60a5fa;
+  --ifm-color-primary-dark: #4996f9;
+  --ifm-color-primary-darker: #3b8ff8;
+  --ifm-color-primary-darkest: #1c79f6;
+  --ifm-color-primary-light: #77b4fb;
+  --ifm-color-primary-lighter: #85bafb;
+  --ifm-color-primary-lightest: #aed0fd;
+  --docusaurus-highlighted-code-line-bg: rgba(96, 165, 250, 0.15);
+
+  --ifm-background-color: #0a0e1a;
+  --ifm-background-surface-color: #0f1424;
+  --ifm-navbar-background-color: #0a0e1acc;
+  --ifm-footer-background-color: #060811;
+
+  --fdt-landing-gradient: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+  --fdt-landing-violet: #a78bfa;
+  --fdt-landing-cyan: #22d3ee;
+  --fdt-landing-bg-elevated: #11162a;
+  --fdt-landing-border: #232a45;
+  --fdt-landing-fg-muted: #9aa4c2;
+  --fdt-landing-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px rgba(76, 29, 149, 0.18);
+  --fdt-landing-code-bg: #0a0e18;
+}
+
+/* Navbar "v2.0.0" pill next to the logo/title — raw HTML via a navbar item (type: 'html' in
+   docusaurus.config.ts), so it's styled globally here rather than through a CSS module. */
+.navbar-version-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.5rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--fdt-landing-border);
+  background: var(--fdt-landing-bg-elevated);
+  color: var(--fdt-landing-fg-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
