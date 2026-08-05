@@ -1,0 +1,57 @@
+{
+  "name": "@rifrocket/fdt-plugin-alignment",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Bare align/distribute controls for the FabricJS Design Tool v2, wired to AlignmentManager (already in @rifrocket/fdt-core with no UI anywhere).",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rifrocket/fdt-core": "workspace:*",
+    "@rifrocket/fdt-react": "workspace:*"
+  },
+  "peerDependencies": {
+    "fabric": "^6.6.7",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "fabric": "^6.6.7",
+    "globals": "^16.0.0",
+    "jsdom": "^25.0.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tsup": "^8.3.5",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vitest": "^2.1.8"
+  }
+}
