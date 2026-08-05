@@ -1,0 +1,36 @@
+/*
+ * Design tokens for the FabricJS Design Tool v2 UI.
+ * Consumers set data-fdt-theme="light" | "dark" on a root element (e.g. via <Editor theme="...">
+ * in @rifrocket/fdt-react) to select a token set.
+ *
+ * Values below are seeded from the v1 demo's existing Tailwind palette so the visual design
+ * doesn't need to change yet — only the delivery mechanism (CSS variables instead of hardcoded
+ * Tailwind utility classes shipped inside components).
+ *
+ * Plain attribute selectors, not `:root[data-fdt-theme]` — `:root` only ever matches <html>,
+ * but <Editor> sets the attribute on its own root <div> (a descendant), so a :root-scoped
+ * selector never matched it and no token ever applied. Scoping to the attribute alone means
+ * it works regardless of which element in the tree carries it.
+ */
+
+[data-fdt-theme="light"] {
+  --fdt-bg: #ffffff;
+  --fdt-bg-elevated: #f9fafb;
+  --fdt-fg: #111827;
+  --fdt-fg-muted: #6b7280;
+  --fdt-border: #e5e7eb;
+  --fdt-accent: #3b82f6;
+  --fdt-accent-hover: #2563eb;
+  --fdt-danger: #ef4444;
+}
+
+[data-fdt-theme="dark"] {
+  --fdt-bg: #1a1a1a;
+  --fdt-bg-elevated: #262626;
+  --fdt-fg: #eeeeee;
+  --fdt-fg-muted: #a1a1aa;
+  --fdt-border: #3f3f46;
+  --fdt-accent: #60a5fa;
+  --fdt-accent-hover: #93c5fd;
+  --fdt-danger: #f87171;
+}
