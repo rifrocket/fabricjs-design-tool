@@ -122,6 +122,7 @@ const config: Config = {
           items: [
             {label: 'GitHub', href: 'https://github.com/rifrocket/fabricjs-design-tool'},
             {label: 'Report an issue', href: 'https://github.com/rifrocket/fabricjs-design-tool/issues'},
+            {label: 'Live Demo', href: 'https://rifrocket.github.io/fabricjs-design-tool/'},
           ],
         },
       ],

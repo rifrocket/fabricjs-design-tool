@@ -1,8 +1,12 @@
+<div align="center">
+  <img src="../apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="220"/>
+</div>
+
 # packages/
 
-v2 monorepo scaffold: a Fabric.js design-tool engine split into small, independently installable packages, replacing the single-package v1 library at the repo root.
+The [Fabric Design Tool](../README.md) engine, split into small, independently installable npm packages instead of one monolithic library. Each package below is published under the `alpha` npm dist-tag via [Changesets](../.changeset/README.md) — see the root README's [Architecture](../README.md#architecture) table for the one-line version of this list.
 
-Nothing here is published yet — every package is `private: true`.
+## Core packages
 
 | Package | Purpose | `engine.use()`-able? |
 |---|---|---|
@@ -10,6 +14,11 @@ Nothing here is published yet — every package is `private: true`.
 | [`react`](./react) | React adapter (`<Editor>`, `<DesignEditor>`, hooks) | — |
 | [`theme`](./theme) | CSS design tokens, light/dark theming | — |
 | [`properties`](./properties) | Shared property-field components (slider, number, color, toggle, select, text) | — |
+
+## Plugins
+
+| Package | Purpose | `engine.use()`-able? |
+|---|---|---|
 | [`plugin-shapes-basic`](./plugin-shapes-basic) | Default shape object types (text, rect, circle, line, ellipse, polygons) | Yes |
 | [`plugin-qrcode`](./plugin-qrcode) | QR code object type (generation, validation, styling) | Yes |
 | [`plugin-svg-import`](./plugin-svg-import) | SVG import | Yes |
@@ -36,6 +45,6 @@ pnpm packages:lint      # turbo run lint, scoped to packages/*
 pnpm packages:dev       # turbo run dev (watch mode), scoped to packages/*
 ```
 
-Versioning/publishing will go through [Changesets](../.changeset/README.md) once packages are ready to leave `private: true` (Release Roadmap Phase 7).
+Versioning/publishing goes through [Changesets](../.changeset/README.md): add a changeset (`pnpm changeset`) describing your change, and merging it triggers the automated version-PR → npm publish flow described in the [root README](../README.md#contributing).
 
 See [`../apps/demo`](../apps/demo) for a working consumer that wires these packages together through the public `<Editor>` API.

@@ -36,7 +36,12 @@ function HomepageHeader() {
           <div className={styles.buttons}>
             <Link className="button button--primary button--lg" to="/docs/getting-started/quick-start">
               Get Started
-            </Link>            
+            </Link>  
+            <Link
+              className="button button--info button--lg"
+              to="https://rifrocket.github.io/fabricjs-design-tool/">
+              Live Demo ↗
+            </Link>          
             <Link
               className="button button--secondary button--lg"
               to="https://github.com/rifrocket/fabricjs-design-tool">

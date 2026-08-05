@@ -1,7 +1,7 @@
 {
   "name": "@rifrocket/fdt-plugin-svg-import",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
   "description": "SVG import registered via the core plugin system — a net-new (not ported from v1) plugin proving the extension points are real.",
   "type": "module",
   "main": "./dist/index.cjs",

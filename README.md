@@ -1,11 +1,15 @@
 # Fabric Design Tool
 
+<div align="center">
+  <img src="apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="500"/>
+</div>
+
 > A Fabric.js-based design tool engine, React adapter, theme, and plugin ecosystem — split into small, independently installable packages.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-This is a pnpm/turborepo monorepo. Every package under `packages/*` is currently `private: true` and not yet published to npm.
+This is a pnpm/turborepo monorepo. Every package under `packages/*` publishes to npm under the `alpha` dist-tag via [Changesets](.changeset/README.md).
 
 ## Architecture
 
@@ -65,6 +69,8 @@ For direct engine access (framework-agnostic core, or a custom plugin set), use 
 3. Run `pnpm packages:lint`, `pnpm packages:typecheck`, and `pnpm packages:test` before submitting.
 4. Add a changeset (`pnpm changeset`) describing your change.
 5. Open a pull request.
+
+Releases are automatic from there: merging a PR that carries a changeset triggers `.github/workflows/release.yml`, which opens (or updates) a "Version Packages" PR bumping every changed package and rolling up the changelogs. Merging that PR publishes the new versions to npm under the `alpha` dist-tag — no manual `npm publish` involved.
 
 ## License
 

@@ -1,8 +1,8 @@
 {
   "name": "@rifrocket/fdt-theme",
-  "version": "0.0.0",
-  "private": true,
-  "description": "CSS design tokens and light/dark theme for the FabricJS Design Tool v2 (preview scaffold — not yet published).",
+  "version": "1.0.0",
+  "private": false,
+  "description": "CSS design tokens and light/dark theme for the FabricJS Design Tool v2.",
   "type": "module",
   "style": "./src/tokens.css",
   "files": [
