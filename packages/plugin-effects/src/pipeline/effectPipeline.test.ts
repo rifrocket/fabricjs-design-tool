@@ -104,12 +104,40 @@ describe("runEffectPipeline", () => {
 
     runEffectPipeline(rect, ctx, [instance("blur")], registry, originalRender);
 
-    expect(ctx.drawImage).toHaveBeenCalledWith(bitmap, -5, -10);
+    // rect has no canvas here, so rasterMultiplier(rect) is 1 and the bitmap's own 10x20 is
+    // already its local size — see rasterize.test.ts for the supersampled-bitmap cases.
+    expect(ctx.drawImage).toHaveBeenCalledWith(bitmap, -5, -10, 10, 20);
     expect(originalRender).not.toHaveBeenCalled();
     // The bitmap replaces the object's own _render() call, so it must still receive the
     // object's position/rotation/scale — otherwise it draws at the ctx's ambient origin
     // instead of wherever the object actually sits on the canvas.
     expect(ctx.transform).toHaveBeenCalled();
+  });
+
+  it("draws a supersampled bitmap back down at the object's true local size instead of its raw (larger) pixel size", () => {
+    // Reproduces the pixelation bug: an enlarged/zoomed object rasterizes at rasterMultiplier(object)
+    // extra density (rasterize.ts) so the bitmap doesn't look blocky, but ctx's own transform
+    // already accounts for that size via object.transform() — drawing at the bitmap's raw 20x40
+    // here would draw the object twice too big, not just too sharp.
+    const rect = new Rect({ scaleX: 2, scaleY: 2 });
+    const registry = new EffectRegistry();
+    const bitmap = { width: 20, height: 40 } as HTMLCanvasElement;
+    const blur: EffectDefinition = {
+      id: "blur",
+      category: "basic",
+      label: "Blur",
+      track: "raster",
+      schema: [],
+      defaults: {},
+      applyRaster: () => bitmap,
+    };
+    registry.register(blur);
+    const ctx = fakeCtx();
+    vi.spyOn(rect, "toCanvasElement").mockReturnValue({} as HTMLCanvasElement);
+
+    runEffectPipeline(rect, ctx, [instance("blur")], registry, vi.fn());
+
+    expect(ctx.drawImage).toHaveBeenCalledWith(bitmap, -5, -10, 10, 20);
   });
 
   it("re-dirties the object before rasterizing when a renderBehind pass ran first, so the raster pass doesn't rasterize a leftover swapped-color cache", () => {

@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fabricjs-design-tool",
-  "version": "2.0.0-beta.1",
+  "version": "3.0.0",
   "private": false,
   "description": "Framework-agnostic canvas engine core for the FabricJS Design Tool v2.",
   "type": "module",

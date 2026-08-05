@@ -1,5 +1,48 @@
 # @rifrocket/fdt-demo
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @rifrocket/fabricjs-design-tool@3.0.0
+  - @rifrocket/fdt-react@3.0.0
+  - @rifrocket/fdt-theme@3.0.0
+  - @rifrocket/fdt-plugin-clipboard@3.0.0
+  - @rifrocket/fdt-plugin-devtools@3.0.0
+  - @rifrocket/fdt-plugin-effects@3.0.0
+  - @rifrocket/fdt-plugin-export-pdf@3.0.0
+  - @rifrocket/fdt-plugin-image@3.0.0
+  - @rifrocket/fdt-plugin-import-json@3.0.0
+  - @rifrocket/fdt-plugin-local-storage@3.0.0
+  - @rifrocket/fdt-plugin-pan-zoom@3.0.0
+  - @rifrocket/fdt-plugin-qrcode@3.0.0
+  - @rifrocket/fdt-plugin-shapes-basic@3.0.0
+  - @rifrocket/fdt-plugin-svg-import@3.0.0
+
+## 0.0.1
+
+### Patch Changes
+
+- f096f8f: Rename the core engine package from `@rifrocket/fdt-core` to `@rifrocket/fabricjs-design-tool` — the well-known, higher-traffic package name. No API changes; `import { createEditor } from "@rifrocket/fabricjs-design-tool"` replaces `@rifrocket/fdt-core`, including its `/history`, `/effects`, and `/export` subpaths. All dependent packages update their internal dependency to match.
+- Updated dependencies
+- Updated dependencies [ebe6ca3]
+- Updated dependencies [f096f8f]
+  - @rifrocket/fdt-plugin-effects@2.0.0
+  - @rifrocket/fabricjs-design-tool@2.0.0
+  - @rifrocket/fdt-react@2.0.0
+  - @rifrocket/fdt-theme@2.0.0
+  - @rifrocket/fdt-plugin-clipboard@2.0.0
+  - @rifrocket/fdt-plugin-devtools@2.0.0
+  - @rifrocket/fdt-plugin-export-pdf@2.0.0
+  - @rifrocket/fdt-plugin-image@2.0.0
+  - @rifrocket/fdt-plugin-import-json@2.0.0
+  - @rifrocket/fdt-plugin-local-storage@2.0.0
+  - @rifrocket/fdt-plugin-pan-zoom@2.0.0
+  - @rifrocket/fdt-plugin-qrcode@2.0.0
+  - @rifrocket/fdt-plugin-shapes-basic@2.0.0
+  - @rifrocket/fdt-plugin-svg-import@2.0.0
+
 ## 0.0.1-beta.1
 
 ### Patch Changes
