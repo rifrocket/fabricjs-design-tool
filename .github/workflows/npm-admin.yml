@@ -1,0 +1,51 @@
+name: npm admin (manual)
+
+# One-off registry maintenance (promoting a dist-tag, deprecating an old package) that doesn't
+# fit the automated Changesets publish flow in release.yml. Manually triggered only — reuses the
+# same NPM_TOKEN secret release.yml already publishes with, so no separate local npm login is
+# needed to run these.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action to run"
+        required: true
+        type: choice
+        options:
+          - dist-tag-latest
+          - deprecate
+      package:
+        description: "Package name, e.g. @rifrocket/fabricjs-design-tool"
+        required: true
+      version:
+        description: "Version to promote to latest (dist-tag-latest only), e.g. 2.0.0-beta.1"
+        required: false
+      message:
+        description: "Deprecation message (deprecate only)"
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: npm dist-tag add (promote to latest)
+        if: inputs.action == 'dist-tag-latest'
+        run: npm dist-tag add "${{ inputs.package }}@${{ inputs.version }}" latest
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: npm deprecate
+        if: inputs.action == 'deprecate'
+        run: npm deprecate "${{ inputs.package }}" "${{ inputs.message }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
