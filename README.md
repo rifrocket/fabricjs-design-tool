@@ -1,7 +1,7 @@
 # Fabric Design Tool
 
 <div align="center">
-  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="500"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo-large.svg" alt="Fabric Design Tool" width="500"/>
 </div>
 
 > A Fabric.js-based design tool engine, React adapter, theme, and plugin ecosystem — split into small, independently installable packages.
