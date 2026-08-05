@@ -1,0 +1,33 @@
+<svg width="300" height="100" viewBox="0 0 300 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="45" fill="url(#gradient1)" stroke="#fff" stroke-width="4"/>
+  
+  <!-- Design tools icon -->
+  <g transform="translate(20, 20)">
+    <!-- Pen tool -->
+    <path d="M20 5L45 30L40 35L15 10L20 5Z" fill="white" fill-opacity="0.9"/>
+    <path d="M15 10L10 15L5 35L25 30L30 25" fill="white" fill-opacity="0.7"/>
+    
+    <!-- Bezier curve -->
+    <circle cx="10" cy="50" r="3.75" fill="white"/>
+    <circle cx="50" cy="50" r="3.75" fill="white"/>
+    <circle cx="20" cy="40" r="2.5" fill="white" fill-opacity="0.8"/>
+    <circle cx="40" cy="40" r="2.5" fill="white" fill-opacity="0.8"/>
+    
+    <!-- Curve lines -->
+    <path d="M10 50Q20 40 30 45Q40 40 50 50" stroke="white" stroke-width="3.75" fill="none" stroke-opacity="0.8"/>
+    <path d="M10 50L20 40M50 50L40 40" stroke="white" stroke-width="2.5" stroke-opacity="0.6"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="120" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="35" font-weight="600" fill="#1f2937">FabricJS</text>
+  <text x="120" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="26" font-weight="500" fill="#6b7280">Design Tool</text>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,47 @@
+.features {
+  padding: 4rem 0 1rem;
+}
+
+.card {
+  height: 100%;
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--fdt-landing-border);
+  border-radius: 14px;
+  background: var(--ifm-background-color);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--fdt-landing-shadow);
+  border-color: var(--ifm-color-primary);
+}
+
+.iconBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 1.1rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ifm-color-primary) 12%, transparent);
+  color: var(--ifm-color-primary);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+}
+
+.cardDescription {
+  color: var(--fdt-landing-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 0;
+}

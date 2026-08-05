@@ -1,0 +1,8 @@
+{
+  "label": "Extension Points",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Every registry-based seam the engine exposes for extending it from userland."
+  }
+}

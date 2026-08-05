@@ -1,0 +1,8 @@
+{
+  "label": "Plugins",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "The 13 official @rifrocket/fdt-plugin-* packages, and how to install them."
+  }
+}

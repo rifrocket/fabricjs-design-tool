@@ -1,0 +1,8 @@
+{
+  "label": "Examples",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Runnable, minimal example apps. Live embedded demos are coming in a later phase — see each page for current status."
+  }
+}

@@ -1,0 +1,229 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 0 4.5rem;
+  background: radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.14), transparent 45%),
+    radial-gradient(circle at 85% 0%, rgba(59, 130, 246, 0.1), transparent 40%),
+    var(--ifm-background-color);
+}
+
+[data-theme='dark'] .heroBanner {
+  background: radial-gradient(circle at 15% 20%, rgba(96, 165, 250, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 0%, rgba(96, 165, 250, 0.1), transparent 40%),
+    var(--ifm-background-color);
+}
+
+.heroGrid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+  pointer-events: none;
+}
+
+.heroContainer {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 3.5rem;
+  align-items: center;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 0 2.5rem;
+  }
+  .heroContainer {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  /* Grid items default to min-width: auto, which lets a long unwrapped line inside
+     .heroPreview's code block force this whole column wider than the viewport instead of
+     wrapping/scrolling — min-width: 0 lets both columns actually shrink to the grid track. */
+  min-width: 0;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  margin-bottom: 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--fdt-landing-border);
+  background: var(--fdt-landing-bg-elevated);
+  color: var(--ifm-color-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.heroTitle {
+  font-size: 2.75rem;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.25rem;
+}
+
+@media screen and (max-width: 996px) {
+  .heroTitle {
+    font-size: 2.1rem;
+  }
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--fdt-landing-fg-muted);
+  max-width: 42rem;
+  margin-bottom: 2rem;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 2.5rem;
+}
+
+.ghostButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 0;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+.ghostButton:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.statRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat dt {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  line-height: 1;
+}
+
+.stat dd {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: var(--fdt-landing-fg-muted);
+}
+
+/* Code preview panel */
+
+.heroPreview {
+  position: relative;
+  min-width: 0;
+}
+
+.codeWindow {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--fdt-landing-border);
+  box-shadow: var(--fdt-landing-shadow);
+  background: var(--fdt-landing-code-bg);
+  transform: rotate(0.4deg);
+}
+
+.codeWindowTitlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot[data-color='red'] {
+  background: #ff5f57;
+}
+.dot[data-color='yellow'] {
+  background: #febc2e;
+}
+.dot[data-color='green'] {
+  background: #28c840;
+}
+
+.codeWindowLabel {
+  margin-left: 0.5rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.codeWindowBody {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* Call-to-action band */
+
+.ctaBand {
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--fdt-landing-border);
+  background: var(--fdt-landing-bg-elevated);
+}
+
+.ctaBandInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.ctaBandTitle {
+  margin-bottom: 0.4rem;
+}
+
+.ctaBandSubtitle {
+  margin: 0;
+  color: var(--fdt-landing-fg-muted);
+  max-width: 32rem;
+}
+
+@media screen and (max-width: 768px) {
+  .ctaBandInner {
+    justify-content: flex-start;
+  }
+}

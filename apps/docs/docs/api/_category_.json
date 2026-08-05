@@ -1,0 +1,8 @@
+{
+  "label": "API Reference",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Generated API reference. Not yet wired up — see the status page for what's coming."
+  }
+}
