@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="180"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo-large.svg" alt="Fabric Design Tool" width="180"/>
 
   # @rifrocket/fdt-plugin-import-json
 

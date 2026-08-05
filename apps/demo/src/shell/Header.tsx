@@ -19,8 +19,8 @@ export function Header({ onTogglePanels }: { onTogglePanels: () => void }): Reac
   return (
     <header className="flex h-14 items-center gap-3 border-b border-fdt-border bg-fdt-bg px-3">
       <div className="flex items-center gap-2 pr-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-fuchsia-500 to-fdt-accent text-white">
-          <Sparkles size={15} strokeWidth={2.25} aria-hidden="true" />
+        <span className="flex h-9 w-9 items-center justify-center to-fdt-accent text-white">
+          <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool Logo" className="themedComponent_Tavw themedComponent--dark_V6Zl" />
         </span>
         <span className="hidden text-sm font-semibold text-fdt-fg sm:inline">FabricJS Design Tool</span>
       </div>
