@@ -25,26 +25,67 @@
 
 .pill {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  gap: 0.8rem;
   height: 100%;
-  padding: 0.9rem 1rem;
-  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
   border: 1px solid var(--fdt-landing-border);
   background: var(--fdt-landing-bg-elevated);
   text-decoration: none;
-  transition: border-color 140ms ease, transform 140ms ease;
+  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
 }
 
 .pill:hover {
   border-color: var(--ifm-color-primary);
   transform: translateY(-2px);
+  box-shadow: var(--fdt-landing-shadow);
   text-decoration: none;
 }
 
-.pillName {
+/* Tinted icon chip per plugin. The three accents cycle across the grid so the showcase reads as
+   one palette (violet → blue → cyan) rather than 13 unrelated colors. */
+.pillIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+}
+
+.pillIcon[data-accent='violet'] {
+  color: var(--fdt-landing-violet);
+  background: color-mix(in srgb, var(--fdt-landing-violet) 14%, transparent);
+}
+
+.pillIcon[data-accent='blue'] {
   color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary) 14%, transparent);
+}
+
+.pillIcon[data-accent='cyan'] {
+  color: var(--fdt-landing-cyan);
+  background: color-mix(in srgb, var(--fdt-landing-cyan) 14%, transparent);
+}
+
+.pillIconGlyph {
+  width: 19px;
+  height: 19px;
+}
+
+.pillBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.pillName {
+  color: var(--ifm-heading-color);
   background: transparent;
+  border: none;
   padding: 0;
   font-size: 0.9rem;
   font-weight: 600;
@@ -52,8 +93,8 @@
 
 .pillDescription {
   color: var(--fdt-landing-fg-muted);
-  font-size: 0.85rem;
-  line-height: 1.4;
+  font-size: 0.82rem;
+  line-height: 1.35;
 }
 
 .footer {

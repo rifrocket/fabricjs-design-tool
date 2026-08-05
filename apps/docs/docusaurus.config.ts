@@ -94,10 +94,24 @@ const config: Config = {
       },
       items: [
         {
+          type: 'html',
+          value: '<span class="navbar-version-badge">v2.0.0</span>',
+          position: 'left',
+        },
+        {
           type: 'docSidebar',
           sidebarId: 'docsSidebar',
           position: 'left',
           label: 'Docs',
+        },
+        {to: '/docs/category/plugins', label: 'Plugins', position: 'left'},
+        {to: '/docs/category/api-reference', label: 'API Reference', position: 'left'},
+        {to: '/docs/category/guides', label: 'Guides', position: 'left'},
+        {to: '/docs/category/examples', label: 'Examples', position: 'left'},
+        {
+          href: 'https://github.com/rifrocket/fabricjs-design-tool/releases',
+          label: 'Changelog',
+          position: 'left',
         },
         {
           href: 'https://github.com/rifrocket/fabricjs-design-tool',

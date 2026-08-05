@@ -5,7 +5,7 @@
 
   **Wheel-zoom and spacebar-drag-pan hooks for a fixed-size [Fabric Design Tool](../../README.md) canvas viewport.**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-pan-zoom/alpha.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-pan-zoom)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-pan-zoom/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-pan-zoom)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>

@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-This is a pnpm/turborepo monorepo. Every package under `packages/*` publishes to npm under the `alpha` dist-tag via [Changesets](.changeset/README.md).
+This is a pnpm/turborepo monorepo. Every package under `packages/*` publishes to npm under the `beta` dist-tag via [Changesets](.changeset/README.md).
 
 ## Architecture
 
@@ -70,7 +70,7 @@ For direct engine access (framework-agnostic core, or a custom plugin set), use 
 4. Add a changeset (`pnpm changeset`) describing your change.
 5. Open a pull request.
 
-Releases are automatic from there: merging a PR that carries a changeset triggers `.github/workflows/release.yml`, which opens (or updates) a "Version Packages" PR bumping every changed package and rolling up the changelogs. Merging that PR publishes the new versions to npm under the `alpha` dist-tag — no manual `npm publish` involved.
+Releases are automatic from there: merging a PR that carries a changeset triggers `.github/workflows/release.yml`, which opens (or updates) a "Version Packages" PR bumping every changed package and rolling up the changelogs. Merging that PR publishes the new versions to npm under the `beta` dist-tag — no manual `npm publish` involved.
 
 ## License
 

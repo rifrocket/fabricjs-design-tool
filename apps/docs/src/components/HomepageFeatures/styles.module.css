@@ -8,7 +8,7 @@
   margin-bottom: 1.5rem;
   border: 1px solid var(--fdt-landing-border);
   border-radius: 14px;
-  background: var(--ifm-background-color);
+  background: var(--fdt-landing-bg-elevated);
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
 
@@ -26,8 +26,23 @@
   height: 44px;
   margin-bottom: 1.1rem;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--ifm-color-primary) 12%, transparent);
+}
+
+/* Cycles the same violet → blue → cyan accent used in the plugin showcase grid, so the two
+   sections read as one system instead of two differently-colored ideas. */
+.iconBadge[data-accent='violet'] {
+  color: var(--fdt-landing-violet);
+  background: color-mix(in srgb, var(--fdt-landing-violet) 14%, transparent);
+}
+
+.iconBadge[data-accent='blue'] {
   color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary) 14%, transparent);
+}
+
+.iconBadge[data-accent='cyan'] {
+  color: var(--fdt-landing-cyan);
+  background: color-mix(in srgb, var(--fdt-landing-cyan) 14%, transparent);
 }
 
 .icon {

@@ -5,7 +5,7 @@
 
   **PDF export for [Fabric Design Tool](../../README.md), isolated so `jsPDF` is only paid for by consumers who install it.**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-export-pdf/alpha.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-export-pdf)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-export-pdf/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-export-pdf)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>

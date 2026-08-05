@@ -18,4 +18,4 @@
 "@rifrocket/fdt-plugin-svg-import": major
 ---
 
-Initial public alpha release of the v2 monorepo packages.
+Initial public beta release of the v2 monorepo packages.

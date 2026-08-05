@@ -4,7 +4,7 @@
 
 # packages/
 
-The [Fabric Design Tool](../README.md) engine, split into small, independently installable npm packages instead of one monolithic library. Each package below is published under the `alpha` npm dist-tag via [Changesets](../.changeset/README.md) — see the root README's [Architecture](../README.md#architecture) table for the one-line version of this list.
+The [Fabric Design Tool](../README.md) engine, split into small, independently installable npm packages instead of one monolithic library. Each package below is published under the `beta` npm dist-tag via [Changesets](../.changeset/README.md) — see the root README's [Architecture](../README.md#architecture) table for the one-line version of this list.
 
 ## Core packages
 

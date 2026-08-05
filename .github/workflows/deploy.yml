@@ -1,0 +1,72 @@
+name: Deploy Pages (docs + demo)
+
+# Publishes apps/docs and apps/demo to the same GitHub Pages project page: docs at the site
+# root, demo under /demo/. Both are built and combined into one artifact because GitHub Pages
+# serves a single deployment per repo — two independent deploy-pages calls (one per app) would
+# each overwrite the other's content. Runs only on push to main, i.e. only once version-2 (or
+# any other branch) is actually merged in; nothing here fires on pushes to other branches.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace packages
+        run: pnpm packages:build
+
+      - name: Build docs site
+        run: pnpm docs:build
+
+      - name: Build demo app
+        run: pnpm --filter @rifrocket/fdt-demo build
+
+      - name: Combine docs (site root) and demo (/demo/) into one Pages artifact
+        run: |
+          mkdir -p site
+          cp -r apps/docs/dist/. site/
+          mkdir -p site/demo
+          cp -r apps/demo/dist/. site/demo/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

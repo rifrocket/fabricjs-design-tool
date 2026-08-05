@@ -7,12 +7,14 @@ type FeatureItem = {
   title: string;
   Icon: (props: {className?: string}) => ReactNode;
   description: ReactNode;
+  accent: 'violet' | 'blue' | 'cyan';
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: 'Framework-agnostic core',
     Icon: LayersIcon,
+    accent: 'violet',
     description: (
       <>
         <code>@rifrocket/fdt-core</code> owns a single Fabric.js canvas and
@@ -25,6 +27,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'A real plugin system',
     Icon: PluginIcon,
+    accent: 'blue',
     description: (
       <>
         Object types, tools, panels, property fields, and export/import
@@ -37,6 +40,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'A thin React adapter',
     Icon: AdapterIcon,
+    accent: 'cyan',
     description: (
       <>
         <code>&lt;DesignEditor preset="default" /&gt;</code> gets you a
@@ -48,11 +52,11 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({title, Icon, description}: FeatureItem) {
+function Feature({title, Icon, description, accent}: FeatureItem) {
   return (
     <div className="col col--4">
       <div className={styles.card}>
-        <div className={styles.iconBadge}>
+        <div className={styles.iconBadge} data-accent={accent}>
           <Icon className={styles.icon} />
         </div>
         <Heading as="h3" className={styles.cardTitle}>
