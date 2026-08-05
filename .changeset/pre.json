@@ -23,6 +23,7 @@
     "@rifrocket/fdt-theme": "1.0.0"
   },
   "changesets": [
-    "initial-beta-release"
+    "initial-beta-release",
+    "rename-core-package"
   ]
 }

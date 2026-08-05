@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-react",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-beta.1",
   "private": false,
   "description": "React adapter (<Editor>, hooks) for @rifrocket/fabricjs-design-tool — FabricJS Design Tool v2.",
   "type": "module",
