@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { PluginRegistry } from "@rifrocket/fdt-core";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import { PluginRegistry } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { alignmentPlugin } from "./plugin";
 import { AlignmentControls } from "./AlignmentControls";
 

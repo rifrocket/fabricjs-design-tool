@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { FabricObject, Group, Rect } from "fabric";
-import { EFFECTS_PROPERTY, EffectRegistry } from "@rifrocket/fdt-core";
+import { EFFECTS_PROPERTY, EffectRegistry } from "@rifrocket/fabricjs-design-tool";
 import { __resetRenderPatchForTests, installRenderPatch, isRenderPatchInstalled } from "./installRenderPatch";
 
 const originalRender = FabricObject.prototype.render;

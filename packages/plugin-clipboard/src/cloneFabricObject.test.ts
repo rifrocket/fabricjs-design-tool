@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Rect } from "fabric";
-import { registerSerializedProperty } from "@rifrocket/fdt-core";
+import { registerSerializedProperty } from "@rifrocket/fabricjs-design-tool";
 import { cloneFabricObject } from "./cloneFabricObject";
 
 describe("cloneFabricObject", () => {

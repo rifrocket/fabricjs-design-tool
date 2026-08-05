@@ -11,11 +11,11 @@ Not yet. Every `@rifrocket/fdt-*` package is currently `private: true` in the mo
 
 ### Does this work outside React?
 
-Yes — `@rifrocket/fdt-core` has zero React dependency, enforced by a CI `dependency-cruiser` rule, not just convention. Use `createEngine()` directly. See [Choosing Your Entry Point](/docs/getting-started/choosing-your-entry-point).
+Yes — `@rifrocket/fabricjs-design-tool` has zero React dependency, enforced by a CI `dependency-cruiser` rule, not just convention. Use `createEngine()` directly. See [Choosing Your Entry Point](/docs/getting-started/choosing-your-entry-point).
 
 ### Does this support Vue, Svelte, or other frameworks?
 
-Not with a first-party adapter today — only `@rifrocket/fdt-react` exists. Because `@rifrocket/fdt-core` is genuinely framework-agnostic, a Vue/Svelte adapter is architecturally possible (it would follow the same thin-wrapper pattern `@rifrocket/fdt-react`'s `<Editor>` does around `createEngine()`), but isn't built today.
+Not with a first-party adapter today — only `@rifrocket/fdt-react` exists. Because `@rifrocket/fabricjs-design-tool` is genuinely framework-agnostic, a Vue/Svelte adapter is architecturally possible (it would follow the same thin-wrapper pattern `@rifrocket/fdt-react`'s `<Editor>` does around `createEngine()`), but isn't built today.
 
 ### Can I use a custom Fabric.js object I've already built?
 
@@ -51,7 +51,7 @@ No — history is command-pattern, not whole-canvas snapshots. Each undo step co
 
 ### How do I persist a document (autosave / save-to-server)?
 
-For `localStorage`, use `@rifrocket/fdt-plugin-local-storage` (or `<DesignEditor autosave={{...}}>` sugar). For a custom backend, `@rifrocket/fdt-core`'s `captureSnapshot(engine)`/`restoreSnapshot(engine, data)` give you the same serialization primitives that plugin builds on — call them yourself on whatever cadence/transport you need. See [`local-storage`](/docs/plugins/local-storage).
+For `localStorage`, use `@rifrocket/fdt-plugin-local-storage` (or `<DesignEditor autosave={{...}}>` sugar). For a custom backend, `@rifrocket/fabricjs-design-tool`'s `captureSnapshot(engine)`/`restoreSnapshot(engine, data)` give you the same serialization primitives that plugin builds on — call them yourself on whatever cadence/transport you need. See [`local-storage`](/docs/plugins/local-storage).
 
 ### Where do I report a bug or request a feature?
 

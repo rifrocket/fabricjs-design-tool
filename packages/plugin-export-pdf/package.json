@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@rifrocket/fdt-core": "workspace:*",
+    "@rifrocket/fabricjs-design-tool": "workspace:*",
     "jspdf": "^3.0.1"
   },
   "peerDependencies": {

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { EditorContext } from "@rifrocket/fdt-react";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { ImportJsonButton } from "./ImportJsonButton";
 
 function renderWithEngine(importFile: ReturnType<typeof vi.fn>) {

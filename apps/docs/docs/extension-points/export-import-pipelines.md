@@ -21,7 +21,7 @@ engine.registry.registerExporter("pdf", (canvas) => {
 });
 ```
 
-`@rifrocket/fdt-plugin-export-pdf` is the reference example — its entire `install()` is one `registerExporter("pdf", exportPdf)` call. `CanvasExporter` (the class backing the 4 built-in formats) is also exported directly from `@rifrocket/fdt-core`, in case you want its PNG/JPEG/SVG/JSON logic without going through the registry.
+`@rifrocket/fdt-plugin-export-pdf` is the reference example — its entire `install()` is one `registerExporter("pdf", exportPdf)` call. `CanvasExporter` (the class backing the 4 built-in formats) is also exported directly from `@rifrocket/fabricjs-design-tool`, in case you want its PNG/JPEG/SVG/JSON logic without going through the registry.
 
 ## Importing
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
 import { BringToFront, SendToBack, Copy, Trash2 } from "lucide-react";
 import { useEditor, useEditorState } from "@rifrocket/fdt-react";
-import { applyViewportTransform } from "@rifrocket/fdt-core";
+import { applyViewportTransform } from "@rifrocket/fabricjs-design-tool";
 import { cloneFabricObject } from "@rifrocket/fdt-plugin-clipboard";
 import { logUiEvent } from "../../dev-tools/uiEventLog";
 

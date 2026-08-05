@@ -1,4 +1,4 @@
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 
 export function getContainerSize(selector: string): { width: number; height: number } | null {
   const container = document.querySelector<HTMLElement>(selector);

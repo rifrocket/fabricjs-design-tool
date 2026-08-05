@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ReactElement } from "react";
 import { useEditor, useEditorState } from "@rifrocket/fdt-react";
-import type { ExportResult } from "@rifrocket/fdt-core";
+import type { ExportResult } from "@rifrocket/fabricjs-design-tool";
 
 export function CanvasStateViewer(): ReactElement {
   const engine = useEditor();

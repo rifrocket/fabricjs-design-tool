@@ -1,5 +1,5 @@
 import type { FabricObject } from "fabric";
-import type { EffectInstance, EffectRegistry, EffectRenderContext } from "@rifrocket/fdt-core";
+import type { EffectInstance, EffectRegistry, EffectRenderContext } from "@rifrocket/fabricjs-design-tool";
 import { buildRasterChain } from "./rasterChain";
 
 // Runs one already-enabled effect stack for a single render pass: wrapRender hooks compose

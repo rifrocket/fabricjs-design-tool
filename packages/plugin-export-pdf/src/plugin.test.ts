@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { Registry } from "@rifrocket/fdt-core";
-import type { CanvasEngine, Exporter } from "@rifrocket/fdt-core";
+import { Registry } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, Exporter } from "@rifrocket/fabricjs-design-tool";
 import { exportPdfPlugin } from "./plugin";
 import { exportPdf } from "./exportPdf";
 

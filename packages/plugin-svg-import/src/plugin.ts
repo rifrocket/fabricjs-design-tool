@@ -1,4 +1,4 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { importSVG } from "./importer";
 
 // Proves the plugin/registry system from Phase 2 against a real gap (v1 had no SVG import

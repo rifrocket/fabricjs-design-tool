@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ["react", "react-dom", "@rifrocket/fdt-core", "@rifrocket/fdt-react", "fabric"],
+  external: ["react", "react-dom", "@rifrocket/fabricjs-design-tool", "@rifrocket/fdt-react", "fabric"],
 });

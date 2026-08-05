@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import type { ReactNode } from "react";
 import { renderHook } from "@testing-library/react";
 import { Rect } from "fabric";
-import { EFFECTS_PROPERTY, HistoryManager, Store } from "@rifrocket/fdt-core";
-import type { CanvasEngine, EngineState } from "@rifrocket/fdt-core";
+import { EFFECTS_PROPERTY, HistoryManager, Store } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, EngineState } from "@rifrocket/fabricjs-design-tool";
 import { EditorContext } from "./context";
 import { useObjectEffects } from "./useObjectEffects";
 

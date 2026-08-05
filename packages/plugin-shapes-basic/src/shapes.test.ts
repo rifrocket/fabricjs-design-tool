@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Ellipse, Line, Polygon, Rect } from "fabric";
-import { ObjectTypeRegistry } from "@rifrocket/fdt-core";
+import { ObjectTypeRegistry } from "@rifrocket/fabricjs-design-tool";
 import { registerBasicShapes } from "./shapes";
 import { SHAPE_COORDINATES } from "./shapeCoordinates";
 

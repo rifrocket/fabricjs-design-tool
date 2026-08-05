@@ -8,7 +8,7 @@ title: Installing Plugins
 ## `engine.use()` — one plugin at a time
 
 ```ts
-import { createEngine } from "@rifrocket/fdt-core";
+import { createEngine } from "@rifrocket/fabricjs-design-tool";
 import { shapesBasicPlugin } from "@rifrocket/fdt-plugin-shapes-basic";
 
 const engine = createEngine(canvasElement);

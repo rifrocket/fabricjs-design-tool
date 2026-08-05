@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="180"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="180"/>
 
   # @rifrocket/fdt-plugin-export-pdf
 
@@ -10,7 +10,7 @@
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
 
-A pure engine plugin that registers a `"pdf"` exporter. `@rifrocket/fdt-core` has zero PDF-related dependency by design — `jspdf` (and its transitive dependencies) only ends up in your bundle if you actually install this package.
+A pure engine plugin that registers a `"pdf"` exporter. `@rifrocket/fabricjs-design-tool` has zero PDF-related dependency by design — `jspdf` (and its transitive dependencies) only ends up in your bundle if you actually install this package.
 
 ## Features
 
@@ -26,7 +26,7 @@ npm install @rifrocket/fdt-plugin-export-pdf
 ```
 
 Peer dependencies: `fabric`.
-Depends on `@rifrocket/fdt-core`, plus `jspdf`.
+Depends on `@rifrocket/fabricjs-design-tool`, plus `jspdf`.
 
 ## Quick start
 

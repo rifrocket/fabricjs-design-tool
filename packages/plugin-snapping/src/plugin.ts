@@ -1,4 +1,4 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { SnappingToggle } from "./SnappingToggle";
 
 // Wraps SnappingToggle as an installable EditorPlugin; it's still exported directly too

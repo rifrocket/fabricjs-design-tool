@@ -2,7 +2,7 @@
   "name": "@rifrocket/fdt-plugin-alignment",
   "version": "2.0.0-beta.0",
   "private": false,
-  "description": "Bare align/distribute controls for the FabricJS Design Tool v2, wired to AlignmentManager (already in @rifrocket/fdt-core with no UI anywhere).",
+  "description": "Bare align/distribute controls for the FabricJS Design Tool v2, wired to AlignmentManager (already in @rifrocket/fabricjs-design-tool with no UI anywhere).",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@rifrocket/fdt-core": "workspace:*",
+    "@rifrocket/fabricjs-design-tool": "workspace:*",
     "@rifrocket/fdt-react": "workspace:*"
   },
   "peerDependencies": {

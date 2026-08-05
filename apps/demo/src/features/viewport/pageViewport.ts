@@ -1,7 +1,7 @@
 import { Rect, Shadow } from "fabric";
 import type { FabricObject } from "fabric";
-import { captureSnapshot } from "@rifrocket/fdt-core";
-import type { CanvasEngine, DocumentSnapshotData } from "@rifrocket/fdt-core";
+import { captureSnapshot } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, DocumentSnapshotData } from "@rifrocket/fabricjs-design-tool";
 
 // Marks the Fabric object that represents the page's own bounds/background at (0,0)-(width,height)
 // in doc space, needed since the canvas element is now a fixed-size viewport rather than being

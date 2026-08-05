@@ -10,7 +10,7 @@ Live, embedded, interactive examples are planned for a later phase of this docum
 :::
 
 ```ts
-import { createEngine } from "@rifrocket/fdt-core";
+import { createEngine } from "@rifrocket/fabricjs-design-tool";
 import { shapesBasicPlugin } from "@rifrocket/fdt-plugin-shapes-basic";
 
 const engine = createEngine(document.querySelector("canvas"), { width: 800, height: 600 });

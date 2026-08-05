@@ -1,4 +1,4 @@
-import type { PanelRegistry } from "@rifrocket/fdt-core";
+import type { PanelRegistry } from "@rifrocket/fabricjs-design-tool";
 import type { ComponentType } from "react";
 
 // A host-provided override replaces whatever plugins registered for that slot.

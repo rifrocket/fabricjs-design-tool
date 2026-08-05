@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { Registry } from "@rifrocket/fdt-core";
-import type { CanvasEngine, Importer } from "@rifrocket/fdt-core";
+import { Registry } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, Importer } from "@rifrocket/fabricjs-design-tool";
 import type { Canvas } from "fabric";
 import { importJsonPlugin } from "./plugin";
 

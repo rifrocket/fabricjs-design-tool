@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from "react";
 import type { ReactElement } from "react";
 import { DesignEditor, EditorContext } from "@rifrocket/fdt-react";
-import type { CanvasEngine, PluginOverrides } from "@rifrocket/fdt-core";
-import { restoreSnapshot } from "@rifrocket/fdt-core";
+import type { CanvasEngine, PluginOverrides } from "@rifrocket/fabricjs-design-tool";
+import { restoreSnapshot } from "@rifrocket/fabricjs-design-tool";
 import { useContainerSize, centerContent } from "@rifrocket/fdt-plugin-pan-zoom";
 import { importJsonPlugin } from "@rifrocket/fdt-plugin-import-json";
 import { localStoragePlugin, loadDesignFromStorage } from "@rifrocket/fdt-plugin-local-storage";

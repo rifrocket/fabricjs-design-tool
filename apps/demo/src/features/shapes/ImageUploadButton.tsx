@@ -16,7 +16,7 @@ function readFileAsDataUrl(file: File): Promise<string> {
 }
 
 // Uses the "image" object type registered by @rifrocket/fdt-plugin-image — there is no
-// built-in image type in @rifrocket/fdt-core itself, so this exercises the same extension
+// built-in image type in @rifrocket/fabricjs-design-tool itself, so this exercises the same extension
 // point any consumer would use to add a new kind of object.
 export function ImageUploadButton(): ReactElement {
   const engine = useEditor();

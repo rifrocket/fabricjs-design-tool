@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rifrocket/fdt-core": "workspace:*",
+    "@rifrocket/fabricjs-design-tool": "workspace:*",
     "@rifrocket/fdt-plugin-clipboard": "workspace:*",
     "@rifrocket/fdt-plugin-effects": "workspace:*",
     "@rifrocket/fdt-plugin-export-pdf": "workspace:*",

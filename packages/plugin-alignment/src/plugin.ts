@@ -1,4 +1,4 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { AlignmentControls } from "./AlignmentControls";
 
 // Wraps AlignmentControls as an installable EditorPlugin; it's still exported directly too

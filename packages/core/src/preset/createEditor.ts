@@ -46,7 +46,7 @@ export function resolvePreset(preset: EditorPreset | "none" | undefined): Editor
   if (!preset || preset === "none") return EMPTY_PRESET;
   if (typeof preset === "string") {
     throw new Error(
-      `createEditor(): preset "${preset}" is not resolvable from @rifrocket/fdt-core alone — core cannot ` +
+      `createEditor(): preset "${preset}" is not resolvable from @rifrocket/fabricjs-design-tool alone — core cannot ` +
         `depend on plugin packages. Use @rifrocket/fdt-react's <DesignEditor preset="${preset}" /> for named ` +
         `presets, or pass a literal EditorPreset object built with definePreset() here.`,
     );

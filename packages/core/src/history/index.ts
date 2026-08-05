@@ -1,4 +1,4 @@
-// Subpath entry point: import from "@rifrocket/fdt-core/history" to pull in only the
+// Subpath entry point: import from "@rifrocket/fabricjs-design-tool/history" to pull in only the
 // command-pattern history stack, without the effects-stack or export-format code the root
 // barrel also re-exports.
 export type { Command } from "./command";

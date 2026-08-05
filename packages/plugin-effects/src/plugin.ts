@@ -1,6 +1,6 @@
-import type { EditorPlugin, EffectDefinition } from "@rifrocket/fdt-core";
-import { registerSerializedProperty } from "@rifrocket/fdt-core";
-import { EFFECTS_PROPERTY } from "@rifrocket/fdt-core";
+import type { EditorPlugin, EffectDefinition } from "@rifrocket/fabricjs-design-tool";
+import { registerSerializedProperty } from "@rifrocket/fabricjs-design-tool";
+import { EFFECTS_PROPERTY } from "@rifrocket/fabricjs-design-tool";
 import { installRenderPatch } from "./pipeline/installRenderPatch";
 import { ALL_BUILTIN_EFFECTS } from "./effects";
 

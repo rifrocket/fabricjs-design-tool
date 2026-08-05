@@ -8,8 +8,8 @@ import {
   resetEffect,
   toggleEffect,
   updateEffectProps,
-} from "@rifrocket/fdt-core";
-import type { EffectStack } from "@rifrocket/fdt-core";
+} from "@rifrocket/fabricjs-design-tool";
+import type { EffectStack } from "@rifrocket/fabricjs-design-tool";
 import { buildEffectRows, useEditor } from "@rifrocket/fdt-react";
 import { getEffectIcon } from "./effectIcons";
 import { EffectPropertyControls } from "./EffectPropertyControls";

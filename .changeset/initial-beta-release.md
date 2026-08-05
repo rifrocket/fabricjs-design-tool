@@ -1,5 +1,5 @@
 ---
-"@rifrocket/fdt-core": major
+"@rifrocket/fabricjs-design-tool": major
 "@rifrocket/fdt-react": major
 "@rifrocket/fdt-theme": major
 "@rifrocket/fdt-properties": major

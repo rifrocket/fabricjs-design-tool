@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { EditorContext } from "@rifrocket/fdt-react";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
-import { Store } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
+import { Store } from "@rifrocket/fabricjs-design-tool";
 import { AlignmentControls } from "./AlignmentControls";
 
 function renderWithEngine(selectedObjectIds: string[]) {

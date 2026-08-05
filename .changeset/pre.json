@@ -4,7 +4,7 @@
   "initialVersions": {
     "@rifrocket/fdt-demo": "0.0.0",
     "@rifrocket/fdt-docs": "0.0.0",
-    "@rifrocket/fdt-core": "1.0.0",
+    "@rifrocket/fabricjs-design-tool": "1.0.0",
     "@rifrocket/fdt-plugin-alignment": "1.0.0",
     "@rifrocket/fdt-plugin-clipboard": "1.0.0",
     "@rifrocket/fdt-plugin-devtools": "1.0.0",

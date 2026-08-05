@@ -1,11 +1,11 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import type { FabricObject } from "fabric";
 import { cloneFabricObject } from "./cloneFabricObject";
 
 const NUDGE_STEP = 1;
 const NUDGE_STEP_LARGE = 10;
 
-// Copy/paste/duplicate/select-all/nudge have no equivalent anywhere in @rifrocket/fdt-core —
+// Copy/paste/duplicate/select-all/nudge have no equivalent anywhere in @rifrocket/fabricjs-design-tool —
 // this plugin builds them entirely from public API (engine.selection, engine.shortcuts,
 // engine.addObject, engine.setObjectProperty, Fabric's own object.clone()). Group/ungroup
 // already exist on SelectionManager; this just wires shortcuts to them.

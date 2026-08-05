@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="180"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="180"/>
 
   # @rifrocket/fdt-plugin-alignment
 
@@ -10,7 +10,7 @@
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
 
-A panel-slot wrapper plugin: [`@rifrocket/fdt-core`](../core) already ships `AlignmentManager` (`engine.alignment`) with no UI attached to it anywhere. This package is that missing UI — `install()` registers `AlignmentControls` into the `sidebar-right` panel slot, so align/distribute becomes a one-line addition instead of a component you'd have to build yourself.
+A panel-slot wrapper plugin: [`@rifrocket/fabricjs-design-tool`](../core) already ships `AlignmentManager` (`engine.alignment`) with no UI attached to it anywhere. This package is that missing UI — `install()` registers `AlignmentControls` into the `sidebar-right` panel slot, so align/distribute becomes a one-line addition instead of a component you'd have to build yourself.
 
 ## Features
 
@@ -25,7 +25,7 @@ npm install @rifrocket/fdt-plugin-alignment
 ```
 
 Peer dependencies: `fabric`, `react`, `react-dom`.
-Depends on `@rifrocket/fdt-core` and `@rifrocket/fdt-react`.
+Depends on `@rifrocket/fabricjs-design-tool` and `@rifrocket/fdt-react`.
 
 ## Quick start
 

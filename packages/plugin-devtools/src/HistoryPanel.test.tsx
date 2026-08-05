@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { Store } from "@rifrocket/fdt-core";
-import type { CanvasEngine, HistoryEntry } from "@rifrocket/fdt-core";
+import { Store } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, HistoryEntry } from "@rifrocket/fabricjs-design-tool";
 import { EditorContext } from "@rifrocket/fdt-react";
 import { HistoryPanel } from "./HistoryPanel";
 

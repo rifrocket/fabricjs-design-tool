@@ -1,5 +1,5 @@
 {
-  "name": "@rifrocket/fdt-core",
+  "name": "@rifrocket/fabricjs-design-tool",
   "version": "2.0.0-beta.0",
   "private": false,
   "description": "Framework-agnostic canvas engine core for the FabricJS Design Tool v2.",

@@ -1,4 +1,4 @@
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 
 // Registers sensible default shortcuts (undo/redo/delete/deselect) plus every installed
 // tool's own `shortcut`, so keyboard-driven tool switching works without extra plugin code.

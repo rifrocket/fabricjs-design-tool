@@ -12,7 +12,7 @@ type PolygonShapeTypeMap = Record<PolygonShapeType, ShapeConfig>;
 // typo-checked autocomplete wherever a typeId is passed (ObjectTypeRegistry.get/has/create/
 // registerPropertyFields, CanvasEngine.addObjectOfType, ...) for any consumer that imports
 // this package — no action needed beyond the import.
-declare module "@rifrocket/fdt-core" {
+declare module "@rifrocket/fabricjs-design-tool" {
   interface ObjectTypeMap extends PolygonShapeTypeMap {
     text: ShapeConfig;
     rect: ShapeConfig;

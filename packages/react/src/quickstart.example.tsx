@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { Editor, useEditor } from "./index";
 
 // Type-checked by the package's "typecheck" script on every build, so the documented Quick Start

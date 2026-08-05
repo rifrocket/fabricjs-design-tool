@@ -1,5 +1,5 @@
-import type { PropertyFieldDefinition } from "@rifrocket/fdt-core";
-import { BLEND_MODES } from "@rifrocket/fdt-core";
+import type { PropertyFieldDefinition } from "@rifrocket/fabricjs-design-tool";
+import { BLEND_MODES } from "@rifrocket/fabricjs-design-tool";
 import { NumberField, SelectField, SliderField } from "@rifrocket/fdt-properties";
 
 const field = (

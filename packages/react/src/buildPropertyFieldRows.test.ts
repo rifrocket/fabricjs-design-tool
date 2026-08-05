@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { PropertyFieldDefinition } from "@rifrocket/fdt-core";
+import type { PropertyFieldDefinition } from "@rifrocket/fabricjs-design-tool";
 import { buildPropertyFieldRows } from "./buildPropertyFieldRows";
 
 const f = (key: string, extra: Partial<PropertyFieldDefinition> = {}): PropertyFieldDefinition => ({

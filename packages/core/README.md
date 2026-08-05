@@ -1,16 +1,16 @@
 <div align="center">
-  <img src="../../apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="220"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="220"/>
 
-  # @rifrocket/fdt-core
+  # @rifrocket/fabricjs-design-tool
 
   **The framework-agnostic canvas engine at the center of [Fabric Design Tool](../../README.md).**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-core/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-core)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffabricjs-design-tool/beta.svg)](https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
 
-`@rifrocket/fdt-core` wraps [Fabric.js](http://fabricjs.com/) in a `CanvasEngine` with its own plugin system, undo/redo history, event bus, and a set of engine managers (selection, layers, alignment, snapping). It has **no dependency on React or any UI framework** — [`@rifrocket/fdt-react`](../react) is the optional adapter built on top of it, and everything in [`packages/plugin-*`](../README.md) is installed into it through the same public plugin API a consumer would use.
+`@rifrocket/fabricjs-design-tool` wraps [Fabric.js](http://fabricjs.com/) in a `CanvasEngine` with its own plugin system, undo/redo history, event bus, and a set of engine managers (selection, layers, alignment, snapping). It has **no dependency on React or any UI framework** — [`@rifrocket/fdt-react`](../react) is the optional adapter built on top of it, and everything in [`packages/plugin-*`](../README.md) is installed into it through the same public plugin API a consumer would use.
 
 ## Features
 
@@ -27,7 +27,7 @@
 ## Install
 
 ```bash
-npm install @rifrocket/fdt-core fabric
+npm install @rifrocket/fabricjs-design-tool fabric
 ```
 
 `fabric` (`^6.6.7`) is a required peer dependency.
@@ -35,7 +35,7 @@ npm install @rifrocket/fdt-core fabric
 ## Quick start
 
 ```ts
-import { createEditor } from "@rifrocket/fdt-core";
+import { createEditor } from "@rifrocket/fabricjs-design-tool";
 
 const canvasEl = document.getElementById("canvas") as HTMLCanvasElement;
 const { engine } = createEditor(canvasEl, { width: 800, height: 600 });
@@ -48,13 +48,13 @@ engine.history.undo();
 
 ## Subpath exports
 
-Everything below is also available from the root `@rifrocket/fdt-core` barrel — these subpaths exist purely to narrow what a bundler pulls in when you only need one slice:
+Everything below is also available from the root `@rifrocket/fabricjs-design-tool` barrel — these subpaths exist purely to narrow what a bundler pulls in when you only need one slice:
 
 | Import | Narrows to |
 |---|---|
-| `@rifrocket/fdt-core/history` | `Command`, `CompositeCommand`, `HistoryManager`, `SetPropertyCommand`, `AddObjectCommand`/`RemoveObjectCommand` |
-| `@rifrocket/fdt-core/effects` | The effects-stack functions and `EffectStackCommand` |
-| `@rifrocket/fdt-core/export` | `CanvasExporter` and its types |
+| `@rifrocket/fabricjs-design-tool/history` | `Command`, `CompositeCommand`, `HistoryManager`, `SetPropertyCommand`, `AddObjectCommand`/`RemoveObjectCommand` |
+| `@rifrocket/fabricjs-design-tool/effects` | The effects-stack functions and `EffectStackCommand` |
+| `@rifrocket/fabricjs-design-tool/export` | `CanvasExporter` and its types |
 
 ## Documentation
 

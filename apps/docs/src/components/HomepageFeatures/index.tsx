@@ -17,7 +17,7 @@ const FeatureList: FeatureItem[] = [
     accent: 'violet',
     description: (
       <>
-        <code>@rifrocket/fdt-core</code> owns a single Fabric.js canvas and
+        <code>@rifrocket/fabricjs-design-tool</code> owns a single Fabric.js canvas and
         composes independently-testable managers — viewport, selection,
         layers, alignment, snapping, and command-pattern history — with zero
         React dependency.
