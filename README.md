@@ -1,158 +1,76 @@
-# FabricJS Design Tool
+# Fabric Design Tool
 
-<div align="center">
-  <img src="./docs/logo-large.svg" alt="FabricJS Design Tool" width="500"/>
-</div>
+> A Fabric.js-based design tool engine, React adapter, theme, and plugin ecosystem — split into small, independently installable packages.
 
-> A comprehensive, modern design tool built with Fabric.js and React - ready for production use in any JavaScript framework.
-
-[![npm version](https://badge.fury.io/js/%40rifrocket%2Ffabricjs-design-tool.svg)](https://badge.fury.io/js/%40rifrocket%2Ffabricjs-design-tool)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
-## ✨ Features
+This is a pnpm/turborepo monorepo. Every package under `packages/*` is currently `private: true` and not yet published to npm.
 
-- 🎨 **Rich Canvas Editing** - Complete design tool with shapes, text, images
-- 🔧 **Framework Agnostic Core** - Use with React, Vue, Angular, or vanilla JS
-- ⚛️ **React Components** - Pre-built UI components for React apps
-- 📱 **Responsive Design** - Works on desktop and mobile
-- 🔒 **TypeScript Support** - Full type definitions included
-- 🚀 **Production Ready** - Optimized builds and tree-shaking
-- 📦 **Modular Architecture** - Import only what you need
+## Architecture
 
-## 🚀 Quick Start
+| Package | Purpose |
+|---|---|
+| [`@rifrocket/fdt-core`](packages/core) | Framework-agnostic canvas engine (`CanvasEngine`, registries, store, `createEditor()`) |
+| [`@rifrocket/fdt-react`](packages/react) | React adapter (`<Editor>`, `<DesignEditor>`, hooks) |
+| [`@rifrocket/fdt-theme`](packages/theme) | CSS design tokens, light/dark theming |
+| [`@rifrocket/fdt-properties`](packages/properties) | Shared property-field components (slider, number, color, toggle, select, text) |
+| `@rifrocket/fdt-plugin-*` | Optional engine plugins — shapes, QR codes, SVG import, images, clipboard, PDF export, JSON import, effects, local-storage autosave, alignment, snapping, dev tools, pan/zoom |
 
-### Installation
+See [`packages/README.md`](packages/README.md) for the full plugin list and what each one does, and [`apps/demo`](apps/demo) for a working consumer that wires these packages together through the public `<Editor>` API.
+
+## Getting started (working in this repo)
 
 ```bash
-npm install @rifrocket/fabricjs-design-tool
+git clone https://github.com/rifrocket/fabricjs-design-tool.git
+cd fabricjs-design-tool
+pnpm install
 ```
 
-### Basic Usage (Any Framework)
+Common scripts (see [`package.json`](package.json) for the full list):
 
-```javascript
-import { useCanvasManager, shapeFactory } from '@rifrocket/fabricjs-design-tool';
-
-// Initialize canvas
-const canvasManager = useCanvasManager();
-
-// Create shapes
-const rect = shapeFactory.createRectangle({
-  left: 100,
-  top: 100,
-  fill: 'red',
-  width: 100,
-  height: 100
-});
-
-// Add to canvas
-canvasManager.addObject(rect);
+```bash
+pnpm packages:build       # build all packages/*
+pnpm packages:test        # test all packages/*
+pnpm packages:lint        # lint all packages/*
+pnpm packages:typecheck   # typecheck all packages/*
+pnpm apps:dev             # run the demo app
+pnpm apps:build           # build the demo app
 ```
 
-### React Components
+Versioning/publishing goes through [Changesets](.changeset/README.md).
 
-```jsx
-import React from 'react';
-import { 
-  CanvasWrapper, 
-  Header, 
-  LeftSidebar, 
-  RightSidebar 
-} from '@rifrocket/fabricjs-design-tool/ui';
+## Usage
 
-function DesignApp() {
-  return (
-    <div className="design-app">
-      <Header />
-      <div className="design-layout">
-        <LeftSidebar />
-        <CanvasWrapper />
-        <RightSidebar />
-      </div>
-    </div>
-  );
+Once published, consumers will install only the packages they need. The React adapter's `<DesignEditor>` is the batteries-included entry point:
+
+```tsx
+import { DesignEditor } from "@rifrocket/fdt-react";
+
+function App() {
+  return <DesignEditor preset="default" theme="system" width={800} height={600} />;
 }
 ```
 
-## 📚 Documentation
+For direct engine access (framework-agnostic core, or a custom plugin set), use `<Editor>` and `useEditor()` from the same package — see [`packages/react/src/quickstart.example.tsx`](packages/react/src/quickstart.example.tsx), which is typechecked on every build so it can't drift from the real API.
 
-- [📖 **Getting Started**](https://rifrocket.github.io/fabricjs-design-tool/docs/getting-started.html) - Installation, setup, and basic usage
-- [🎨 **Core API Reference**](https://rifrocket.github.io/fabricjs-design-tool/docs/core-api.html) - Framework-agnostic API documentation
-- [⚛️ **React Components**](https://rifrocket.github.io/fabricjs-design-tool/docs/react-components.html) - React UI components reference
-- [🎨 **Customization Guide**](https://rifrocket.github.io/fabricjs-design-tool/docs/customization.html) - Theming, custom shapes, and plugins
-- [ **Troubleshooting**](https://rifrocket.github.io/fabricjs-design-tool/docs/troubleshooting.html) - Common issues and solutions
-- [🤝 **Contributing**](https://rifrocket.github.io/fabricjs-design-tool/docs/contributing.html) - Complete setup guide and development workflow
-- [📋 **Changelog**](./CHANGELOG.md) - Version history and changes
+## Documentation
 
-## 🎯 Architecture
+- **[Documentation site](https://rifrocket.github.io/fabricjs-design-tool/)** — installation, quick start, architecture, every plugin, extension points, and guides (source: [`apps/docs`](apps/docs))
 
-This library provides two main packages from a single install:
+## Contributing
 
-### Core Library (`fabricjs-design-tool`)
-Framework-agnostic functionality that works everywhere:
-- Canvas management hooks
-- Shape creation utilities
-- Export/import functions
-- Type definitions
+1. Fork the repository and create a feature branch.
+2. Make your changes, keeping packages independently buildable.
+3. Run `pnpm packages:lint`, `pnpm packages:typecheck`, and `pnpm packages:test` before submitting.
+4. Add a changeset (`pnpm changeset`) describing your change.
+5. Open a pull request.
 
-### UI Components (`fabricjs-design-tool/ui`)
-React-specific components for quick implementation:
-- Complete design interface
-- Customizable toolbar
-- Property panels
-- Drag-and-drop shapes
+## License
 
-## 🤝 Contributing
+[MIT](LICENSE) © FabricJS Design Tool Contributors
 
-We welcome contributions! Please see our [**Contributing Guide**](https://rifrocket.github.io/fabricjs-design-tool/docs/contributing.html) for comprehensive details on:
+## Links
 
-### 🚀 Quick Setup
-```bash
-git clone https://github.com/YOUR_USERNAME/fabricjs-design-tool.git
-cd fabricjs-design-tool
-npm install
-npm run dev
-```
-
-### 📋 Available Commands
-- `npm run dev` - Start development server
-- `npm run build:lib` - Build library for distribution
-- `npm run lint` - Check code quality
-- `npm run lint:fix` - Auto-fix linting issues
-- `npm run clean` - Clean build artifacts
-
-### 🚀 Automated Deployment
-This project uses GitHub Actions for automated deployment:
-
-- **GitHub Pages**: Auto-deploys documentation and demo on every push to `main`
-- **NPM Publishing**: Auto-publishes to npm when `package.json` version changes
-- **Releases**: Auto-creates GitHub releases with tags when version changes
-
-To publish a new version:
-1. Update the version in `package.json`
-2. Push to `main` branch
-3. GitHub Actions handles the rest automatically!
-
-### 🏗️ Development Workflow
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-For detailed setup instructions, project structure, code style guidelines, and testing procedures, please read the [**Contributing Guide**](https://rifrocket.github.io/fabricjs-design-tool/docs/contributing.html).
-
-## 📄 License
-
-MIT © [Your Name]
-
-## 🔗 Links
-
-- [📖 Documentation](https://rifrocket.github.io/fabricjs-design-tool/docs/)
-- [🌐 Live Demo](https://rifrocket.github.io/fabricjs-design-tool/)
-- [🐛 Report Issues](https://github.com/rifrocket/fabricjs-design-tool/issues)
-- [📦 NPM Package](https://www.npmjs.com/package/@rifrocket/fabricjs-design-tool)
-
----
-
-**Built with ❤️ using [Fabric.js](http://fabricjs.com/) and [React](https://reactjs.org/)**
+- [Report Issues](https://github.com/rifrocket/fabricjs-design-tool/issues)
+- [Repository](https://github.com/rifrocket/fabricjs-design-tool)
