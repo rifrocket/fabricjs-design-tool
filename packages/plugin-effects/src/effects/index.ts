@@ -1,4 +1,4 @@
-import type { EffectDefinition } from "@rifrocket/fdt-core";
+import type { EffectDefinition } from "@rifrocket/fabricjs-design-tool";
 import * as basic from "./basic";
 import * as creative from "./creative";
 import * as text from "./text";

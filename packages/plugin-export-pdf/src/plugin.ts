@@ -1,4 +1,4 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { exportPdf } from "./exportPdf";
 
 export const exportPdfPlugin: EditorPlugin = {

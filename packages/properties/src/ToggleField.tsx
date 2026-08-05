@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { PropertyFieldProps } from "@rifrocket/fdt-core";
+import type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 
 const DEFAULT_ON_OFF: [unknown, unknown] = [true, false];
 

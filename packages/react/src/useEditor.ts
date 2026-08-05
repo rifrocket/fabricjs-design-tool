@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { EditorContext } from "./context";
 
 // Reads the CanvasEngine from context; throws outside <Editor> or before it's ready.

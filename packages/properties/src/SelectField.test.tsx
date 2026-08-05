@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Rect } from "fabric";
-import type { PropertyFieldDefinition } from "@rifrocket/fdt-core";
+import type { PropertyFieldDefinition } from "@rifrocket/fabricjs-design-tool";
 import { SelectField } from "./SelectField";
 
 describe("SelectField", () => {

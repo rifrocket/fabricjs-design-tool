@@ -68,7 +68,7 @@ Resolution order: resolve the preset → compute plugin list (drop `exclude`, ap
 ## Writing your own preset
 
 ```ts
-import { definePreset } from "@rifrocket/fdt-core";
+import { definePreset } from "@rifrocket/fabricjs-design-tool";
 import { shapesBasicPlugin } from "@rifrocket/fdt-plugin-shapes-basic";
 
 const myPreset = definePreset({
@@ -83,7 +83,7 @@ const myPreset = definePreset({
 ## `createEditor()` — the non-React counterpart
 
 ```ts
-import { createEditor } from "@rifrocket/fdt-core";
+import { createEditor } from "@rifrocket/fabricjs-design-tool";
 
 const { engine, resolvedPreset } = createEditor(canvasElement, {
   preset: myPreset, // a literal EditorPreset object — see below
@@ -91,7 +91,7 @@ const { engine, resolvedPreset } = createEditor(canvasElement, {
 });
 ```
 
-`@rifrocket/fdt-core` can only resolve a **literal preset object** (built with `definePreset()`) or `"none"` — it cannot resolve the named `"default"`/`"minimal"` strings, because every true plugin package depends on `core`, so `core` depending back on them to define those named presets would be a circular package dependency. Those convenience names exist one layer up, in `@rifrocket/fdt-react`'s `<DesignEditor preset="default">`, which is built from real plugin instances there. Passing a preset **name string** to `createEditor()` throws a clear error pointing you at `<DesignEditor>` instead.
+`@rifrocket/fabricjs-design-tool` can only resolve a **literal preset object** (built with `definePreset()`) or `"none"` — it cannot resolve the named `"default"`/`"minimal"` strings, because every true plugin package depends on `core`, so `core` depending back on them to define those named presets would be a circular package dependency. Those convenience names exist one layer up, in `@rifrocket/fdt-react`'s `<DesignEditor preset="default">`, which is built from real plugin instances there. Passing a preset **name string** to `createEditor()` throws a clear error pointing you at `<DesignEditor>` instead.
 
 `resolvedPreset` — returned alongside `engine` — is the fully-resolved preset actually used, post-override, useful for introspection/debugging (e.g. logging exactly which plugins ended up installed).
 

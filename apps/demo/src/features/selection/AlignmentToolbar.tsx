@@ -10,7 +10,7 @@ import {
   AlignVerticalDistributeCenter,
 } from "lucide-react";
 import { useEditor, useEditorState } from "@rifrocket/fdt-react";
-import type { Alignment, DistributeAxis } from "@rifrocket/fdt-core";
+import type { Alignment, DistributeAxis } from "@rifrocket/fabricjs-design-tool";
 import { InfoTooltip } from "../../docs/InfoTooltip";
 
 const ALIGN_BUTTONS: Array<{ value: Alignment; Icon: typeof AlignStartVertical; label: string }> = [

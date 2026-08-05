@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="180"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="180"/>
 
   # @rifrocket/fdt-plugin-import-json
 
@@ -27,7 +27,7 @@ npm install @rifrocket/fdt-plugin-import-json
 ```
 
 Peer dependencies: `fabric`, `react`, `react-dom`.
-Depends on `@rifrocket/fdt-core` and `@rifrocket/fdt-react`.
+Depends on `@rifrocket/fabricjs-design-tool` and `@rifrocket/fdt-react`.
 
 ## Quick start
 

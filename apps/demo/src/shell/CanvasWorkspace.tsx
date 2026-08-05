@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { useEditorState } from "@rifrocket/fdt-react";
-import { applyViewportTransform } from "@rifrocket/fdt-core";
+import { applyViewportTransform } from "@rifrocket/fabricjs-design-tool";
 import { useCanvasPanZoom } from "@rifrocket/fdt-plugin-pan-zoom";
 import { useEngineOrNull } from "../engine/useEngineOrNull";
 import { useTemplateContext } from "../templates/TemplateContext";

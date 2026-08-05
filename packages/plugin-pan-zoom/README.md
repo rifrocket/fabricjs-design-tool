@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="180"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="180"/>
 
   # @rifrocket/fdt-plugin-pan-zoom
 
@@ -27,7 +27,7 @@ npm install @rifrocket/fdt-plugin-pan-zoom
 ```
 
 Peer dependencies: `fabric`, `react`, `react-dom`.
-Depends on `@rifrocket/fdt-core`.
+Depends on `@rifrocket/fabricjs-design-tool`.
 
 ## Quick start
 

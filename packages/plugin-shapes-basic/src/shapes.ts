@@ -1,5 +1,5 @@
 import { Circle, Ellipse, Line, Polygon, Rect, Text } from "fabric";
-import type { ObjectTypeRegistry } from "@rifrocket/fdt-core";
+import type { ObjectTypeRegistry } from "@rifrocket/fabricjs-design-tool";
 import { SHAPE_COLORS, SHAPE_COORDINATES } from "./shapeCoordinates";
 import type { ShapeConfig } from "./types";
 import {

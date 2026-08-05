@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { resetAllEffects } from "@rifrocket/fdt-core";
+import { resetAllEffects } from "@rifrocket/fabricjs-design-tool";
 import { useEditor, useObjectEffects } from "@rifrocket/fdt-react";
 import { InfoTooltip } from "../../docs/InfoTooltip";
 import { EffectStackList } from "./EffectStackList";

@@ -1,4 +1,4 @@
-import type { DocumentSnapshotData } from "@rifrocket/fdt-core";
+import type { DocumentSnapshotData } from "@rifrocket/fabricjs-design-tool";
 
 export const DEFAULT_STORAGE_KEY = "fdt:document-snapshot";
 

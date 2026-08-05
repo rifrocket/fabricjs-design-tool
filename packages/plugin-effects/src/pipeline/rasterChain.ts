@@ -1,5 +1,5 @@
 import type { FabricObject } from "fabric";
-import type { EffectDefinition, EffectInstance } from "@rifrocket/fdt-core";
+import type { EffectDefinition, EffectInstance } from "@rifrocket/fabricjs-design-tool";
 import { rasterizeObjectLocal } from "./rasterize";
 import { getCachedRasterBitmap, setCachedRasterBitmap } from "./rasterCache";
 

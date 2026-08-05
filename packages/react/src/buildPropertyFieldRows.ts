@@ -1,4 +1,4 @@
-import type { PropertyFieldDefinition } from "@rifrocket/fdt-core";
+import type { PropertyFieldDefinition } from "@rifrocket/fabricjs-design-tool";
 
 export interface PropertyFieldRow {
   // React key for the row — the joined keys of whichever field(s) landed in it.

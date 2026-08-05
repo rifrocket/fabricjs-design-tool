@@ -41,7 +41,7 @@ importers:
 
   apps/demo:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../../packages/core
       '@rifrocket/fdt-plugin-clipboard':
@@ -211,7 +211,7 @@ importers:
 
   packages/plugin-alignment:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-react':
@@ -272,7 +272,7 @@ importers:
 
   packages/plugin-clipboard:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -306,7 +306,7 @@ importers:
 
   packages/plugin-devtools:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-react':
@@ -367,7 +367,7 @@ importers:
 
   packages/plugin-effects:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -401,7 +401,7 @@ importers:
 
   packages/plugin-export-pdf:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       jspdf:
@@ -438,7 +438,7 @@ importers:
 
   packages/plugin-image:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-properties':
@@ -481,7 +481,7 @@ importers:
 
   packages/plugin-import-json:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-react':
@@ -542,7 +542,7 @@ importers:
 
   packages/plugin-local-storage:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -576,7 +576,7 @@ importers:
 
   packages/plugin-pan-zoom:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -634,7 +634,7 @@ importers:
 
   packages/plugin-qrcode:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-properties':
@@ -683,7 +683,7 @@ importers:
 
   packages/plugin-shapes-basic:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-properties':
@@ -726,7 +726,7 @@ importers:
 
   packages/plugin-snapping:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-react':
@@ -787,7 +787,7 @@ importers:
 
   packages/plugin-svg-import:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -821,7 +821,7 @@ importers:
 
   packages/properties:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -879,7 +879,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@rifrocket/fdt-core':
+      '@rifrocket/fabricjs-design-tool':
         specifier: workspace:*
         version: link:../core
       '@rifrocket/fdt-plugin-clipboard':

@@ -18,7 +18,7 @@ interface Command {
 }
 ```
 
-`@rifrocket/fdt-core` ships a handful of built-in commands: `AddObjectCommand`, `RemoveObjectCommand`, `SetPropertyCommand`, and `CompositeCommand` (wraps several commands as one undo step — used internally by `deleteSelection()`, `align()`, and `distribute()`).
+`@rifrocket/fabricjs-design-tool` ships a handful of built-in commands: `AddObjectCommand`, `RemoveObjectCommand`, `SetPropertyCommand`, and `CompositeCommand` (wraps several commands as one undo step — used internally by `deleteSelection()`, `align()`, and `distribute()`).
 
 ## `HistoryManager`
 

@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { EffectInstance, EffectPropSchemaField } from "@rifrocket/fdt-core";
+import type { EffectInstance, EffectPropSchemaField } from "@rifrocket/fabricjs-design-tool";
 import { EffectSliderControl } from "./controls/EffectSliderControl";
 import { EffectColorControl } from "./controls/EffectColorControl";
 import { EffectAngleControl } from "./controls/EffectAngleControl";

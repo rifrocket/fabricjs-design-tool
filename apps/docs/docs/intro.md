@@ -15,7 +15,7 @@ It's built for two different audiences at once:
 
 ## Why a framework-agnostic core?
 
-Most Fabric.js-based editors hard-wire the canvas, the UI, and the feature set together, which makes them impossible to extend without forking. `@rifrocket/fdt-core` owns exactly one thing — a single Fabric.js `Canvas` instance — and exposes every other capability (object types, tools, panels, property fields, import/export formats) as a **registry** that plugins register into. The React package, and every one of the 13 official plugins, are built entirely on top of that same public registry API — nothing in this framework has special internal access that a third-party plugin doesn't also have.
+Most Fabric.js-based editors hard-wire the canvas, the UI, and the feature set together, which makes them impossible to extend without forking. `@rifrocket/fabricjs-design-tool` owns exactly one thing — a single Fabric.js `Canvas` instance — and exposes every other capability (object types, tools, panels, property fields, import/export formats) as a **registry** that plugins register into. The React package, and every one of the 13 official plugins, are built entirely on top of that same public registry API — nothing in this framework has special internal access that a third-party plugin doesn't also have.
 
 ## Two ways in
 
@@ -27,7 +27,7 @@ import { DesignEditor } from "@rifrocket/fdt-react";
 ```
 
 ```ts
-import { createEngine } from "@rifrocket/fdt-core";
+import { createEngine } from "@rifrocket/fabricjs-design-tool";
 
 // Framework-agnostic: no React, no bundled plugins, just the engine.
 const engine = createEngine(canvasElement, { width: 800, height: 600 });

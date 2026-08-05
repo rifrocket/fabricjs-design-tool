@@ -13,18 +13,18 @@ Every `@rifrocket/fdt-*` package is currently `private: true` in the [monorepo](
 
 | You want... | Install |
 |---|---|
-| A batteries-included React editor | `@rifrocket/fdt-react` (pulls in `@rifrocket/fdt-core` and the plugins its `"default"` preset bundles) |
-| The React adapter with your own hand-picked plugins | `@rifrocket/fdt-core` + `@rifrocket/fdt-react` + whichever `@rifrocket/fdt-plugin-*` packages you need |
-| Just the framework-agnostic canvas engine, no React | `@rifrocket/fdt-core` + whichever plugins you need |
+| A batteries-included React editor | `@rifrocket/fdt-react` (pulls in `@rifrocket/fabricjs-design-tool` and the plugins its `"default"` preset bundles) |
+| The React adapter with your own hand-picked plugins | `@rifrocket/fabricjs-design-tool` + `@rifrocket/fdt-react` + whichever `@rifrocket/fdt-plugin-*` packages you need |
+| Just the framework-agnostic canvas engine, no React | `@rifrocket/fabricjs-design-tool` + whichever plugins you need |
 | Themed light/dark CSS variables | `@rifrocket/fdt-theme` (optional — plain CSS, no JS runtime) |
 
 ## React consumers
 
 ```bash
-npm install @rifrocket/fdt-core @rifrocket/fdt-react @rifrocket/fdt-theme
+npm install @rifrocket/fabricjs-design-tool @rifrocket/fdt-react @rifrocket/fdt-theme
 ```
 
-`fabric` is a **peer dependency** of `@rifrocket/fdt-core`, and `react`/`react-dom` are peer dependencies of `@rifrocket/fdt-react` — install them yourself if your app doesn't already have them:
+`fabric` is a **peer dependency** of `@rifrocket/fabricjs-design-tool`, and `react`/`react-dom` are peer dependencies of `@rifrocket/fdt-react` — install them yourself if your app doesn't already have them:
 
 ```bash
 npm install fabric react react-dom
@@ -41,13 +41,13 @@ Each plugin declares its own peer dependencies (always `fabric`; plugins with UI
 ## Framework-agnostic (no React) consumers
 
 ```bash
-npm install @rifrocket/fdt-core fabric
+npm install @rifrocket/fabricjs-design-tool fabric
 ```
 
-`@rifrocket/fdt-core` has zero React dependency — enforced in CI via a `dependency-cruiser` rule, not just convention — so this install works in a vanilla-JS, Vue, Svelte, or any other app. Reach for `createEngine()`:
+`@rifrocket/fabricjs-design-tool` has zero React dependency — enforced in CI via a `dependency-cruiser` rule, not just convention — so this install works in a vanilla-JS, Vue, Svelte, or any other app. Reach for `createEngine()`:
 
 ```ts
-import { createEngine } from "@rifrocket/fdt-core";
+import { createEngine } from "@rifrocket/fabricjs-design-tool";
 
 const engine = createEngine(document.querySelector("canvas"), { width: 800, height: 600 });
 ```
@@ -68,15 +68,15 @@ import "@rifrocket/fdt-theme/tokens.css";
 
 ## Package export subpaths
 
-`@rifrocket/fdt-core` ships three subpath exports alongside its main barrel, so bundlers can tree-shake code you don't use (e.g. the PDF/history/effects machinery) out of your bundle:
+`@rifrocket/fabricjs-design-tool` ships three subpath exports alongside its main barrel, so bundlers can tree-shake code you don't use (e.g. the PDF/history/effects machinery) out of your bundle:
 
 ```ts
-import { HistoryManager } from "@rifrocket/fdt-core/history";
-import { getEffectStack } from "@rifrocket/fdt-core/effects";
-import { CanvasExporter } from "@rifrocket/fdt-core/export";
+import { HistoryManager } from "@rifrocket/fabricjs-design-tool/history";
+import { getEffectStack } from "@rifrocket/fabricjs-design-tool/effects";
+import { CanvasExporter } from "@rifrocket/fabricjs-design-tool/export";
 ```
 
-Importing the same symbols from the main `@rifrocket/fdt-core` entry point works too — the subpaths exist for bundle-size control, not because anything is exclusive to them.
+Importing the same symbols from the main `@rifrocket/fabricjs-design-tool` entry point works too — the subpaths exist for bundle-size control, not because anything is exclusive to them.
 
 ## Next steps
 

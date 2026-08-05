@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { computeRulerTicks } from "@rifrocket/fdt-core";
+import { computeRulerTicks } from "@rifrocket/fabricjs-design-tool";
 import { useEditorState } from "./useEditorState";
 
 export interface RulerProps {

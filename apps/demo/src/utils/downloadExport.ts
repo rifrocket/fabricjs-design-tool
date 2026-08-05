@@ -1,4 +1,4 @@
-import type { ExportResult } from "@rifrocket/fdt-core";
+import type { ExportResult } from "@rifrocket/fabricjs-design-tool";
 
 // CanvasExporter's `data` isn't one shape across formats: PNG/JPEG are data: URLs, PDF is a
 // Blob, but JSON/SVG are raw text — treating raw text as an href (the previous bug) produced a

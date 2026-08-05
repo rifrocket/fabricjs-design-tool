@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { DocumentSnapshotData } from "@rifrocket/fdt-core";
+import type { DocumentSnapshotData } from "@rifrocket/fabricjs-design-tool";
 import { DEFAULT_STORAGE_KEY, clearSavedDesign, loadDesignFromStorage, saveDesignToStorage } from "./storage";
 import type { StorageLike, StoredDesign } from "./storage";
 

@@ -1,5 +1,5 @@
-import type { CanvasEngine, DocumentSnapshotData, EditorPlugin } from "@rifrocket/fdt-core";
-import { captureSnapshot as captureDocumentSnapshot } from "@rifrocket/fdt-core";
+import type { CanvasEngine, DocumentSnapshotData, EditorPlugin } from "@rifrocket/fabricjs-design-tool";
+import { captureSnapshot as captureDocumentSnapshot } from "@rifrocket/fabricjs-design-tool";
 import { DEFAULT_STORAGE_KEY, saveDesignToStorage } from "./storage";
 import type { StorageLike } from "./storage";
 
@@ -9,7 +9,7 @@ export interface LocalStoragePluginOptions<TMeta = unknown> {
   // sequence of undo/redo presses into a single localStorage write instead of one per event.
   debounceMs?: number;
   storage?: StorageLike;
-  // Overrides how a snapshot is captured for autosave. Defaults to @rifrocket/fdt-core's plain
+  // Overrides how a snapshot is captured for autosave. Defaults to @rifrocket/fabricjs-design-tool's plain
   // captureSnapshot(engine); a consumer that draws its own non-content chrome directly onto the
   // canvas (e.g. a page-boundary marker rect — see apps/demo's captureDesignSnapshot) can supply
   // one that excludes it, so autosave only ever persists real document content.
@@ -42,7 +42,7 @@ export function requestSave(engine: CanvasEngine): void {
 // install() runs synchronously during CanvasEngine.useAll(), before a consumer has had any
 // chance to add its own starter content. Auto-restoring here would race an app's own load
 // sequence (see apps/demo/src/engine/EngineHost.tsx, which restores explicitly instead). Use
-// loadDesignFromStorage() + @rifrocket/fdt-core's restoreSnapshot() for that.
+// loadDesignFromStorage() + @rifrocket/fabricjs-design-tool's restoreSnapshot() for that.
 export function localStoragePlugin<TMeta = unknown>(options: LocalStoragePluginOptions<TMeta> = {}): EditorPlugin {
   const key = options.key ?? DEFAULT_STORAGE_KEY;
   const debounceMs = options.debounceMs ?? DEFAULT_DEBOUNCE_MS;

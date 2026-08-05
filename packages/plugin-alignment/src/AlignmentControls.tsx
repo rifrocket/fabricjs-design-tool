@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { Alignment, DistributeAxis } from "@rifrocket/fdt-core";
+import type { Alignment, DistributeAxis } from "@rifrocket/fabricjs-design-tool";
 import { useEditor, useEditorState } from "@rifrocket/fdt-react";
 
 const ALIGNMENTS: Array<{ value: Alignment; label: string }> = [
@@ -18,7 +18,7 @@ const DISTRIBUTE_AXES: Array<{ value: DistributeAxis; label: string }> = [
 
 // Bare/unstyled, matching the convention @rifrocket/fdt-react's own shipped components
 // (LayersPanel, PropertiesPanel) already follow — AlignmentManager already exists in
-// @rifrocket/fdt-core with no UI anywhere.
+// @rifrocket/fabricjs-design-tool with no UI anywhere.
 export function AlignmentControls(): ReactElement {
   const engine = useEditor();
   const selectedCount = useEditorState((state) => state.selectedObjectIds.length);

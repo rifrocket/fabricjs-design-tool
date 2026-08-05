@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { Rect } from "fabric";
-import { EffectRegistry } from "@rifrocket/fdt-core";
-import type { EffectDefinition, EffectInstance } from "@rifrocket/fdt-core";
+import { EffectRegistry } from "@rifrocket/fabricjs-design-tool";
+import type { EffectDefinition, EffectInstance } from "@rifrocket/fabricjs-design-tool";
 import { runEffectPipeline } from "./effectPipeline";
 
 function instance(effectId: string, props: Record<string, unknown> = {}): EffectInstance {

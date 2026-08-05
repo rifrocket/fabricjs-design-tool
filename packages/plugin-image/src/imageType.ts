@@ -1,5 +1,5 @@
 import { FabricImage } from "fabric";
-import type { ObjectTypeRegistry } from "@rifrocket/fdt-core";
+import type { ObjectTypeRegistry } from "@rifrocket/fabricjs-design-tool";
 import { MEDIA_FIELDS } from "./propertyFields";
 
 export interface ImageObjectConfig {

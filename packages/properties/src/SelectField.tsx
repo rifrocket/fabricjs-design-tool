@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { PropertyFieldProps } from "@rifrocket/fdt-core";
+import type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 
 // <option> values are always strings in the DOM, so the selected option's original (possibly
 // non-string) value is looked up by matching String(option.value) back to the option list.

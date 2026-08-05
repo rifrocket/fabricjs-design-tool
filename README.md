@@ -1,7 +1,7 @@
 # Fabric Design Tool
 
 <div align="center">
-  <img src="apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="500"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="500"/>
 </div>
 
 > A Fabric.js-based design tool engine, React adapter, theme, and plugin ecosystem — split into small, independently installable packages.
@@ -15,7 +15,7 @@ This is a pnpm/turborepo monorepo. Every package under `packages/*` publishes to
 
 | Package | Purpose |
 |---|---|
-| [`@rifrocket/fdt-core`](packages/core) | Framework-agnostic canvas engine (`CanvasEngine`, registries, store, `createEditor()`) |
+| [`@rifrocket/fabricjs-design-tool`](packages/core) | Framework-agnostic canvas engine (`CanvasEngine`, registries, store, `createEditor()`) |
 | [`@rifrocket/fdt-react`](packages/react) | React adapter (`<Editor>`, `<DesignEditor>`, hooks) |
 | [`@rifrocket/fdt-theme`](packages/theme) | CSS design tokens, light/dark theming |
 | [`@rifrocket/fdt-properties`](packages/properties) | Shared property-field components (slider, number, color, toggle, select, text) |

@@ -45,7 +45,7 @@ export interface ObjectTypeDefinition<TConfig = unknown> {
 // any other plugin) needing to know about the plugin's types ahead of time. E.g.
 // plugin-shapes-basic does:
 //
-//   declare module "@rifrocket/fdt-core" {
+//   declare module "@rifrocket/fabricjs-design-tool" {
 //     interface ObjectTypeMap { rect: ShapeConfig; circle: ShapeConfig; ... }
 //   }
 //

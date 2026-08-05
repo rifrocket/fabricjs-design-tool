@@ -13,7 +13,7 @@ import type { DesignEditorPreset } from "./types";
 // fdt-react) that pnpm/tsup can't build. shapes-basic/image/qrcode look like the same risk but
 // aren't: they depend on @rifrocket/fdt-properties, which used to import a *type* from
 // @rifrocket/fdt-react and create this exact cycle; that type (PropertyFieldProps) now lives in
-// @rifrocket/fdt-core instead (see core's objectTypeRegistry.ts). Excluded plugins stay available
+// @rifrocket/fabricjs-design-tool instead (see core's objectTypeRegistry.ts). Excluded plugins stay available
 // the same way any third-party plugin is: `plugins: { add: [...] }` (see DesignEditor.tsx and
 // apps/demo/src/engine/EngineHost.tsx).
 //

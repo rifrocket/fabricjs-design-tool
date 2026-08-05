@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
 import type { ComponentProps } from "react";
-import type { CanvasEngine, EditorPlugin } from "@rifrocket/fdt-core";
+import type { CanvasEngine, EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { DesignEditor } from "./DesignEditor";
 import { defaultPreset, minimalPreset } from "./builtinPresets";
 import type { DesignEditorPreset } from "./types";

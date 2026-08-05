@@ -5,7 +5,7 @@ title: The React Adapter
 
 # The React Adapter
 
-`@rifrocket/fdt-react` is intentionally thin. `<Editor>` doesn't add any capability `@rifrocket/fdt-core` doesn't already have — it wires `createEngine()` into React's lifecycle, provides the resulting `CanvasEngine` through context, and renders three named panel slots.
+`@rifrocket/fdt-react` is intentionally thin. `<Editor>` doesn't add any capability `@rifrocket/fabricjs-design-tool` doesn't already have — it wires `createEngine()` into React's lifecycle, provides the resulting `CanvasEngine` through context, and renders three named panel slots.
 
 ## What `<Editor>` actually does
 

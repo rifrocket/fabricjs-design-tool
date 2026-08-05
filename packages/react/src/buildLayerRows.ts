@@ -1,5 +1,5 @@
 import type { FabricObject } from "fabric";
-import { getObjectId, resolveObjectTypeId } from "@rifrocket/fdt-core";
+import { getObjectId, resolveObjectTypeId } from "@rifrocket/fabricjs-design-tool";
 
 export interface LayerRow {
   id: string;

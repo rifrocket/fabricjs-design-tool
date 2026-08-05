@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { EventBus } from "@rifrocket/fdt-core";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import { EventBus } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { localStoragePlugin, requestSave } from "./plugin";
 import { DEFAULT_STORAGE_KEY, loadDesignFromStorage } from "./storage";
 import type { StorageLike } from "./storage";

@@ -1,4 +1,4 @@
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 
 export interface ZoomCenter {
   x: number;

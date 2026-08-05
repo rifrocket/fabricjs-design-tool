@@ -11,7 +11,7 @@ title: Overview
 
 ```mermaid
 flowchart TB
-    core["@rifrocket/fdt-core<br/>(zero React dependency)"]
+    core["@rifrocket/fabricjs-design-tool<br/>(zero React dependency)"]
     react["@rifrocket/fdt-react<br/>(thin adapter)"]
     theme["@rifrocket/fdt-theme<br/>(pure CSS)"]
     properties["@rifrocket/fdt-properties<br/>(shared field components)"]
@@ -54,4 +54,4 @@ Every extension point — object types, tools, panels, property fields, export/i
 
 ## Package export subpaths
 
-`@rifrocket/fdt-core` ships subpath exports (`./history`, `./effects`, `./export`) alongside its main barrel with `"sideEffects": false` set, so bundlers can tree-shake code your app doesn't touch — e.g. the PDF-adjacent export machinery — out of a bundle that only imports `createEngine`.
+`@rifrocket/fabricjs-design-tool` ships subpath exports (`./history`, `./effects`, `./export`) alongside its main barrel with `"sideEffects": false` set, so bundlers can tree-shake code your app doesn't touch — e.g. the PDF-adjacent export machinery — out of a bundle that only imports `createEngine`.

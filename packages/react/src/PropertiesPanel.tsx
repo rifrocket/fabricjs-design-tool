@@ -1,16 +1,16 @@
 import type { ComponentType, ReactElement } from "react";
-import { resolveObjectTypeId } from "@rifrocket/fdt-core";
-import type { PropertyFieldProps } from "@rifrocket/fdt-core";
+import { resolveObjectTypeId } from "@rifrocket/fabricjs-design-tool";
+import type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 import { useEditor } from "./useEditor";
 import { useEditorState } from "./useEditorState";
 import { resolvePropertyFields } from "./resolvePropertyFields";
 import { buildPropertyFieldRows } from "./buildPropertyFieldRows";
 
-// Re-exported from @rifrocket/fdt-core, where it has to live so that
+// Re-exported from @rifrocket/fabricjs-design-tool, where it has to live so that
 // @rifrocket/fdt-properties's shared field components can type against it without depending on
 // this package (see core's objectTypeRegistry.ts for the full reasoning) — kept as a named
 // export here too since this is where consumers writing a custom field component look for it.
-export type { PropertyFieldProps } from "@rifrocket/fdt-core";
+export type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 
 // Renders one row per registerPropertyFields() entry (or one 2-column row per half+half pair —
 // see buildPropertyFieldRows.ts) for the first selected object's type, replacing v1's

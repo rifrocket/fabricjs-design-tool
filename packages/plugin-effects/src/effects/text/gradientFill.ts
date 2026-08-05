@@ -1,5 +1,5 @@
-import { createLinearGradient } from "@rifrocket/fdt-core";
-import type { EffectDefinition } from "@rifrocket/fdt-core";
+import { createLinearGradient } from "@rifrocket/fabricjs-design-tool";
+import type { EffectDefinition } from "@rifrocket/fabricjs-design-tool";
 
 export interface GradientFillProps {
   colorStart: string;

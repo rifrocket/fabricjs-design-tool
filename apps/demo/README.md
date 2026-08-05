@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="220"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo.svg" alt="Fabric Design Tool" width="220"/>
 
   # Fabric Design Tool — Demo
 
@@ -40,7 +40,7 @@ There's currently no hosted live demo — this app isn't deployed anywhere yet, 
 
 ## Tech stack
 
-React 19, Vite, Tailwind CSS v4, [Fabric.js](http://fabricjs.com/) (via `@rifrocket/fdt-core`), [Lucide](https://lucide.dev/) icons — TypeScript throughout, strict mode.
+React 19, Vite, Tailwind CSS v4, [Fabric.js](http://fabricjs.com/) (via `@rifrocket/fabricjs-design-tool`), [Lucide](https://lucide.dev/) icons — TypeScript throughout, strict mode.
 
 ## License
 

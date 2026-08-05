@@ -12,7 +12,7 @@ const PDF_PAGE_WIDTH_MM = 210;
 const PDF_PAGE_HEIGHT_MM = 297;
 const PDF_MARGIN_MM = 10;
 
-// Moved out of @rifrocket/fdt-core verbatim: jsPDF pulled in ~230KB of transitive deps as a
+// Moved out of @rifrocket/fabricjs-design-tool verbatim: jsPDF pulled in ~230KB of transitive deps as a
 // hard dependency of every core consumer, for a format most editors never use.
 export function exportPdf(canvas: Canvas): PdfExportResult {
   const canvasWidth = canvas.getWidth();

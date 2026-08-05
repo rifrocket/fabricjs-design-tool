@@ -10,7 +10,7 @@ This walkthrough builds a small but complete plugin — a `"sticky-note"` object
 ## 1. Start from the shape every plugin has
 
 ```ts
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 
 export const stickyNotePlugin: EditorPlugin = {
   name: "sticky-note",
@@ -105,7 +105,7 @@ engine.useAll([shapesBasicPlugin, stickyNotePlugin]);
 ## 6. (Optional) Typed object-type ids
 
 ```ts
-declare module "@rifrocket/fdt-core" {
+declare module "@rifrocket/fabricjs-design-tool" {
   interface ObjectTypeMap {
     "sticky-note": StickyNoteConfig;
   }
