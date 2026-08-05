@@ -80,3 +80,4 @@ Releases are automatic from there: merging a PR that carries a changeset trigger
 
 - [Report Issues](https://github.com/rifrocket/fabricjs-design-tool/issues)
 - [Repository](https://github.com/rifrocket/fabricjs-design-tool)
+- [Live Demo](https://rifrocket.github.io/fabricjs-design-tool/demo/)

@@ -67,3 +67,9 @@ Everything below is also available from the root `@rifrocket/fdt-core` barrel â€
 ## License
 
 [MIT](../../LICENSE) Â© Fabric Design Tool Contributors
+
+## Links
+
+- [Report Issues](https://github.com/rifrocket/fabricjs-design-tool/issues)
+- [Repository](https://github.com/rifrocket/fabricjs-design-tool)
+- [Live Demo](https://rifrocket.github.io/fabricjs-design-tool/demo/)

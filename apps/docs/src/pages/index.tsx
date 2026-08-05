@@ -70,7 +70,7 @@ function HomepageHeader() {
             <Link className={`button button--lg ${styles.primaryButton}`} to="/docs/getting-started/quick-start">
               Get Started →
             </Link>
-            <Link className={`button button--lg ${styles.outlineButton}`} to="https://rifrocket.github.io/fabricjs-design-tool/">
+            <Link className={`button button--lg ${styles.outlineButton}`} to="https://rifrocket.github.io/fabricjs-design-tool/demo/">
               Live Demo ↗
             </Link>
             <Link
