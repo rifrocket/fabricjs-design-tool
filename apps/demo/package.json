@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-demo",
-  "version": "0.0.0",
+  "version": "0.0.1-beta.0",
   "private": true,
   "description": "Reference implementation and feature showcase for the v2 public API (@rifrocket/fdt-react + plugins) — a full application shell built entirely against the documented public API, demonstrating best-practice integration for developers evaluating the library.",
   "type": "module",

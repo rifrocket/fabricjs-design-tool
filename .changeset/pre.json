@@ -22,5 +22,7 @@
     "@rifrocket/fdt-react": "1.0.0",
     "@rifrocket/fdt-theme": "1.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "initial-beta-release"
+  ]
 }

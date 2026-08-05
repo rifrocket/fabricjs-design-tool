@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-export-pdf",
-  "version": "1.0.0",
+  "version": "2.0.0-beta.0",
   "private": false,
   "description": "PDF export for the FabricJS Design Tool v2, extracted from core so jsPDF (and its transitive dependencies) is only paid for by consumers who install this plugin.",
   "type": "module",
