@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-properties",
-  "version": "2.0.0-beta.1",
+  "version": "3.0.0",
   "private": false,
   "description": "Bare property-field components (slider, number, color, toggle, select, text) for the FabricJS Design Tool v2, driven by PropertyFieldDefinition.config.",
   "type": "module",

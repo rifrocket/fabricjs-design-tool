@@ -1,6 +1,6 @@
 import type { FabricObject } from "fabric";
 import type { EffectDefinition, EffectInstance } from "@rifrocket/fabricjs-design-tool";
-import { rasterizeObjectLocal } from "./rasterize";
+import { rasterizeObjectLocal, rasterMultiplier } from "./rasterize";
 import { getCachedRasterBitmap, setCachedRasterBitmap } from "./rasterCache";
 
 export type EffectLookup = (effectId: string) => EffectDefinition | undefined;
@@ -17,7 +17,12 @@ export function buildRasterChain(
 ): HTMLCanvasElement | undefined {
   if (instances.length === 0) return undefined;
 
-  const signature = JSON.stringify(instances.map((instance) => [instance.instanceId, instance.props]));
+  // rasterMultiplier is folded into the signature (not just instance props) because a canvas
+  // zoom or object-scale change alone doesn't mark the object dirty, but it does change the
+  // resolution rasterizeObjectLocal needs to render at (see rasterize.ts) — without this, zooming
+  // in on an object that already has a cached raster bitmap would keep reusing the stale,
+  // now-too-low-resolution one instead of re-rasterizing at the new size.
+  const signature = JSON.stringify([rasterMultiplier(object), instances.map((instance) => [instance.instanceId, instance.props])]);
   const forceRefresh = object.dirty === true;
   if (!forceRefresh) {
     const cached = getCachedRasterBitmap(object, signature);

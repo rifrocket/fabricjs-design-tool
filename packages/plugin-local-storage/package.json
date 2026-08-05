@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-local-storage",
-  "version": "2.0.0-beta.1",
+  "version": "3.0.0",
   "private": false,
   "description": "Debounced localStorage autosave (engine plugin) plus save/load/clear primitives for the FabricJS Design Tool v2, built on @rifrocket/fabricjs-design-tool's document snapshot.",
   "type": "module",
