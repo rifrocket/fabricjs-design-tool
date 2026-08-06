@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-docs",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Developer documentation site for the FabricJS Design Tool v2 (@rifrocket/fdt-*) — Docusaurus 3.",
   "scripts": {

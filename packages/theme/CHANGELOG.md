@@ -1,5 +1,11 @@
 # @rifrocket/fdt-theme
 
+## 3.0.1
+
+### Patch Changes
+
+- 6a408a4: update documentation
+
 ## 3.0.0
 
 ### Major Changes

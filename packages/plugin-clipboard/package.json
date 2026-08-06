@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-clipboard",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "private": false,
   "description": "Copy/paste/duplicate/group/select-all/nudge keyboard shortcuts for the FabricJS Design Tool v2, registered via the core plugin system.",
   "repository": {
