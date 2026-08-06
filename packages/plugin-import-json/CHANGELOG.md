@@ -1,5 +1,14 @@
 # @rifrocket/fdt-plugin-import-json
 
+## 3.0.1
+
+### Patch Changes
+
+- 6a408a4: update documentation
+- Updated dependencies [6a408a4]
+  - @rifrocket/fdt-react@3.0.1
+  - @rifrocket/fabricjs-design-tool@3.0.1
+
 ## 3.0.0
 
 ### Major Changes

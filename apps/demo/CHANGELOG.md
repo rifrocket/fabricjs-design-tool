@@ -1,5 +1,26 @@
 # @rifrocket/fdt-demo
 
+## 0.0.3
+
+### Patch Changes
+
+- 6a408a4: update documentation
+- Updated dependencies [6a408a4]
+  - @rifrocket/fdt-plugin-local-storage@3.0.1
+  - @rifrocket/fdt-plugin-shapes-basic@3.0.1
+  - @rifrocket/fdt-plugin-import-json@3.0.1
+  - @rifrocket/fdt-plugin-export-pdf@3.0.1
+  - @rifrocket/fdt-plugin-svg-import@3.0.1
+  - @rifrocket/fdt-plugin-clipboard@3.0.1
+  - @rifrocket/fdt-plugin-devtools@3.0.1
+  - @rifrocket/fdt-plugin-pan-zoom@3.0.1
+  - @rifrocket/fdt-plugin-effects@3.0.1
+  - @rifrocket/fdt-plugin-qrcode@3.0.1
+  - @rifrocket/fdt-plugin-image@3.0.1
+  - @rifrocket/fdt-react@3.0.1
+  - @rifrocket/fdt-theme@3.0.1
+  - @rifrocket/fabricjs-design-tool@3.0.1
+
 ## 0.0.2
 
 ### Patch Changes

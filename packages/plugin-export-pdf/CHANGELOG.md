@@ -1,5 +1,13 @@
 # @rifrocket/fdt-plugin-export-pdf
 
+## 3.0.1
+
+### Patch Changes
+
+- 6a408a4: update documentation
+- Updated dependencies [6a408a4]
+  - @rifrocket/fabricjs-design-tool@3.0.1
+
 ## 3.0.0
 
 ### Major Changes
