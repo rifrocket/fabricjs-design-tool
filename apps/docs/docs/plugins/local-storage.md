@@ -47,7 +47,7 @@ This plugin is **autosave-only**. `install()` never restores anything, because r
 
 ```ts
 import { loadDesignFromStorage, clearSavedDesign } from "@rifrocket/fdt-plugin-local-storage";
-import { restoreSnapshot } from "@rifrocket/fdt-core";
+import { restoreSnapshot } from "@rifrocket/fabricjs-design-tool";
 
 const saved = loadDesignFromStorage("my-app:design");
 if (saved) {

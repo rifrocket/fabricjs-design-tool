@@ -13,13 +13,13 @@ v1 remains published and functional under its own dist-tag indefinitely — upgr
 
 **v1**: one package, two subpaths (`.` for "core" hooks/utils, `./ui` for React components).
 
-**v2**: a monorepo of small, independently-installable packages (`@rifrocket/fdt-core`, `@rifrocket/fdt-react`, `@rifrocket/fdt-theme`, `@rifrocket/fdt-properties`, 13 `@rifrocket/fdt-plugin-*` packages). See [Installation](/docs/getting-started/installation).
+**v2**: a monorepo of small, independently-installable packages (`@rifrocket/fabricjs-design-tool`, `@rifrocket/fdt-react`, `@rifrocket/fdt-theme`, `@rifrocket/fdt-properties`, 13 `@rifrocket/fdt-plugin-*` packages). See [Installation](/docs/getting-started/installation).
 
 ## Peer dependencies, not hard dependencies
 
 **v1**: `react`, `react-dom`, and `fabric` were hard `dependencies` — any consumer app risked a second copy of React/Fabric bundled (a common cause of "invalid hook call" and duplicate-canvas bugs).
 
-**v2**: `fabric` is a peer dependency of `@rifrocket/fdt-core`; `react`/`react-dom` are peer dependencies of `@rifrocket/fdt-react` only. Install them explicitly in your app.
+**v2**: `fabric` is a peer dependency of `@rifrocket/fabricjs-design-tool`; `react`/`react-dom` are peer dependencies of `@rifrocket/fdt-react` only. Install them explicitly in your app.
 
 ## The component API
 
@@ -83,5 +83,5 @@ See [Custom Object Types](/docs/extension-points/custom-object-types).
 
 ## What's the same
 
-Some v1 functionality was good and got ported largely as-is, just relocated: the smart-guide/snapping engine (v1's `smoothAlignmentGuides.ts` → v2's `SnapEngine`) and the multi-format canvas exporter (v1's `CanvasExporter` → v2's `CanvasExporter` in `@rifrocket/fdt-core`, PDF split out into `@rifrocket/fdt-plugin-export-pdf`).
+Some v1 functionality was good and got ported largely as-is, just relocated: the smart-guide/snapping engine (v1's `smoothAlignmentGuides.ts` → v2's `SnapEngine`) and the multi-format canvas exporter (v1's `CanvasExporter` → v2's `CanvasExporter` in `@rifrocket/fabricjs-design-tool`, PDF split out into `@rifrocket/fdt-plugin-export-pdf`).
 

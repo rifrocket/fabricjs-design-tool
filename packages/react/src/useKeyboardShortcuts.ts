@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import type { KeyboardShortcutManager } from "@rifrocket/fdt-core";
-import { normalizeKeyEvent } from "@rifrocket/fdt-core";
+import type { KeyboardShortcutManager } from "@rifrocket/fabricjs-design-tool";
+import { normalizeKeyEvent } from "@rifrocket/fabricjs-design-tool";
 
 const EDITABLE_SELECTOR = "input, textarea, select, [contenteditable=\"true\"]";
 

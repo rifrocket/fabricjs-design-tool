@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import type { EngineState } from "@rifrocket/fdt-core";
+import type { EngineState } from "@rifrocket/fabricjs-design-tool";
 import { useEditor } from "./useEditor";
 
 // Subscribes to a slice of engine state via useSyncExternalStore so components only

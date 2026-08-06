@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Rect } from "fabric";
-import { getObjectId } from "@rifrocket/fdt-core";
+import { getObjectId } from "@rifrocket/fabricjs-design-tool";
 import { buildLayerRows } from "./buildLayerRows";
 
 describe("buildLayerRows", () => {

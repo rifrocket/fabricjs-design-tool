@@ -1,6 +1,7 @@
 import type { FabricObject } from "fabric";
-import type { EffectInstance, EffectRegistry, EffectRenderContext } from "@rifrocket/fdt-core";
+import type { EffectInstance, EffectRegistry, EffectRenderContext } from "@rifrocket/fabricjs-design-tool";
 import { buildRasterChain } from "./rasterChain";
+import { rasterMultiplier } from "./rasterize";
 
 // Runs one already-enabled effect stack for a single render pass: wrapRender hooks compose
 // outermost-first (first entry in the stack wraps everything after it), then behind passes in
@@ -67,7 +68,16 @@ function runBasePasses(
       object.transform(ctx);
       object._setOpacity(ctx);
       object._setShadow(ctx);
-      ctx.drawImage(bitmap, -bitmap.width / 2, -bitmap.height / 2);
+      // bitmap was rasterized at rasterMultiplier(object) extra density (rasterize.ts) so it
+      // doesn't look blocky once stretched to the object's actual on-screen size — ctx's own
+      // transform above already accounts for that size (object scale + canvas zoom), so drawing
+      // at the bitmap's raw pixel dimensions here would draw it that much too big. Dividing back
+      // out by the same multiplier restores the object's real local width/height, letting the
+      // canvas downsample the supersampled bitmap into it instead.
+      const scale = rasterMultiplier(object);
+      const width = bitmap.width / scale;
+      const height = bitmap.height / scale;
+      ctx.drawImage(bitmap, -width / 2, -height / 2, width, height);
       ctx.restore();
     } else {
       // A renderBehind pass above (e.g. Shadow/Glow's silhouette) may have swapped the object's

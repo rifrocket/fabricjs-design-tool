@@ -25,7 +25,7 @@ interface PanelDefinition {
 ## Registering into a slot
 
 ```ts
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { MyBrandKitPanel } from "./MyBrandKitPanel";
 
 const brandKitPlugin: EditorPlugin = {

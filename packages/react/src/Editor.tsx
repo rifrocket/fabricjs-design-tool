@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { ComponentType, ReactElement } from "react";
-import type { CanvasEngine, EditorPlugin, PresetShortcutsConfig, SnapEngineOptions } from "@rifrocket/fdt-core";
+import type { CanvasEngine, EditorPlugin, PresetShortcutsConfig, SnapEngineOptions } from "@rifrocket/fabricjs-design-tool";
 import { EditorContext } from "./context";
 import { PanelSlot } from "./PanelSlot";
 import { setupDefaultShortcuts } from "./setupDefaultShortcuts";
@@ -48,7 +48,7 @@ export interface EditorProps {
 
 // The v2 public entry point: replaces hand-wiring ~6 hooks and ~9 components (v1's App.tsx)
 // with one composable component backed by useCanvasEngine()/createEngine() from
-// @rifrocket/fdt-core. For a custom application shell beyond the 3 slots below, use
+// @rifrocket/fabricjs-design-tool. For a custom application shell beyond the 3 slots below, use
 // useCanvasEngine() directly and re-provide EditorContext around your own layout instead.
 export function Editor(props: EditorProps): ReactElement {
   const {

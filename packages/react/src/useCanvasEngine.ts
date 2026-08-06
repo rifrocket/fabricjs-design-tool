@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { RefObject } from "react";
-import { createEngine } from "@rifrocket/fdt-core";
-import type { CanvasEngine, EditorPlugin, EngineOptions } from "@rifrocket/fdt-core";
+import { createEngine } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, EditorPlugin, EngineOptions } from "@rifrocket/fabricjs-design-tool";
 
 export interface UseCanvasEngineOptions extends EngineOptions {
   plugins?: EditorPlugin[];

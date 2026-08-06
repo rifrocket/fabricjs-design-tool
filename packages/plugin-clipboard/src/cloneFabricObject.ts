@@ -1,5 +1,5 @@
 import type { FabricObject } from "fabric";
-import { getSerializedProperties } from "@rifrocket/fdt-core";
+import { getSerializedProperties } from "@rifrocket/fabricjs-design-tool";
 
 const PASTE_OFFSET = 20;
 

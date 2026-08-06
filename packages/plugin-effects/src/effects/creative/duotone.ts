@@ -1,4 +1,4 @@
-import type { EffectDefinition } from "@rifrocket/fdt-core";
+import type { EffectDefinition } from "@rifrocket/fabricjs-design-tool";
 import { applyDuotone } from "../../pixelOps/duotone";
 
 export interface DuotoneProps {

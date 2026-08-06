@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import type { ReactElement } from "react";
-import { resolvePluginList, resolvePropertyFields } from "@rifrocket/fdt-core";
-import type { CanvasEngine, PluginOverrides, PresetShortcutsConfig, PropertyFieldDefinition } from "@rifrocket/fdt-core";
+import { resolvePluginList, resolvePropertyFields } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, PluginOverrides, PresetShortcutsConfig, PropertyFieldDefinition } from "@rifrocket/fabricjs-design-tool";
 import { localStoragePlugin } from "@rifrocket/fdt-plugin-local-storage";
 import type { LocalStoragePluginOptions } from "@rifrocket/fdt-plugin-local-storage";
 import { Editor } from "../Editor";

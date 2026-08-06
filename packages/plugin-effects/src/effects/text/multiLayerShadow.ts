@@ -1,4 +1,4 @@
-import type { EffectDefinition } from "@rifrocket/fdt-core";
+import type { EffectDefinition } from "@rifrocket/fabricjs-design-tool";
 import { drawSilhouettePass } from "../../pipeline/silhouettePass";
 
 export interface MultiLayerShadowProps {

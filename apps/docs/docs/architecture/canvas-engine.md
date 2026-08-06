@@ -5,10 +5,10 @@ title: The CanvasEngine
 
 # The CanvasEngine
 
-`CanvasEngine` is the central object in `@rifrocket/fdt-core`. It owns one Fabric.js `Canvas` and composes narrow, independently-testable managers around it instead of exposing the raw canvas as the primary surface.
+`CanvasEngine` is the central object in `@rifrocket/fabricjs-design-tool`. It owns one Fabric.js `Canvas` and composes narrow, independently-testable managers around it instead of exposing the raw canvas as the primary surface.
 
 ```ts
-import { createEngine } from "@rifrocket/fdt-core";
+import { createEngine } from "@rifrocket/fabricjs-design-tool";
 
 const engine = createEngine(canvasElement, { width: 800, height: 600 });
 ```

@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { PropertyFieldProps } from "@rifrocket/fdt-core";
+import type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 
 // Plain stateless read — see NumberField.tsx for why local state isn't needed. Only handles
 // plain hex fill/stroke here — gradients are a distinct, non-string fill value and out of

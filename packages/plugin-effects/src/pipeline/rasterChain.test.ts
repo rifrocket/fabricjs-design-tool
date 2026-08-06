@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Rect } from "fabric";
-import type { EffectDefinition, EffectInstance } from "@rifrocket/fdt-core";
+import type { EffectDefinition, EffectInstance } from "@rifrocket/fabricjs-design-tool";
 import { buildRasterChain } from "./rasterChain";
 import * as rasterizeModule from "./rasterize";
 

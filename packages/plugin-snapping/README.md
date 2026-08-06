@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../apps/docs/static/img/logo-large.svg" alt="Fabric Design Tool" width="180"/>
+  <img src="https://rifrocket.github.io/fabricjs-design-tool/img/logo-large.svg" alt="Fabric Design Tool" width="180"/>
 
   # @rifrocket/fdt-plugin-snapping
 
@@ -10,7 +10,7 @@
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
 
-A panel-slot wrapper plugin: [`@rifrocket/fdt-core`](../core) already ships `SnapEngine` (`engine.snapping`) with no UI attached. `install()` registers `SnappingToggle` — a bare on/off switch — into the `sidebar-right` panel slot.
+A panel-slot wrapper plugin: [`@rifrocket/fabricjs-design-tool`](../core) already ships `SnapEngine` (`engine.snapping`) with no UI attached. `install()` registers `SnappingToggle` — a bare on/off switch — into the `sidebar-right` panel slot.
 
 ## Features
 
@@ -27,7 +27,7 @@ npm install @rifrocket/fdt-plugin-snapping
 ```
 
 Peer dependencies: `fabric`, `react`, `react-dom`.
-Depends on `@rifrocket/fdt-core` and `@rifrocket/fdt-react`.
+Depends on `@rifrocket/fabricjs-design-tool` and `@rifrocket/fdt-react`.
 
 ## Quick start
 

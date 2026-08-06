@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PanelRegistry } from "@rifrocket/fdt-core";
+import { PanelRegistry } from "@rifrocket/fabricjs-design-tool";
 import { resolvePanelComponents } from "./resolvePanels";
 
 function ToolbarButton(): null {

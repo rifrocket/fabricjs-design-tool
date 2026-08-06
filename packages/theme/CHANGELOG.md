@@ -1,0 +1,19 @@
+# @rifrocket/fdt-theme
+
+## 3.0.0
+
+### Major Changes
+
+- First stable release. Beta testing (2.0.0-beta.0/beta.1) is complete — this is the first release published under npm's `latest` tag with no prerelease suffix, published directly as 3.0.0 rather than 2.0.0 so the version number isn't tied to the beta cycle. No breaking API changes beyond what already shipped in the betas.
+
+## 2.0.0
+
+### Major Changes
+
+- ebe6ca3: Initial public beta release of the v2 monorepo packages.
+
+## 2.0.0-beta.0
+
+### Major Changes
+
+- ebe6ca3: Initial public beta release of the v2 monorepo packages.

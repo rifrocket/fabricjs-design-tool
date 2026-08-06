@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-shapes-basic",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": false,
   "description": "Default shape object types (text, rect, circle, line, ellipse, polygons) for the FabricJS Design Tool v2, registered via the core plugin system.",
   "type": "module",
@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@rifrocket/fdt-core": "workspace:*",
+    "@rifrocket/fabricjs-design-tool": "workspace:*",
     "@rifrocket/fdt-properties": "workspace:*"
   },
   "peerDependencies": {

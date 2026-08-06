@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import { Group } from "fabric";
 import type { FabricObject } from "fabric";
 import { ChevronDown, Circle } from "lucide-react";
-import { getObjectId, resolveObjectTypeId } from "@rifrocket/fdt-core";
+import { getObjectId, resolveObjectTypeId } from "@rifrocket/fabricjs-design-tool";
 import { useEditor, useEditorState } from "@rifrocket/fdt-react";
 import { useDebugMode } from "./DebugModeToggle";
 

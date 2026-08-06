@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { act, render, screen } from "@testing-library/react";
-import { EventBus } from "@rifrocket/fdt-core";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import { EventBus } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { EditorContext } from "@rifrocket/fdt-react";
 import { EventLogPanel } from "./EventLogPanel";
 

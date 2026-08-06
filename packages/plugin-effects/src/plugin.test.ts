@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { FabricObject } from "fabric";
-import { PluginRegistry, getSerializedProperties } from "@rifrocket/fdt-core";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import { PluginRegistry, getSerializedProperties } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { createEffectsPlugin } from "./plugin";
 import { shadowEffect } from "./effects/basic/shadow";
 import { ALL_BUILTIN_EFFECTS } from "./effects";

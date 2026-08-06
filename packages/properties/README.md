@@ -9,6 +9,6 @@ npm install @rifrocket/fdt-properties
 ```
 
 Peer dependencies: `fabric`, `react`, `react-dom`.
-Depends on `@rifrocket/fdt-core`.
+Depends on `@rifrocket/fabricjs-design-tool`.
 
 Full usage: [/docs/extension-points/custom-property-fields](https://rifrocket.github.io/fabricjs-design-tool/docs/extension-points/custom-property-fields)

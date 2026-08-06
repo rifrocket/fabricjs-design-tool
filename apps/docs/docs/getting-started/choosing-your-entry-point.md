@@ -10,7 +10,7 @@ There are three ways to start an editor, at three different levels of the stack.
 ```mermaid
 flowchart TD
     A["&lt;DesignEditor preset=&quot;default&quot;&gt;<br/>(@rifrocket/fdt-react)"] --> B["&lt;Editor plugins=&#123;...&#125;&gt;<br/>(@rifrocket/fdt-react)"]
-    B --> C["createEngine()<br/>(@rifrocket/fdt-core)"]
+    B --> C["createEngine()<br/>(@rifrocket/fabricjs-design-tool)"]
 
     A -.->|"batteries-included,<br/>zero config"| A
     B -.->|"a-la-carte plugins,<br/>still React"| B
@@ -53,16 +53,16 @@ Use this when you want full control over exactly which plugins are installed, wi
 ## `createEngine()` — framework-agnostic
 
 ```ts
-import { createEngine } from "@rifrocket/fdt-core";
+import { createEngine } from "@rifrocket/fabricjs-design-tool";
 
 const engine = createEngine(canvasElement, { width: 800, height: 600 });
 engine.use(shapesBasicPlugin);
 engine.addObjectOfType("rect", { left: 10, top: 10, width: 100, height: 60 });
 ```
 
-Use this when you're not using React at all, or you're building a framework adapter of your own. `@rifrocket/fdt-core` has zero React dependency (enforced by a `dependency-cruiser` CI rule, not just convention), so this works in vanilla JS, Vue, Svelte, or any other environment with a `<canvas>` element.
+Use this when you're not using React at all, or you're building a framework adapter of your own. `@rifrocket/fabricjs-design-tool` has zero React dependency (enforced by a `dependency-cruiser` CI rule, not just convention), so this works in vanilla JS, Vue, Svelte, or any other environment with a `<canvas>` element.
 
-`@rifrocket/fdt-core` also exports `createEditor()`, the non-React counterpart to presets — see [Presets](/docs/guides/presets) — but it can only resolve a **literal preset object** (via `definePreset()`), not the named `"default"`/`"minimal"` strings `<DesignEditor>` accepts, because `core` cannot depend back on the plugin packages that make up those named presets without creating a circular package dependency.
+`@rifrocket/fabricjs-design-tool` also exports `createEditor()`, the non-React counterpart to presets — see [Presets](/docs/guides/presets) — but it can only resolve a **literal preset object** (via `definePreset()`), not the named `"default"`/`"minimal"` strings `<DesignEditor>` accepts, because `core` cannot depend back on the plugin packages that make up those named presets without creating a circular package dependency.
 
 ## Decision guide
 
@@ -71,5 +71,5 @@ Use this when you're not using React at all, or you're building a framework adap
 | You want a general-purpose editor working in one line | `<DesignEditor preset="default">` |
 | You want React but a custom, hand-picked plugin list | `<Editor plugins={[...]}>` |
 | You need a layout beyond 3 fixed panel slots (header, multiple sidebars, status bar) | `useCanvasEngine()` + `EditorContext` re-provision — see [Custom Shell guide](/docs/guides/custom-shell-with-editorcontext) |
-| You're not using React at all | `createEngine()` from `@rifrocket/fdt-core` |
+| You're not using React at all | `createEngine()` from `@rifrocket/fabricjs-design-tool` |
 | You're building a Vue/Svelte/other framework adapter | `createEngine()` (and optionally `createEditor()` with a literal preset) |

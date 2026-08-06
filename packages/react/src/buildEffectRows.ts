@@ -1,4 +1,4 @@
-import type { EffectDefinition, EffectInstance, EffectRegistry, EffectStack } from "@rifrocket/fdt-core";
+import type { EffectDefinition, EffectInstance, EffectRegistry, EffectStack } from "@rifrocket/fabricjs-design-tool";
 
 export interface EffectRow {
   instance: EffectInstance;

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { renderHook } from "@testing-library/react";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { useCanvasPanZoom } from "./useCanvasPanZoom";
 
 // A narrow double for the surface this hook actually touches, faking just what's used rather

@@ -1,4 +1,4 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { registerQRCodeType } from "./objectType";
 
 export const qrCodePlugin: EditorPlugin = {

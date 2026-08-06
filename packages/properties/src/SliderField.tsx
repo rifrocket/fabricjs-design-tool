@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
-import type { PropertyFieldProps } from "@rifrocket/fdt-core";
+import type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 
 // Range/step come from the field's own PropertyFieldConfig (registerPropertyFields), falling
 // back to a generic 0..100 range for any field registered without one.

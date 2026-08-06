@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { EditorContext } from "@rifrocket/fdt-react";
 
 // useEditor() (from @rifrocket/fdt-react) throws when the engine isn't ready yet — true

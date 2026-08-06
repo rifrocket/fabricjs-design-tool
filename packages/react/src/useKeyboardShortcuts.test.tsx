@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { KeyboardShortcutManager } from "@rifrocket/fdt-core";
+import { KeyboardShortcutManager } from "@rifrocket/fabricjs-design-tool";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 
 describe("useKeyboardShortcuts", () => {

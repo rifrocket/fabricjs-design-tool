@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ["fabric", "@rifrocket/fdt-core", "jspdf"],
+  external: ["fabric", "@rifrocket/fabricjs-design-tool", "jspdf"],
 });

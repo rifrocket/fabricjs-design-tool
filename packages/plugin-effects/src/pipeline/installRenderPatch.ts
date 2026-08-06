@@ -1,6 +1,6 @@
 import { FabricObject } from "fabric";
-import { getEffectStack } from "@rifrocket/fdt-core";
-import type { EffectRegistry } from "@rifrocket/fdt-core";
+import { getEffectStack } from "@rifrocket/fabricjs-design-tool";
+import type { EffectRegistry } from "@rifrocket/fabricjs-design-tool";
 import { isRenderBypassed } from "./renderGuard";
 import { runEffectPipeline } from "./effectPipeline";
 

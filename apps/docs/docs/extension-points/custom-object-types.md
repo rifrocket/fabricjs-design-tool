@@ -17,7 +17,7 @@ interface ObjectTypeDefinition<TConfig = unknown> {
 ## Registering a type
 
 ```ts
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { Rect } from "fabric";
 
 interface StickyNoteConfig {
@@ -86,7 +86,7 @@ See [Custom Property Fields](/docs/extension-points/custom-property-fields) for 
 `ObjectTypeId` is `keyof ObjectTypeMap | (string & {})` — an open interface any plugin can augment via TypeScript's module-augmentation pattern to get autocomplete/typo-checking on its own type ids, without core or any other plugin needing to know about them ahead of time:
 
 ```ts
-declare module "@rifrocket/fdt-core" {
+declare module "@rifrocket/fabricjs-design-tool" {
   interface ObjectTypeMap {
     "sticky-note": StickyNoteConfig;
   }

@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { Rect } from "fabric";
 import type { FabricObject } from "fabric";
-import { KeyboardShortcutManager } from "@rifrocket/fdt-core";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import { KeyboardShortcutManager } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { clipboardPlugin } from "./plugin";
 
 function createFakeEngine() {

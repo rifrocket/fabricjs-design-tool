@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { ObjectTypeRegistry } from "@rifrocket/fdt-core";
+import { ObjectTypeRegistry } from "@rifrocket/fabricjs-design-tool";
 import { registerImageType } from "./imageType";
 
 const { fakeImage, fromURL } = vi.hoisted(() => {

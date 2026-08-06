@@ -1,6 +1,6 @@
 import type { FabricObject } from "fabric";
-import { EffectStackCommand, getEffectStack } from "@rifrocket/fdt-core";
-import type { EffectStack } from "@rifrocket/fdt-core";
+import { EffectStackCommand, getEffectStack } from "@rifrocket/fabricjs-design-tool";
+import type { EffectStack } from "@rifrocket/fabricjs-design-tool";
 import { useEditor } from "./useEditor";
 import { useEditorState } from "./useEditorState";
 

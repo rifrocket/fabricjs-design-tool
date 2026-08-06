@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
-import type { PropertyFieldProps } from "@rifrocket/fdt-core";
+import type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 
 // Local state holds only the transient typing buffer (same reasoning as SliderField.tsx's
 // paired number input) — the committed value itself is read fresh from the object on every

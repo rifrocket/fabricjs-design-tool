@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { EditorPreset } from "@rifrocket/fdt-core";
+import type { EditorPreset } from "@rifrocket/fabricjs-design-tool";
 import type { EditorTheme } from "../Editor";
 
 export type PanelSlotName = "toolbar-start" | "sidebar-right" | "properties-footer";

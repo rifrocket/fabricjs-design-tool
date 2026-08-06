@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { setCanvasZoom } from "./setCanvasZoom";
 
 function createFakeEngine(resultingZoom: number): { engine: CanvasEngine; setZoom: ReturnType<typeof vi.fn> } {

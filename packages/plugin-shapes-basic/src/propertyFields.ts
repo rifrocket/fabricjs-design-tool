@@ -1,4 +1,4 @@
-import type { PropertyFieldDefinition } from "@rifrocket/fdt-core";
+import type { PropertyFieldDefinition } from "@rifrocket/fabricjs-design-tool";
 import { ColorField, NumberField, SelectField, SliderField, TextField, ToggleField } from "@rifrocket/fdt-properties";
 
 const field = (

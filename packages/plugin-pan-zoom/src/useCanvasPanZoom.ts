@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { CanvasEngine } from "@rifrocket/fdt-core";
+import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import type { TPointerEventInfo, TPointerEvent } from "fabric";
 import { setCanvasZoom } from "./setCanvasZoom";
 
@@ -12,7 +12,7 @@ export interface UseCanvasPanZoomOptions {
   wheelZoomSensitivity?: number;
 }
 
-// Wheel-zoom and spacebar-drag-pan have no equivalent in @rifrocket/fdt-core beyond raw
+// Wheel-zoom and spacebar-drag-pan have no equivalent in @rifrocket/fabricjs-design-tool beyond raw
 // viewport math (setZoom/zoomBy/pan); this hook is the interaction layer on top, built through
 // the getFabricCanvas() escape hatch since neither wheel events nor "held key" state are
 // exposed by any manager.

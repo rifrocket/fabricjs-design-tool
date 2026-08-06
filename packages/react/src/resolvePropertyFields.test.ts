@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ObjectTypeRegistry } from "@rifrocket/fdt-core";
+import { ObjectTypeRegistry } from "@rifrocket/fabricjs-design-tool";
 import { Rect } from "fabric";
 import { resolvePropertyFields } from "./resolvePropertyFields";
 

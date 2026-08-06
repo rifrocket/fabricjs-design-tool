@@ -7,7 +7,7 @@ title: export-pdf
 
 **Kind:** Pure engine plugin · **Peer dependencies:** `fabric`
 
-Registers a `"pdf"` exporter. Isolated into its own package so `jspdf` (and its transitive dependencies) is only paid for by consumers who actually install this plugin — `@rifrocket/fdt-core` itself has no PDF-related dependency at all.
+Registers a `"pdf"` exporter. Isolated into its own package so `jspdf` (and its transitive dependencies) is only paid for by consumers who actually install this plugin — `@rifrocket/fabricjs-design-tool` itself has no PDF-related dependency at all.
 
 ```ts
 import { exportPdfPlugin } from "@rifrocket/fdt-plugin-export-pdf";

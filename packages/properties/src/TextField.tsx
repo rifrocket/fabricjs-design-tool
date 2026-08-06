@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { PropertyFieldProps } from "@rifrocket/fdt-core";
+import type { PropertyFieldProps } from "@rifrocket/fabricjs-design-tool";
 
 // Plain stateless read — PropertiesPanel re-renders on every property mutation
 // (EngineState.propertyVersion), not just selection changes, so object.get() is always fresh.

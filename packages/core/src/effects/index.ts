@@ -1,4 +1,4 @@
-// Subpath entry point: import from "@rifrocket/fdt-core/effects" to pull in only the
+// Subpath entry point: import from "@rifrocket/fabricjs-design-tool/effects" to pull in only the
 // effects-stack code, without history or export-format code the root barrel also re-exports.
 export {
   getEffectStack,

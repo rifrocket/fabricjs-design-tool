@@ -1,4 +1,4 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import type { TPointerEventInfo, TPointerEvent } from "fabric";
 
 const STAMP_SIZE = 40;

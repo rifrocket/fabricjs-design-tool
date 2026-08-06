@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { ReactElement } from "react";
 import { Download, ChevronDown } from "lucide-react";
 import { useEditor } from "@rifrocket/fdt-react";
-import type { ExportFormat, ExportResult } from "@rifrocket/fdt-core";
+import type { ExportFormat, ExportResult } from "@rifrocket/fabricjs-design-tool";
 import { getContainerSize } from "@rifrocket/fdt-plugin-pan-zoom";
 import { downloadExport } from "../../utils/downloadExport";
 import { InfoTooltip } from "../../docs/InfoTooltip";

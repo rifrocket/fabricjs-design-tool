@@ -1,4 +1,4 @@
-import type { EditorPlugin } from "@rifrocket/fdt-core";
+import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import { EventLogPanel } from "./EventLogPanel";
 import { CanvasStateViewer } from "./CanvasStateViewer";
 import { HistoryPanel } from "./HistoryPanel";

@@ -1,10 +1,10 @@
 # @rifrocket/fdt-react
 
-React adapter for `@rifrocket/fdt-core` — `<Editor>`, `<DesignEditor>`, `useEditor`, `useEditorState`, and the slot-based component system.
+React adapter for `@rifrocket/fabricjs-design-tool` — `<Editor>`, `<DesignEditor>`, `useEditor`, `useEditorState`, and the slot-based component system.
 
 **Status:** scaffold only, not published.
 
-`react` and `react-dom` are peer dependencies; `@rifrocket/fdt-core` (plus the plugin packages `<DesignEditor>`'s built-in presets bundle — see `src/preset/builtinPresets.ts`) are workspace dependencies.
+`react` and `react-dom` are peer dependencies; `@rifrocket/fabricjs-design-tool` (plus the plugin packages `<DesignEditor>`'s built-in presets bundle — see `src/preset/builtinPresets.ts`) are workspace dependencies.
 
 ## Quick start
 
@@ -38,7 +38,7 @@ import { devtoolsPlugin } from "@rifrocket/fdt-plugin-devtools";
 <DesignEditor preset="default" plugins={{ add: [alignmentPlugin, ...(import.meta.env.DEV ? [devtoolsPlugin] : [])] }} />;
 ```
 
-For everything below "one preset, minor overrides" — a from-scratch plugin list, no preset machinery at all — use `<Editor plugins={[...]}>` directly, or `@rifrocket/fdt-core`'s `createEditor()`/`createEngine()` outside React entirely.
+For everything below "one preset, minor overrides" — a from-scratch plugin list, no preset machinery at all — use `<Editor plugins={[...]}>` directly, or `@rifrocket/fabricjs-design-tool`'s `createEditor()`/`createEngine()` outside React entirely.
 
 ## Building a custom application shell
 

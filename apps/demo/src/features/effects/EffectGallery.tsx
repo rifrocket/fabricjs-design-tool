@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ReactElement } from "react";
-import { addEffect } from "@rifrocket/fdt-core";
-import type { EffectCategory, EffectStack } from "@rifrocket/fdt-core";
+import { addEffect } from "@rifrocket/fabricjs-design-tool";
+import type { EffectCategory, EffectStack } from "@rifrocket/fabricjs-design-tool";
 import { useEditor } from "@rifrocket/fdt-react";
 import { getEffectIcon } from "./effectIcons";
 
