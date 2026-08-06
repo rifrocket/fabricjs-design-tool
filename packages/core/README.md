@@ -24,6 +24,28 @@
 - **Keyboard shortcuts** — `KeyboardShortcutManager` with cross-platform key-combo normalization
 - **Presets** — `createEditor()` + `definePreset()` for bundling a reusable plugin set (see `@rifrocket/fdt-react`'s `preset="default"`/`"minimal"` for the named presets built on top of this)
 
+## Available Plugins
+
+`@rifrocket/fdt-core` ships with no shapes, tools, or panels built in — everything below is installed via `plugins: { add: [...] }` (see [Quick start](#quick-start)):
+
+| Plugin | Purpose |
+|---|---|
+| [`plugin-shapes-basic`](../plugin-shapes-basic) | Default shape object types (text, rect, circle, line, ellipse, polygons) |
+| [`plugin-qrcode`](../plugin-qrcode) | QR code object type (generation, validation, styling) |
+| [`plugin-svg-import`](../plugin-svg-import) | SVG import |
+| [`plugin-image`](../plugin-image) | Image object type |
+| [`plugin-clipboard`](../plugin-clipboard) | Copy/paste/duplicate/group/select-all/nudge shortcuts |
+| [`plugin-export-pdf`](../plugin-export-pdf) | PDF export (isolated so `jspdf` is only paid for by consumers who install this) |
+| [`plugin-import-json`](../plugin-import-json) | JSON import (engine plugin + a bare trigger button) |
+| [`plugin-effects`](../plugin-effects) | Object effects system (shadow, glow, blur, glitch, duotone, ...) |
+| [`plugin-local-storage`](../plugin-local-storage) | Debounced `localStorage` autosave, built on this package's document snapshot |
+| [`plugin-alignment`](../plugin-alignment) | Align/distribute panel, wired to `AlignmentManager` |
+| [`plugin-snapping`](../plugin-snapping) | Smart-guide snapping on/off toggle panel |
+| [`plugin-devtools`](../plugin-devtools) | Dev-tools panels (event log, canvas state, history, hierarchy, perf stats) |
+| [`plugin-pan-zoom`](../plugin-pan-zoom) | Wheel-zoom + spacebar-drag-pan hooks for a fixed-size viewport |
+
+See [`packages/README.md`](../README.md#plugins) for the full table including which plugins are `engine.use()`-able vs. panel-slot wrappers.
+
 ## Install
 
 ```bash
