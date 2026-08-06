@@ -10,7 +10,7 @@
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
 
-`@rifrocket/fabricjs-design-tool` wraps [Fabric.js](http://fabricjs.com/) in a `CanvasEngine` with its own plugin system, undo/redo history, event bus, and a set of engine managers (selection, layers, alignment, snapping). It has **no dependency on React or any UI framework** — [`@rifrocket/fdt-react`](../react) is the optional adapter built on top of it, and everything in [`packages/plugin-*`](../README.md) is installed into it through the same public plugin API a consumer would use.
+`@rifrocket/fabricjs-design-tool` wraps [Fabric.js](http://fabricjs.com/) in a `CanvasEngine` with its own plugin system, undo/redo history, event bus, and a set of engine managers (selection, layers, alignment, snapping). It has **no dependency on React or any UI framework** — [`@rifrocket/fdt-react`](../react) is the optional adapter built on top of it, and everything in [`packages/plugin-*`](https://rifrocket.github.io/fabricjs-design-tool/docs/category/plugins) is installed into it through the same public plugin API a consumer would use.
 
 ## Features
 

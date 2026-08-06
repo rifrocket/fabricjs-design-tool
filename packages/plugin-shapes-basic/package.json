@@ -3,6 +3,15 @@
   "version": "3.0.0",
   "private": false,
   "description": "Default shape object types (text, rect, circle, line, ellipse, polygons) for the FabricJS Design Tool v2, registered via the core plugin system.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rifrocket/fabricjs-design-tool.git",
+    "directory": "packages/plugin-shapes-basic"
+  },
+  "homepage": "https://github.com/rifrocket/fabricjs-design-tool/tree/main/packages/plugin-shapes-basic#readme",
+  "bugs": {
+    "url": "https://github.com/rifrocket/fabricjs-design-tool/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
