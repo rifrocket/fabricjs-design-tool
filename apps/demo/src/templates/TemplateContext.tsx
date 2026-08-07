@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import type { ReactElement, ReactNode } from "react";
 import { loadDesignFromStorage } from "@rifrocket/fdt-plugin-local-storage";
 import { TEMPLATES } from "./index";
-import type { PageMeta, TemplateDefinition } from "./types";
+import type { StarterDesignMeta, TemplateDefinition } from "./types";
 
 interface CustomSize {
   width: number;
@@ -30,7 +30,7 @@ interface InitialPageState {
 // initializer before the engine exists.
 function readInitialPageState(): InitialPageState {
   const fallback: InitialPageState = { templateId: TEMPLATES[0].id, customSize: null };
-  const meta = loadDesignFromStorage<PageMeta>()?.meta;
+  const meta = loadDesignFromStorage<StarterDesignMeta>()?.meta;
   if (!meta) return fallback;
 
   const baseTemplate = TEMPLATES.find((template) => template.id === meta.templateId);

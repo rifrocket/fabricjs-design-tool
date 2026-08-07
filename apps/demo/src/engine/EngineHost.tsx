@@ -3,7 +3,7 @@ import type { ReactElement } from "react";
 import { DesignEditor, EditorContext } from "@rifrocket/fdt-react";
 import type { CanvasEngine, PluginOverrides } from "@rifrocket/fabricjs-design-tool";
 import { restoreSnapshot } from "@rifrocket/fabricjs-design-tool";
-import { useContainerSize, centerContent } from "@rifrocket/fdt-plugin-pan-zoom";
+import { useContainerSize, centerContent, createPageBoundaryRect } from "@rifrocket/fdt-plugin-pan-zoom";
 import { importJsonPlugin } from "@rifrocket/fdt-plugin-import-json";
 import { localStoragePlugin, loadDesignFromStorage } from "@rifrocket/fdt-plugin-local-storage";
 import { stampToolPlugin } from "../plugins/stampToolPlugin";
@@ -12,9 +12,9 @@ import { useThemeContext } from "../theme/ThemeContext";
 import { AppShell } from "../shell/AppShell";
 import { SelectionQuickActions } from "../features/selection/SelectionQuickActions";
 import { logUiEvent } from "../dev-tools/uiEventLog";
-import { createPageBoundaryRect, captureDesignSnapshot } from "../features/viewport/pageViewport";
+import { captureDesignSnapshot } from "../features/viewport/pageViewport";
 import { CANVAS_CONTAINER_SELECTOR } from "../features/viewport/canvasContainerSelector";
-import type { PageMeta } from "../templates/types";
+import type { StarterDesignMeta } from "../templates/types";
 
 interface ReadyState {
   templateId: string;
@@ -35,7 +35,7 @@ const FALLBACK_VIEWPORT_SIZE = { width: 800, height: 600 };
 // template — the template's dimensions instead size a page-boundary rect (createPageBoundaryRect,
 // pageViewport.ts) so the page can pan/zoom within a fixed-size viewport. No backgroundColor is
 // passed to <Editor> for the same reason: the page background lives on that rect too.
-export function EngineHost(): ReactElement {
+export function EngineHost({ onOpenPagesExample }: { onOpenPagesExample: () => void }): ReactElement {
   const { activeTemplate } = useTemplateContext();
   const { resolvedTheme } = useThemeContext();
   const [readyState, setReadyState] = useState<ReadyState | null>(null);
@@ -60,7 +60,7 @@ export function EngineHost(): ReactElement {
       add: [
         importJsonPlugin,
         stampToolPlugin,
-        localStoragePlugin<PageMeta>({
+        localStoragePlugin<StarterDesignMeta>({
           captureSnapshot: captureDesignSnapshot,
           captureMeta: () => ({
             templateId: activeTemplateRef.current.id,
@@ -70,7 +70,6 @@ export function EngineHost(): ReactElement {
         }),
       ],
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -85,7 +84,7 @@ export function EngineHost(): ReactElement {
 
     // Restoring a save only makes sense on the session's first load, not every template switch —
     // that would silently override the template the user just picked with whatever was last autosaved.
-    const savedDesign = isInitialLoadRef.current ? loadDesignFromStorage<PageMeta>() : null;
+    const savedDesign = isInitialLoadRef.current ? loadDesignFromStorage<StarterDesignMeta>() : null;
 
     try {
       if (savedDesign) {
@@ -130,6 +129,11 @@ export function EngineHost(): ReactElement {
   return (
     <EditorContext.Provider value={engine}>
       <AppShell
+        mode="workspace"
+        onOpenPagesExample={onOpenPagesExample}
+        documentLabel={`${activeTemplate.label} · ${activeTemplate.width} × ${activeTemplate.height}px`}
+        documentSize={{ width: activeTemplate.width, height: activeTemplate.height }}
+        containerSelector={CANVAS_CONTAINER_SELECTOR}
         editor={
           <DesignEditor
             key={activeTemplate.id}

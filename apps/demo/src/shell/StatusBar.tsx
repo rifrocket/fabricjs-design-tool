@@ -2,15 +2,25 @@ import type { ReactElement } from "react";
 import { Keyboard } from "lucide-react";
 import { useEditorState } from "@rifrocket/fdt-react";
 import { useEngineOrNull } from "../engine/useEngineOrNull";
-import { useTemplateContext } from "../templates/TemplateContext";
 import { ZoomControls } from "../features/viewport/ZoomControls";
 import { SnappingToggle } from "../features/viewport/SnappingToggle";
 
 const KBD_CLASS = "rounded border border-fdt-border bg-fdt-bg-elevated px-1.5 py-0.5 font-mono text-[10px] text-fdt-fg";
 
-export function StatusBar(): ReactElement {
+// documentLabel/documentSize/containerSelector let AppShell drive this from either mode (see
+// AppShell.tsx) — pan/zoom is wired into both the workspace and the multi-page canvas now, so
+// there's no mode-specific gating left here beyond documentLabel's mobile-only text, which only
+// the workspace currently supplies (plugin-pages has no single "current document" label).
+export function StatusBar({
+  documentLabel,
+  documentSize,
+  containerSelector,
+}: {
+  documentLabel?: string;
+  documentSize: { width: number; height: number } | null;
+  containerSelector: string;
+}): ReactElement {
   const engine = useEngineOrNull();
-  const { activeTemplate } = useTemplateContext();
 
   return (
     <footer className="flex h-9 items-center justify-between border-t border-fdt-border bg-fdt-bg px-3 text-xs text-fdt-fg-muted">
@@ -21,16 +31,24 @@ export function StatusBar(): ReactElement {
         </span>
       </div>
 
-      <span className="sm:hidden">
-        {activeTemplate.label} · {activeTemplate.width} × {activeTemplate.height}px
-      </span>
+      {documentLabel && <span className="sm:hidden">{documentLabel}</span>}
 
-      {engine ? <StatusBarContent /> : <span>Loading canvas…</span>}
+      {engine && documentSize ? (
+        <StatusBarContent documentSize={documentSize} containerSelector={containerSelector} />
+      ) : (
+        <span>Loading canvas…</span>
+      )}
     </footer>
   );
 }
 
-function StatusBarContent(): ReactElement {
+function StatusBarContent({
+  documentSize,
+  containerSelector,
+}: {
+  documentSize: { width: number; height: number };
+  containerSelector: string;
+}): ReactElement {
   const objectCount = useEditorState((state) => state.objectIds.length);
   const selectedCount = useEditorState((state) => state.selectedObjectIds.length);
 
@@ -42,7 +60,7 @@ function StatusBarContent(): ReactElement {
       </span>
       <SnappingToggle />
       <div className="h-4 w-px bg-fdt-border" />
-      <ZoomControls />
+      <ZoomControls documentSize={documentSize} containerSelector={containerSelector} />
     </div>
   );
 }

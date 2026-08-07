@@ -7,8 +7,6 @@ import { getContainerSize } from "@rifrocket/fdt-plugin-pan-zoom";
 import { downloadExport } from "../../utils/downloadExport";
 import { InfoTooltip } from "../../docs/InfoTooltip";
 import { logUiEvent } from "../../dev-tools/uiEventLog";
-import { useTemplateContext } from "../../templates/TemplateContext";
-import { CANVAS_CONTAINER_SELECTOR } from "../viewport/canvasContainerSelector";
 
 // "pdf" isn't part of core's ExportFormat union — PDF export moved to @rifrocket/fdt-plugin-export-pdf
 // (installed in engine/EngineHost.tsx), which core has no static knowledge of.
@@ -22,15 +20,25 @@ const FORMATS: Array<{ value: DemoExportFormat; label: string }> = [
   { value: "pdf", label: "PDF" },
 ];
 
-export function ExportMenu(): ReactElement {
+// documentSize/containerSelector are threaded down from AppShell.tsx so this works against
+// either mode (EngineHost's activeTemplate + CANVAS_CONTAINER_SELECTOR, or the active page from
+// plugin-pages' PagesManager + PAGES_CANVAS_CONTAINER_SELECTOR) without this component reaching
+// into a mode-specific context or constant itself.
+export function ExportMenu({
+  documentSize,
+  containerSelector,
+}: {
+  documentSize: { width: number; height: number };
+  containerSelector: string;
+}): ReactElement {
   const engine = useEditor();
-  const { activeTemplate } = useTemplateContext();
   const [open, setOpen] = useState(false);
 
   // PNG/JPEG/SVG/PDF exporters render the canvas's current on-screen content, but the canvas
-  // element is normally a pannable/zoomable viewport, not the page — so for the export instant
-  // only, resize it to the page's exact bounds at zoom 1/pan 0, export, then restore the real
-  // viewport synchronously (no visible flash). JSON serializes object properties instead and skips this.
+  // element is a pannable/zoomable viewport, not the page — so for the export instant only,
+  // resize it to the page's exact bounds at zoom 1/pan 0, export, then restore the real
+  // viewport synchronously (no visible flash). JSON serializes object properties instead and
+  // skips this.
   const runExport = (format: DemoExportFormat, label: string) => {
     if (format === "json") {
       downloadExport(engine.export(format) as ExportResult);
@@ -41,12 +49,12 @@ export function ExportMenu(): ReactElement {
 
     const previousZoom = engine.viewport.getZoom();
     const previousPan = engine.viewport.getPan();
-    const previousViewportSize = getContainerSize(CANVAS_CONTAINER_SELECTOR);
+    const previousViewportSize = getContainerSize(containerSelector);
 
     // Zoom must reset to 1 before setDimensions(): setDimensions scales width/height by whatever
     // zoom is active at that moment, so resetting first avoids sizing to width/height * previousZoom.
     engine.setZoom(1, { resizeElement: false });
-    engine.setDimensions(activeTemplate.width, activeTemplate.height);
+    engine.setDimensions(documentSize.width, documentSize.height);
     engine.panTo(0, 0);
 
     const result = engine.export(format) as ExportResult;

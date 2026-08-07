@@ -1,11 +1,10 @@
 import { useState } from "react";
 import type { ReactElement } from "react";
 import { useEditor } from "@rifrocket/fdt-react";
-import { setCanvasZoom, centerContent } from "@rifrocket/fdt-plugin-pan-zoom";
+import { setCanvasZoom, centerContent, findPageBoundary } from "@rifrocket/fdt-plugin-pan-zoom";
 import { useTemplateContext } from "../../templates/TemplateContext";
 import { InfoTooltip } from "../../docs/InfoTooltip";
 import { logUiEvent } from "../../dev-tools/uiEventLog";
-import { findPageBoundary } from "../viewport/pageViewport";
 import { CANVAS_CONTAINER_SELECTOR } from "../viewport/canvasContainerSelector";
 
 const MIN_DIMENSION = 20;

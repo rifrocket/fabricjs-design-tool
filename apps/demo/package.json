@@ -21,6 +21,7 @@
     "@rifrocket/fdt-plugin-import-json": "workspace:*",
     "@rifrocket/fdt-plugin-devtools": "workspace:*",
     "@rifrocket/fdt-plugin-local-storage": "workspace:*",
+    "@rifrocket/fdt-plugin-pages": "workspace:*",
     "@rifrocket/fdt-plugin-pan-zoom": "workspace:*",
     "@rifrocket/fdt-plugin-qrcode": "workspace:*",
     "@rifrocket/fdt-plugin-shapes-basic": "workspace:*",
