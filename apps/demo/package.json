@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@rifrocket/fabricjs-design-tool": "workspace:*",
+    "@rifrocket/fdt-plugin-alignment": "workspace:*",
     "@rifrocket/fdt-plugin-clipboard": "workspace:*",
     "@rifrocket/fdt-plugin-effects": "workspace:*",
     "@rifrocket/fdt-plugin-export-pdf": "workspace:*",
@@ -23,6 +24,7 @@
     "@rifrocket/fdt-plugin-pan-zoom": "workspace:*",
     "@rifrocket/fdt-plugin-qrcode": "workspace:*",
     "@rifrocket/fdt-plugin-shapes-basic": "workspace:*",
+    "@rifrocket/fdt-plugin-snapping": "workspace:*",
     "@rifrocket/fdt-plugin-svg-import": "workspace:*",
     "@rifrocket/fdt-react": "workspace:*",
     "@rifrocket/fdt-theme": "workspace:*",

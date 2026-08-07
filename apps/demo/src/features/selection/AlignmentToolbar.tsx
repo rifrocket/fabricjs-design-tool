@@ -9,31 +9,32 @@ import {
   AlignHorizontalDistributeCenter,
   AlignVerticalDistributeCenter,
 } from "lucide-react";
-import { useEditor, useEditorState } from "@rifrocket/fdt-react";
 import type { Alignment, DistributeAxis } from "@rifrocket/fabricjs-design-tool";
+import { ALIGNMENTS, DISTRIBUTE_AXES, useAlignmentActions } from "@rifrocket/fdt-plugin-alignment";
 import { InfoTooltip } from "../../docs/InfoTooltip";
 
-const ALIGN_BUTTONS: Array<{ value: Alignment; Icon: typeof AlignStartVertical; label: string }> = [
-  { value: "left", Icon: AlignStartVertical, label: "Align left" },
-  { value: "center", Icon: AlignCenterVertical, label: "Align center" },
-  { value: "right", Icon: AlignEndVertical, label: "Align right" },
-  { value: "top", Icon: AlignStartHorizontal, label: "Align top" },
-  { value: "middle", Icon: AlignCenterHorizontal, label: "Align middle" },
-  { value: "bottom", Icon: AlignEndHorizontal, label: "Align bottom" },
-];
+// Icons only — button values, labels, and enablement rules come from
+// @rifrocket/fdt-plugin-alignment's useAlignmentActions, the single source of truth also used
+// by that package's own bare <AlignmentControls>.
+const ALIGN_ICONS: Record<Alignment, typeof AlignStartVertical> = {
+  left: AlignStartVertical,
+  center: AlignCenterVertical,
+  right: AlignEndVertical,
+  top: AlignStartHorizontal,
+  middle: AlignCenterHorizontal,
+  bottom: AlignEndHorizontal,
+};
 
-const DISTRIBUTE_BUTTONS: Array<{ value: DistributeAxis; Icon: typeof AlignHorizontalDistributeCenter; label: string }> = [
-  { value: "horizontal", Icon: AlignHorizontalDistributeCenter, label: "Distribute horizontally" },
-  { value: "vertical", Icon: AlignVerticalDistributeCenter, label: "Distribute vertically" },
-];
+const DISTRIBUTE_ICONS: Record<DistributeAxis, typeof AlignHorizontalDistributeCenter> = {
+  horizontal: AlignHorizontalDistributeCenter,
+  vertical: AlignVerticalDistributeCenter,
+};
 
 const BUTTON_CLASS =
   "flex h-7 w-7 items-center justify-center rounded-md text-fdt-fg-muted transition-colors duration-150 hover:bg-fdt-bg-elevated hover:text-fdt-fg disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent";
 
 export function AlignmentToolbar(): ReactElement {
-  const engine = useEditor();
-  const selectedCount = useEditorState((state) => state.selectedObjectIds.length);
-  const disabled = selectedCount === 0;
+  const { alignDisabled, distributeDisabled, align, distribute } = useAlignmentActions();
 
   return (
     <div>
@@ -42,31 +43,37 @@ export function AlignmentToolbar(): ReactElement {
         <InfoTooltip featureKey="alignment" />
       </div>
       <div className="flex flex-wrap gap-0.5">
-        {ALIGN_BUTTONS.map(({ value, Icon, label }) => (
-          <button
-            key={value}
-            type="button"
-            title={label}
-            disabled={disabled}
-            className={BUTTON_CLASS}
-            onClick={() => engine.alignment.align(value)}
-          >
-            <Icon size={15} strokeWidth={2} />
-          </button>
-        ))}
+        {ALIGNMENTS.map(({ value, label }) => {
+          const Icon = ALIGN_ICONS[value];
+          return (
+            <button
+              key={value}
+              type="button"
+              title={label}
+              disabled={alignDisabled}
+              className={BUTTON_CLASS}
+              onClick={() => align(value)}
+            >
+              <Icon size={15} strokeWidth={2} />
+            </button>
+          );
+        })}
         <div className="mx-1 my-auto h-5 w-px bg-fdt-border" />
-        {DISTRIBUTE_BUTTONS.map(({ value, Icon, label }) => (
-          <button
-            key={value}
-            type="button"
-            title={label}
-            disabled={selectedCount < 3}
-            className={BUTTON_CLASS}
-            onClick={() => engine.alignment.distribute(value)}
-          >
-            <Icon size={15} strokeWidth={2} />
-          </button>
-        ))}
+        {DISTRIBUTE_AXES.map(({ value, label }) => {
+          const Icon = DISTRIBUTE_ICONS[value];
+          return (
+            <button
+              key={value}
+              type="button"
+              title={label}
+              disabled={distributeDisabled}
+              className={BUTTON_CLASS}
+              onClick={() => distribute(value)}
+            >
+              <Icon size={15} strokeWidth={2} />
+            </button>
+          );
+        })}
       </div>
     </div>
   );
