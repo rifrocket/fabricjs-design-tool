@@ -20,9 +20,8 @@ export interface EffectGalleryProps {
   apply: (next: EffectStack) => void;
 }
 
-// Category-chip filtered grid of preset buttons — the structural analog of ShapeGallery, minus
-// the modal shell, since this already lives inside the Effects tab rather than needing its own
-// dialog. Clicking a preset appends it to the stack with its schema's own defaults.
+// Category-chip filtered grid of preset buttons. Clicking a preset appends it to the stack with
+// its schema's own defaults.
 export function EffectGallery({ stack, apply }: EffectGalleryProps): ReactElement {
   const engine = useEditor();
   const [category, setCategory] = useState<CategoryFilter>("all");

@@ -29,7 +29,7 @@ import { DesignEditor } from "@rifrocket/fdt-react";
 
 **`preset`/`plugins` are construction-time only** — same contract as `<Editor plugins>` below: changing them on an already-mounted `<DesignEditor>` does nothing until it remounts (e.g. via a changing `key={documentId}`). There's no safe general story for hot-swapping an installed plugin set (uninstall ordering, plugin-held state), so this is a deliberate limitation, not a bug.
 
-Not bundled into either built-in preset: `@rifrocket/fdt-plugin-alignment`, `-snapping`, `-devtools`, and `-import-json`. Each of those depends on `@rifrocket/fdt-react` itself (they render panel components via `useEditor()`), so this package bundling them back would be a circular package dependency. Add them the same way you'd add any third-party plugin:
+Not bundled into either built-in preset: `@rifrocket/fdt-plugin-alignment`, `-snapping`, `-devtools`, `-import-json`, and `-effects-panel`. Each of those depends on `@rifrocket/fdt-react` itself (they render panel components via `useEditor()`), so this package bundling them back would be a circular package dependency. Add them the same way you'd add any third-party plugin:
 
 ```tsx
 import { alignmentPlugin } from "@rifrocket/fdt-plugin-alignment";

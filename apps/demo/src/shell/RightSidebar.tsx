@@ -1,10 +1,10 @@
 import { lazy, Suspense, useState } from "react";
 import type { ReactElement } from "react";
 import { PropertiesPanel, useEditorState } from "@rifrocket/fdt-react";
+import { EffectsPanel } from "@rifrocket/fdt-plugin-effects-panel";
 import { AlignmentToolbar } from "../features/selection/AlignmentToolbar";
 import { EnhancedLayersPanel } from "../features/layers/EnhancedLayersPanel";
 import { CanvasSizeFields } from "../features/canvas/CanvasSizeFields";
-import { EffectsSection } from "../features/effects/EffectsSection";
 import { InfoTooltip } from "../docs/InfoTooltip";
 
 const DevToolsPanel = lazy(() => import("../dev-tools/DevToolsPanel").then((m) => ({ default: m.DevToolsPanel })));
@@ -72,7 +72,7 @@ export function RightSidebar({ showCanvasSize = true }: { showCanvasSize?: boole
           (selectedCount === 0 ? (
             <p className="text-xs text-fdt-fg-muted">Select an object on the canvas to apply effects.</p>
           ) : (
-            <EffectsSection />
+            <EffectsPanel headingExtra={<InfoTooltip featureKey="effects" />} />
           ))}
 
         {tab === "layers" && <EnhancedLayersPanel />}

@@ -1,13 +1,17 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { resetAllEffects } from "@rifrocket/fabricjs-design-tool";
 import { useEditor, useObjectEffects } from "@rifrocket/fdt-react";
-import { InfoTooltip } from "../../docs/InfoTooltip";
 import { EffectStackList } from "./EffectStackList";
 import { EffectGallery } from "./EffectGallery";
 
-// Renders nothing when there's no selection (RightSidebar guards on that too, but this stays
-// self-contained for direct reuse).
-export function EffectsSection(): ReactElement | null {
+export interface EffectsPanelProps {
+  /** Rendered next to the "Effects" heading — e.g. a host app's own docs/tooltip widget. */
+  headingExtra?: ReactNode;
+}
+
+// Renders nothing when there's no selection — stays self-contained for direct reuse regardless
+// of whether the host already guards on selection count itself.
+export function EffectsPanel({ headingExtra }: EffectsPanelProps = {}): ReactElement | null {
   const engine = useEditor();
   const [object] = engine.selection.getActiveObjects();
   const { stack, apply } = useObjectEffects(object);
@@ -19,7 +23,7 @@ export function EffectsSection(): ReactElement | null {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-fdt-fg-muted">
           Effects
-          <InfoTooltip featureKey="effects" />
+          {headingExtra}
         </div>
         {stack.length > 0 && (
           <button
