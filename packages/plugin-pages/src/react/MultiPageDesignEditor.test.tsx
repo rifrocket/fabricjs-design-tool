@@ -58,6 +58,22 @@ describe("MultiPageDesignEditor", () => {
     expect(secondPageId).not.toBe(firstPageId);
   });
 
+  it("seeds page 1 from initialDocument instead of blank, when provided", async () => {
+    let capturedEngine: FakeEngine | undefined;
+    const snapshot = { json: { objects: [] }, backgroundColor: "#123456" };
+    renderMultiPage({
+      initialDocument: { snapshot, meta: { name: "Cover", width: 1024, height: 768 } },
+      onReady: (engine) => {
+        capturedEngine = engine as unknown as FakeEngine;
+      },
+    });
+
+    await waitFor(() => expect(capturedEngine).toBeTruthy());
+    expect(capturedEngine!.__fake.setBackgroundColor).toHaveBeenCalledWith("#123456");
+    expect(capturedEngine!.__fake.importFile).toHaveBeenCalledWith("json", snapshot.json);
+    await waitFor(() => expect(screen.getAllByText(/Cover/).length).toBeGreaterThan(0));
+  });
+
   it("wires default shortcuts against the active page's engine", async () => {
     let capturedEngine: FakeEngine | undefined;
     renderMultiPage({
@@ -98,5 +114,90 @@ describe("MultiPageDesignEditor", () => {
 
     await waitFor(() => expect(capturedEngine).toBeTruthy());
     expect(capturedEngine!.__fake.useAll).toHaveBeenCalledWith([testPlugin]);
+  });
+
+  it("registers propertyFields overrides on each page's engine, once, without duplicating on a page revisit", async () => {
+    const shapesPlugin: EditorPlugin = {
+      name: "shapes",
+      install: (e) => e.registry.objectTypes.register("rect", { create: () => ({}) as never }),
+    };
+    let capturedEngine: FakeEngine | undefined;
+    renderMultiPage({
+      preset: "none",
+      plugins: { add: [shapesPlugin] },
+      propertyFields: { rect: [{ key: "fill" }] },
+      onReady: (engine) => {
+        capturedEngine = engine as unknown as FakeEngine;
+      },
+    });
+
+    await waitFor(() => expect(capturedEngine).toBeTruthy());
+    expect(capturedEngine!.registry.objectTypes.get("rect")?.propertyFields).toEqual([{ key: "fill" }]);
+
+    // Add a second page then switch back to page 1 — onReady re-fires against the *same* engine
+    // (revisiting an already-created page), which must not re-append the same fields again.
+    fireEvent.click(screen.getByTitle("Add page"));
+    await waitFor(() => expect(screen.getAllByText(/Page 2/).length).toBeGreaterThan(0));
+    fireEvent.click(screen.getByText("Page 1"));
+    await waitFor(() => expect(capturedEngine!.registry.objectTypes.get("rect")?.propertyFields).toEqual([{ key: "fill" }]));
+  });
+
+  it("autosave restores a prior save on mount instead of auto-seeding blank, taking priority over initialDocument", async () => {
+    const storage = new Map<string, string>();
+    const fakeStorage = {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, value),
+      removeItem: (key: string) => storage.delete(key),
+    };
+    storage.set(
+      "fdt:pages",
+      JSON.stringify({
+        pages: [{ id: "page_1", name: "Restored", order: 0, width: 800, height: 600 }],
+        snapshots: { page_1: { json: { objects: [] }, backgroundColor: "#00ff00" } },
+      }),
+    );
+
+    let capturedEngine: FakeEngine | undefined;
+    renderMultiPage({
+      autosave: { storage: fakeStorage },
+      initialDocument: { snapshot: { json: {}, backgroundColor: "#ff0000" }, meta: { name: "Fresh" } },
+      onReady: (engine) => {
+        capturedEngine = engine as unknown as FakeEngine;
+      },
+    });
+
+    await waitFor(() => expect(capturedEngine).toBeTruthy());
+    expect(capturedEngine!.__fake.setBackgroundColor).toHaveBeenCalledWith("#00ff00");
+    await waitFor(() => expect(screen.getAllByText(/Restored/).length).toBeGreaterThan(0));
+    expect(screen.queryByText(/Fresh/)).toBeNull();
+  });
+
+  it("autosave debounces a save after content changes, via savePagesToStorage", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const setItem = vi.fn();
+      const fakeStorage = { getItem: () => null, setItem, removeItem: vi.fn() };
+
+      let capturedEngine: FakeEngine | undefined;
+      renderMultiPage({
+        autosave: { storage: fakeStorage, debounceMs: 300 },
+        onReady: (engine) => {
+          capturedEngine = engine as unknown as FakeEngine;
+        },
+      });
+      await vi.waitFor(() => expect(capturedEngine).toBeTruthy());
+
+      // Simulate a tracked content change the same way PagesManager's own thumbnail tracking
+      // does — via the fake engine's store.subscribe callback.
+      const scheduleHandler = (capturedEngine!.store.subscribe as ReturnType<typeof vi.fn>).mock.calls[0][0] as () => void;
+      scheduleHandler();
+
+      expect(setItem).not.toHaveBeenCalled();
+      await vi.advanceTimersByTimeAsync(300);
+      expect(setItem).toHaveBeenCalledTimes(1);
+      expect(setItem.mock.calls[0][0]).toBe("fdt:pages");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

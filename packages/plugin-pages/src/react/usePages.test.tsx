@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { StrictMode, useEffect, useRef } from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useEditor } from "@rifrocket/fdt-react";
@@ -123,6 +123,45 @@ describe("PagesProvider / usePagesContext", () => {
     // activePageId never got set — the waitFor above is what actually would have timed out.
     const fakeEngine = manager.getEngine(pageId) as FakeEngine;
     expect(fakeEngine.__fake.destroy).not.toHaveBeenCalled();
+  });
+
+  it("wires default keyboard shortcuts against the active page's engine, with no <MultiPageDesignEditor> involved", async () => {
+    let manager!: PagesManager;
+    renderApp((m) => (manager = m));
+
+    fireEvent.click(screen.getByRole("button", { name: "Add page" }));
+    fireEvent.click(screen.getByRole("button", { name: /New page/ }));
+    await waitFor(() => expect(screen.getByTestId("active-engine").textContent).toBe("has engine"));
+
+    const engine = manager.getEngine(manager.getActivePageId()!) as FakeEngine;
+    expect(engine.shortcuts.has("ctrl+z")).toBe(true);
+    expect(engine.shortcuts.has("delete")).toBe(true);
+  });
+
+  it("honors a `shortcuts` option (disable defaults, add custom combos)", async () => {
+    const handler = vi.fn();
+    let manager!: PagesManager;
+    render(
+      <PagesProvider
+        options={{
+          maxPages: 5,
+          canvasElementFactory: fakeCanvasElementFactory,
+          thumbnails: { offscreenCanvasFactory: fakeOffscreenCanvasFactory },
+          shortcuts: { disable: ["ctrl+z"], add: { "ctrl+d": { handler, description: "Duplicate" } } },
+        }}
+        engineFactory={createEngineFactory()}
+      >
+        <TestApp onManager={(m) => (manager = m)} />
+      </PagesProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Add page" }));
+    fireEvent.click(screen.getByRole("button", { name: /New page/ }));
+    await waitFor(() => expect(screen.getByTestId("active-engine").textContent).toBe("has engine"));
+
+    const engine = manager.getEngine(manager.getActivePageId()!) as FakeEngine;
+    expect(engine.shortcuts.has("ctrl+z")).toBe(false);
+    expect(engine.shortcuts.has("ctrl+d")).toBe(true);
   });
 
   it("still destroys every page's engine on a genuine unmount", async () => {

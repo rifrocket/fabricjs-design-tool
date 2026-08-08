@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
-import { defaultPreset, minimalPreset } from "@rifrocket/fdt-react";
+import type { CanvasEngine, PresetShortcutsConfig } from "@rifrocket/fabricjs-design-tool";
+import { defaultPreset, minimalPreset, setupDefaultShortcuts, useKeyboardShortcuts } from "@rifrocket/fdt-react";
 import { PagesManager } from "../PagesManager";
 import type { EngineFactory } from "../PagesManager";
 import type { PagesManagerOptions, PagesState } from "../types";
@@ -12,6 +12,16 @@ import type { PagesManagerOptions, PagesState } from "../types";
 // depend on plugin packages; only this optional /react layer can).
 export interface UsePagesOptions extends Omit<PagesManagerOptions, "preset"> {
   preset?: PagesManagerOptions["preset"] | "default" | "minimal";
+  // Same disable/add shape <DesignEditor shortcuts>/<MultiPageDesignEditor shortcuts> accept.
+  // Read fresh on every render (not frozen at construction, unlike preset/plugins above) and
+  // re-applied whenever the active page's engine changes, mirroring <MultiPageDesignEditor>'s
+  // own per-page-switch behavior — shortcuts are a per-CanvasEngine concern, so "the active
+  // engine changed" is the right trigger, not "usePages() re-rendered". Omit for the same
+  // default (undo/redo/delete/deselect, plus every installed tool's own shortcut) <Editor> ships
+  // unconditionally. Previously only <MultiPageDesignEditor> wired this — standalone
+  // PagesProvider/usePagesContext/<PagesCanvas> consumers (e.g. apps/demo's own
+  // MultiPageExample.tsx) had zero keyboard shortcuts in multi-page mode until now.
+  shortcuts?: PresetShortcutsConfig;
 }
 
 export interface UsePagesResult {
@@ -62,6 +72,20 @@ export function usePages(options: UsePagesOptions, engineFactory?: EngineFactory
   }, [manager]);
 
   const activeEngine = state.activePageId ? (manager.getEngine(state.activePageId) ?? null) : null;
+
+  useEffect(() => {
+    if (!activeEngine) return;
+    const unregisterDefaults = setupDefaultShortcuts(activeEngine, options.shortcuts?.disable);
+    const unregisterAdded = Object.entries(options.shortcuts?.add ?? {}).map(([combo, { handler, description }]) =>
+      activeEngine.shortcuts.register(combo, () => handler(activeEngine), description),
+    );
+    return () => {
+      unregisterDefaults();
+      unregisterAdded.forEach((unregister) => unregister());
+    };
+  }, [activeEngine, options.shortcuts]);
+
+  useKeyboardShortcuts(activeEngine?.shortcuts ?? null);
 
   return { manager, pages: state.pages, activePageId: state.activePageId, activeEngine };
 }

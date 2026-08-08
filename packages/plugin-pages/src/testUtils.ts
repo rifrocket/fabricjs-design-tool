@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 import type { FabricObject } from "fabric";
-import { KeyboardShortcutManager, PanelRegistry } from "@rifrocket/fabricjs-design-tool";
-import type { CanvasEngine, OffscreenCanvasFactory } from "@rifrocket/fabricjs-design-tool";
+import { KeyboardShortcutManager, PluginRegistry } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, EditorPlugin, OffscreenCanvasFactory } from "@rifrocket/fabricjs-design-tool";
 import type { EngineFactory } from "./PagesManager";
 
 // Shared fakes for exercising PagesManager (and anything built on it, like the React bindings)
@@ -52,7 +52,14 @@ export function createFakeEngine(): FakeEngine {
     canvas.backgroundColor = color;
   });
   const destroy = vi.fn();
-  const useAll = vi.fn();
+  // Actually installs each plugin (not just recording the call) — needed so tests that register
+  // a real object type/panel/etc. through a plugin (e.g. MultiPageDesignEditor's propertyFields
+  // prop, which checks registry.objectTypes.has(typeId)) see real effects, the same way a real
+  // CanvasEngine.useAll() would. `engine` is referenced before its own declaration below, but
+  // this closure only runs once useAll() is actually called later, by which point it exists.
+  const useAll = vi.fn((plugins: EditorPlugin[]) => {
+    plugins.forEach((plugin) => plugin.install(engine));
+  });
   const historyClear = vi.fn();
   const addObjectOfType = vi.fn(async () => {
     const object = { toObject: () => ({}) } as unknown as FabricObject;
@@ -85,7 +92,13 @@ export function createFakeEngine(): FakeEngine {
     redo: vi.fn(),
     deleteSelection: vi.fn(),
     selection: { clear: vi.fn(), getActiveObjects: () => [] },
-    registry: { tools: { list: () => [], get: () => undefined, activate: vi.fn() }, panels: new PanelRegistry() },
+    // Real PluginRegistry (not a stub) — composes real objectTypes/tools/panels/effects/
+    // exporters/importers registries, including facade methods like registerPropertyFields()
+    // that only exist on PluginRegistry itself, not on ObjectTypeRegistry's own hand-picked
+    // subset. Same rationale as KeyboardShortcutManager above: lets tests exercise real
+    // registration calls (e.g. MultiPageDesignEditor's propertyFields prop) exactly like a real
+    // engine, not just record that a call happened.
+    registry: new PluginRegistry(),
   } as unknown as FakeEngine;
 
   engine.__fake = {

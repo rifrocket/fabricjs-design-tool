@@ -1,4 +1,6 @@
 import type {
+  CanvasEngine,
+  DocumentSnapshotData,
   EditorPlugin,
   EditorPreset,
   EngineOptions,
@@ -6,6 +8,7 @@ import type {
   PluginOverrides,
 } from "@rifrocket/fabricjs-design-tool";
 import type { TemplateDefinition } from "./templates";
+import type { PagesManager } from "./PagesManager";
 
 export interface PageMeta {
   id: string;
@@ -17,12 +20,6 @@ export interface PageMeta {
   locked?: boolean;
   visible?: boolean;
   templateId?: string;
-  // Links a front/back pair — see PagesManager's pairing helpers. Two PageMeta rows sharing a
-  // pairId are the two sides of one physical document, not two independent pages.
-  pairId?: string;
-  side?: "front" | "back";
-  // When true, resizing either side of a pair resizes the other to match.
-  linkedDimensions?: boolean;
   thumbnail?: string;
 }
 
@@ -70,6 +67,25 @@ export interface PagesManagerOptions {
     // (see @rifrocket/fabricjs-design-tool's OffscreenCanvasFactory) — leave unset in real usage.
     offscreenCanvasFactory?: OffscreenCanvasFactory;
   };
+  // Fired, undebounced, on the same events (engine.store change / object:modified / text:changed)
+  // that already drive per-page thumbnail tracking — reuses that existing listener wiring rather
+  // than a consumer duplicating it. This is the documented, intended extension point
+  // persistence.ts's own savePagesToStorage() comment anticipates ("a consumer that wants
+  // autosave should call this from its own debounced handler ... subscribed to ... each activated
+  // page's content changes"): apply your own debounce, then call savePagesToStorage(manager). The
+  // manager is passed as the second argument so a consumer doesn't need an external reference to
+  // it — see @rifrocket/fdt-plugin-pages/react's <MultiPageDesignEditor autosave> for the
+  // reference implementation.
+  onContentChange?: (pageId: string, manager: PagesManager) => void;
+  // Overrides how a snapshot is captured for duplicatePage()/getSnapshotForPersistence()/
+  // refreshThumbnail() (the same three internal call sites — see PagesManager). Defaults to
+  // @rifrocket/fabricjs-design-tool's plain captureSnapshot(engine). PagesManager can't depend on
+  // @rifrocket/fdt-plugin-pan-zoom (that would be the same kind of circular/cross-plugin coupling
+  // builtinPresets.ts's comment describes for @rifrocket/fdt-react), so a consumer whose page
+  // engines draw their own non-content chrome — e.g. plugin-pan-zoom's page-boundary rect — needs
+  // to supply plugin-pan-zoom's captureSnapshotExcludingBoundary here explicitly, the same way
+  // @rifrocket/fdt-plugin-local-storage's own captureSnapshot option works.
+  captureSnapshot?: (engine: CanvasEngine) => DocumentSnapshotData;
 }
 
 // What PagesManager needs to mount a page's canvas off-DOM until it's activated. The consumer

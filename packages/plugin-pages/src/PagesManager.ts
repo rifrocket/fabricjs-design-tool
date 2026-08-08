@@ -2,7 +2,7 @@ import {
   Store,
   createEngine,
   getObjectId,
-  captureSnapshot,
+  captureSnapshot as captureDocumentSnapshot,
   restoreSnapshot,
   renderSnapshotThumbnail,
   resolvePreset,
@@ -57,6 +57,8 @@ export class PagesManager {
   private readonly thumbnailDebounceMs: number;
   private readonly offscreenCanvasFactory: OffscreenCanvasFactory | undefined;
   private readonly templates: Record<string, TemplateDefinition>;
+  private readonly onContentChange: PagesManagerOptions["onContentChange"];
+  private readonly captureSnapshot: (engine: CanvasEngine) => DocumentSnapshotData;
 
   private readonly runtimes = new Map<string, PageRuntime>();
   // Snapshot captured from a source page at duplicatePage() time, applied once the duplicate's
@@ -88,6 +90,8 @@ export class PagesManager {
     this.thumbnailDebounceMs = options.thumbnails?.debounceMs ?? DEFAULT_THUMBNAIL_DEBOUNCE_MS;
     this.offscreenCanvasFactory = options.thumbnails?.offscreenCanvasFactory;
     this.templates = options.templates ?? {};
+    this.onContentChange = options.onContentChange;
+    this.captureSnapshot = options.captureSnapshot ?? captureDocumentSnapshot;
     this.store = new Store<PagesState>({ pages: [], activePageId: null });
   }
 
@@ -150,7 +154,7 @@ export class PagesManager {
   async duplicatePage(id: string): Promise<PageMeta> {
     const source = this.requireMeta(id);
     const sourceEngine = await this.getOrCreateEngine(source.id);
-    const snapshot = captureSnapshot(sourceEngine);
+    const snapshot = this.captureSnapshot(sourceEngine);
 
     const duplicate = this.addPage({
       name: `${source.name} copy`,
@@ -168,6 +172,19 @@ export class PagesManager {
   // underlying behavior differs yet.
   copyPage(id: string): Promise<PageMeta> {
     return this.duplicatePage(id);
+  }
+
+  // The supported bridge for "make my existing document page 1" migrations — adopts a snapshot
+  // the caller already has (typically captureSnapshot() run against a single-CanvasEngine app
+  // being migrated onto plugin-pages) as a new page, via the exact same lazy-apply mechanism
+  // duplicatePage()/hydrate() already use (pendingSnapshots), just sourced externally instead of
+  // captured from one of this manager's own pages. Unlike hydrate(), this does not require the
+  // manager to have zero pages — it's just addPage() plus a pending snapshot, so it composes
+  // with pages that already exist.
+  seedFromDocument(snapshot: DocumentSnapshotData, init: NewPageInit = {}): PageMeta {
+    const page = this.addPage(init);
+    this.pendingSnapshots.set(page.id, snapshot);
+    return page;
   }
 
   deletePage(id: string): void {
@@ -261,15 +278,20 @@ export class PagesManager {
   // duplicate/hydrate snapshot; otherwise undefined (nothing but the meta itself to persist).
   getSnapshotForPersistence(id: string): DocumentSnapshotData | undefined {
     const engine = this.getEngine(id);
-    if (engine) return captureSnapshot(engine);
+    if (engine) return this.captureSnapshot(engine);
     return this.pendingSnapshots.get(id);
   }
 
-  // Loads a previously-persisted page collection. Only valid on a manager with no pages yet —
-  // like restoreSnapshot() in @rifrocket/fabricjs-design-tool, restoring is a consumer-level
-  // decision (when to call this — first mount only, only if no template was explicitly chosen,
-  // etc.) rather than something PagesManager does for you automatically. Page content is applied
-  // lazily through the same pendingSnapshots path duplicatePage() uses, not eagerly.
+  // Loads a previously-persisted page collection — round-trips this manager's own storage
+  // format (PageMeta[] + a DocumentSnapshotData per page id). For adopting a single *foreign*
+  // document (e.g. migrating an existing single-CanvasEngine app onto plugin-pages), use
+  // seedFromDocument() instead — hydrate() is for restoring plugin-pages' own prior state, not
+  // for constructing that state from scratch. Only valid on a manager with no pages yet — like
+  // restoreSnapshot() in @rifrocket/fabricjs-design-tool, restoring is a consumer-level decision
+  // (when to call this — first mount only, only if no template was explicitly chosen, etc.)
+  // rather than something PagesManager does for you automatically. Page content is applied
+  // lazily through the same pendingSnapshots path duplicatePage()/seedFromDocument() use, not
+  // eagerly.
   hydrate(data: { pages: PageMeta[]; snapshots?: Record<string, DocumentSnapshotData> }): void {
     if (this.getState().pages.length > 0) {
       throw new Error("hydrate() can only be called before any pages have been added");
@@ -293,7 +315,7 @@ export class PagesManager {
     const engine = this.getEngine(id);
     if (!engine) return;
     const meta = this.requireMeta(id);
-    const snapshot = captureSnapshot(engine);
+    const snapshot = this.captureSnapshot(engine);
     const thumbnail = await renderSnapshotThumbnail(
       snapshot,
       { width: meta.width, height: meta.height },
@@ -366,6 +388,11 @@ export class PagesManager {
   // plugin-local-storage's autosave uses, for the same reason.
   private wireThumbnailTracking(id: string, engine: CanvasEngine): void {
     const schedule = () => {
+      // Fired undebounced, on every trigger — onContentChange consumers (e.g. <MultiPageDesignEditor
+      // autosave>) apply their own debounce rather than sharing this method's thumbnail-specific
+      // one, since the two concerns can legitimately want different cadences.
+      this.onContentChange?.(id, this);
+
       const existing = this.thumbnailTimers.get(id);
       if (existing) clearTimeout(existing);
       this.thumbnailTimers.set(

@@ -110,6 +110,29 @@ describe("PagesManager", () => {
     expect(duplicateEngine.__fake.importFile).toHaveBeenCalledTimes(1);
   });
 
+  it("adopts an externally-supplied snapshot as a new page via seedFromDocument, the same lazy-apply path duplicatePage uses", async () => {
+    const manager = createManager();
+    const existingSnapshot = { json: { objects: [] }, backgroundColor: "#00ff00" };
+
+    const page = manager.seedFromDocument(existingSnapshot, { name: "Page 1", width: 1024, height: 768 });
+    expect(page.name).toBe("Page 1");
+    expect(page.width).toBe(1024);
+    expect(manager.getEngine(page.id)).toBeUndefined(); // still lazy, not applied yet
+
+    const engine = (await manager.setActivePage(page.id)) as FakeEngine;
+    expect(engine.__fake.setBackgroundColor).toHaveBeenCalledWith("#00ff00");
+    expect(engine.__fake.importFile).toHaveBeenCalledWith("json", existingSnapshot.json);
+  });
+
+  it("seedFromDocument composes with pages that already exist, unlike hydrate()", () => {
+    const manager = createManager();
+    manager.addPage();
+    expect(() =>
+      manager.seedFromDocument({ json: {}, backgroundColor: "#fff" }),
+    ).not.toThrow();
+    expect(manager.getPages()).toHaveLength(2);
+  });
+
   it("moves an object between two pages, undoable independently on each side", async () => {
     const manager = createManager();
     const pageA = manager.addPage();
@@ -149,6 +172,18 @@ describe("PagesManager", () => {
 
     await manager.refreshThumbnail(page.id);
     expect(manager.getPages()[0].thumbnail).toBe("data:image/png;base64,fake");
+  });
+
+  it("invokes onContentChange, undebounced, on the same trigger that schedules a thumbnail refresh", async () => {
+    const onContentChange = vi.fn();
+    const manager = createManager({ onContentChange });
+    const page = manager.addPage();
+    const engine = (await manager.setActivePage(page.id)) as FakeEngine;
+
+    const scheduleHandler = (engine.store.subscribe as ReturnType<typeof vi.fn>).mock.calls[0][0] as () => void;
+    scheduleHandler();
+
+    expect(onContentChange).toHaveBeenCalledWith(page.id, manager);
   });
 
   it("round-trips a page collection through save/load/hydrate", async () => {
@@ -210,6 +245,28 @@ describe("PagesManager", () => {
     expect(engine.__fake.addObjectOfType).toHaveBeenCalledTimes(1);
     expect(engine.__fake.setObjectProperty).toHaveBeenCalledWith(expect.anything(), "text", "Your Name");
     expect(engine.__fake.historyClear).toHaveBeenCalledTimes(1);
+  });
+
+  it("uses a caller-supplied captureSnapshot instead of the core default, at every internal call site", async () => {
+    const customSnapshot = { json: { objects: ["custom"] }, backgroundColor: "#custom" };
+    const captureSnapshot = vi.fn().mockReturnValue(customSnapshot);
+    const manager = createManager({ captureSnapshot });
+    const page = manager.addPage();
+    const engine = (await manager.setActivePage(page.id)) as FakeEngine;
+
+    expect(captureSnapshot).toHaveBeenCalledWith(engine);
+    captureSnapshot.mockClear();
+
+    expect(manager.getSnapshotForPersistence(page.id)).toBe(customSnapshot);
+    expect(captureSnapshot).toHaveBeenCalledWith(engine);
+    captureSnapshot.mockClear();
+
+    await manager.refreshThumbnail(page.id);
+    expect(captureSnapshot).toHaveBeenCalledWith(engine);
+    captureSnapshot.mockClear();
+
+    await manager.duplicatePage(page.id);
+    expect(captureSnapshot).toHaveBeenCalledWith(engine);
   });
 
   it("prefers a hydrated page's real content over its template's starter content, when a page has both", async () => {
