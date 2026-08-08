@@ -42,9 +42,9 @@ For everything below "one preset, minor overrides" — a from-scratch plugin lis
 
 ## Building a custom application shell
 
-`<Editor>`/`<DesignEditor>` only render 3 fixed panel slots (`toolbar-start`, `sidebar-right`, `properties-footer`) inside their own wrapping `<div>`. That covers a self-contained editor widget, but not a real application shell — a header, multiple sidebars, a status bar, floating panels, or anything else laid out around the canvas rather than inside `<Editor>`'s own markup.
+`<Editor>`/`<DesignEditor>` only render 4 fixed panel slots (`toolbar-start`, `tool-rail`, `sidebar-right`, `properties-footer`) inside their own wrapping `<div>`. That covers a self-contained editor widget, but not a real application shell — a header, multiple sidebars, a status bar, floating panels, or anything else laid out around the canvas rather than inside `<Editor>`'s own markup.
 
-For that, drop down to `useCanvasEngine()` — the same headless hook `<Editor>` is built on — and **re-provide `EditorContext`** around your own layout. This is the one, fully-supported pattern for going beyond the 3 slots; it's not a workaround.
+For that, drop down to `useCanvasEngine()` — the same headless hook `<Editor>` is built on — and **re-provide `EditorContext`** around your own layout. This is the one, fully-supported pattern for going beyond the 4 slots; it's not a workaround.
 
 ```tsx
 import { useRef } from "react";

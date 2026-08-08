@@ -6,8 +6,8 @@ import { localStoragePlugin } from "@rifrocket/fdt-plugin-local-storage";
 import type { LocalStoragePluginOptions } from "@rifrocket/fdt-plugin-local-storage";
 import { Editor } from "../Editor";
 import type { EditorProps } from "../Editor";
-import { defaultPreset, minimalPreset, NONE_PRESET } from "./builtinPresets";
 import type { DesignEditorPreset } from "./types";
+import { resolveDesignPreset, mergeShortcuts } from "./presetHelpers";
 
 export interface DesignEditorProps extends Omit<EditorProps, "plugins" | "slots" | "theme"> {
   /**
@@ -40,33 +40,16 @@ export interface DesignEditorProps extends Omit<EditorProps, "plugins" | "slots"
    * because bundling it unconditionally into a preset risks silently persisting one app's canvas
    * into another's localStorage key. `true` uses the plugin's own defaults; pass an options
    * object for a custom key/debounce/capture callbacks.
+   *
+   * **Save-only, like the underlying plugin itself — nothing is restored automatically.** Call
+   * `loadDesignFromStorage()` + `restoreSnapshot()` yourself, typically inside `onReady`, gated
+   * to only the very first load (a template switch / `key`-driven remount shouldn't silently
+   * override what the caller just picked with whatever was last autosaved). See `apps/demo`'s
+   * `EngineHost.tsx` (`handleReady`) for the reference pattern, including passing a custom
+   * `captureSnapshot` here to exclude non-content chrome (e.g. a page-boundary rect) from what
+   * gets saved.
    */
   autosave?: true | LocalStoragePluginOptions;
-}
-
-// Exported for reuse by other one-liner components built on the same preset model but not on
-// <Editor> itself (e.g. @rifrocket/fdt-plugin-pages' <MultiPageDesignEditor>), so "default"/
-// "minimal"/"none"/a literal preset resolve identically everywhere instead of each consumer
-// reimplementing this switch.
-export function resolveDesignPreset(preset: DesignEditorProps["preset"]): DesignEditorPreset {
-  if (!preset || preset === "none") return NONE_PRESET;
-  if (preset === "default") return defaultPreset;
-  if (preset === "minimal") return minimalPreset;
-  return preset;
-}
-
-// disable = union (either side disabling a combo wins); add = this prop's entries overlay the
-// preset's (same pattern as plugins.replace: an explicit, named override wins over the preset).
-// Exported for the same cross-package reuse reason as resolveDesignPreset above.
-export function mergeShortcuts(
-  presetShortcuts: PresetShortcutsConfig | undefined,
-  overrideShortcuts: PresetShortcutsConfig | undefined,
-): PresetShortcutsConfig | undefined {
-  if (!presetShortcuts && !overrideShortcuts) return undefined;
-  return {
-    disable: [...(presetShortcuts?.disable ?? []), ...(overrideShortcuts?.disable ?? [])],
-    add: { ...presetShortcuts?.add, ...overrideShortcuts?.add },
-  };
 }
 
 // Resolves the preset (core plugins/propertyFields/snapping + react.slots/theme), merges
