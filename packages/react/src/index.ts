@@ -1,7 +1,7 @@
-export { Editor } from "./Editor";
+export { Editor, resolveTheme } from "./Editor";
 export type { EditorProps, EditorTheme } from "./Editor";
 
-export { DesignEditor, defaultPreset, minimalPreset } from "./preset";
+export { DesignEditor, defaultPreset, minimalPreset, resolveDesignPreset, mergeShortcuts } from "./preset";
 export type { DesignEditorProps, DesignEditorPreset, ReactPresetExtension, PanelSlotName } from "./preset";
 
 export { EditorContext } from "./context";

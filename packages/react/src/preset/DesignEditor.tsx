@@ -44,7 +44,11 @@ export interface DesignEditorProps extends Omit<EditorProps, "plugins" | "slots"
   autosave?: true | LocalStoragePluginOptions;
 }
 
-function resolveDesignPreset(preset: DesignEditorProps["preset"]): DesignEditorPreset {
+// Exported for reuse by other one-liner components built on the same preset model but not on
+// <Editor> itself (e.g. @rifrocket/fdt-plugin-pages' <MultiPageDesignEditor>), so "default"/
+// "minimal"/"none"/a literal preset resolve identically everywhere instead of each consumer
+// reimplementing this switch.
+export function resolveDesignPreset(preset: DesignEditorProps["preset"]): DesignEditorPreset {
   if (!preset || preset === "none") return NONE_PRESET;
   if (preset === "default") return defaultPreset;
   if (preset === "minimal") return minimalPreset;
@@ -53,7 +57,8 @@ function resolveDesignPreset(preset: DesignEditorProps["preset"]): DesignEditorP
 
 // disable = union (either side disabling a combo wins); add = this prop's entries overlay the
 // preset's (same pattern as plugins.replace: an explicit, named override wins over the preset).
-function mergeShortcuts(
+// Exported for the same cross-package reuse reason as resolveDesignPreset above.
+export function mergeShortcuts(
   presetShortcuts: PresetShortcutsConfig | undefined,
   overrideShortcuts: PresetShortcutsConfig | undefined,
 ): PresetShortcutsConfig | undefined {

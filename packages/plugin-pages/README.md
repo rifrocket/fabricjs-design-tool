@@ -23,6 +23,8 @@ Unlike every other `@rifrocket/fdt-plugin-*` package, this one is **not** an `Ed
 - Templates: `TemplateDefinition` + `applyTemplateToEngine` seed a page's starter content on first activation; real content (duplicated or hydrated) always wins over a template
 - Persistence primitives (`capturePagesSnapshot` / `savePagesToStorage` / `loadPagesFromStorage` / `clearSavedPages`) plus `PagesManager.hydrate()` — manual/on-demand, mirroring `plugin-local-storage`'s "restoring is a consumer decision" philosophy
 - Optional React binding at the `./react` subpath (`usePages`, `<PagesProvider>`, `usePagesContext`, `<PagesCanvas>`, `usePageCanvasRef`) — `<PagesProvider>` re-provides `@rifrocket/fdt-react`'s `EditorContext` with whichever page is active, so existing `EditorContext`-consuming UI (PropertiesPanel, LayersPanel, toolbar) follows page switches with no changes on their part; `<PagesCanvas>` mounts and relocates the active page's canvas declaratively, no manual DOM code required
+- `<MultiPageDesignEditor>` (`./react` subpath) — the batteries-included, one-line multi-page counterpart to `@rifrocket/fdt-react`'s `<DesignEditor>`: same `preset`/`plugins`/`theme`/`shortcuts`/`slots` prop shape, auto-seeds page 1, wires default keyboard shortcuts against whichever page is active, and renders a `<PageTabsBar>` (add/duplicate/delete/reorder/rename/lock) below the canvas by default
+- `<PageTabsBar>` (`./react` subpath) — the page-strip UI `<MultiPageDesignEditor>` uses by default, exported separately for consumers building their own chrome on `usePagesContext()` directly (see `apps/demo`'s `MultiPageExample.tsx`)
 
 ## Install
 
@@ -73,6 +75,16 @@ function Canvas() {
   <Canvas />
 </PagesProvider>;
 ```
+
+Or the one-line version of the same thing:
+
+```tsx
+import { MultiPageDesignEditor } from "@rifrocket/fdt-plugin-pages/react";
+
+<MultiPageDesignEditor preset="default" maxPages={20} />;
+```
+
+Not a prop on `<DesignEditor>` itself — `@rifrocket/fdt-react` can't depend on this package without a circular package dependency (this package's `./react` subpath already depends on `fdt-react`), the same constraint documented in `packages/react/src/preset/builtinPresets.ts` for the panel-slot-wrapper plugins. Deliberately has no pan/zoom or page-boundary-rect treatment, mirroring `<Editor>`'s own bare-canvas scope for the single-page case — build your own chrome on `usePagesContext()`/`<PagesCanvas>` directly if you need that (see `apps/demo`'s `MultiPageExample.tsx`).
 
 ## License
 

@@ -1,20 +1,27 @@
 import { useEffect, useRef } from "react";
 import type { ReactElement } from "react";
 import { importJsonPlugin } from "@rifrocket/fdt-plugin-import-json";
-import { PagesProvider, usePagesContext } from "@rifrocket/fdt-plugin-pages/react";
+import { PageTabsBar, PagesProvider, usePagesContext } from "@rifrocket/fdt-plugin-pages/react";
 import { stampToolPlugin } from "../../plugins/stampToolPlugin";
 import { AppShell } from "../../shell/AppShell";
-import { PageTabsBar, MAX_PAGES } from "./PageTabsBar";
 import { PageCanvasHost } from "./PageCanvasHost";
 import { PAGES_CANVAS_CONTAINER_SELECTOR } from "./pagesCanvasContainerSelector";
+
+const MAX_PAGES = 12;
 
 // Deliberately isolated from EngineHost's *document model*: that shell is a tuned
 // single-document setup (one CanvasEngine, TemplateContext, localStoragePlugin autosave).
 // plugin-pages orchestrates N independent CanvasEngines with its own persistence model —
-// reconciling the two document models is a real product decision, not attempted here. What *is*
-// shared: AppShell itself (Header/LeftToolRail/RightSidebar/StatusBar) and pan/zoom — see
-// AppShell.tsx's "pages" mode and PageCanvasHost.tsx, which gives each page's canvas the same
-// fixed-viewport-plus-page-boundary-rect treatment CanvasWorkspace.tsx gives the single document.
+// reconciling the two document models is a real product decision, not attempted here.
+// @rifrocket/fdt-plugin-pages/react also ships <MultiPageDesignEditor>, a one-line batteries-
+// included multi-page editor, for consumers who don't need a custom shell/pan-zoom — this screen
+// deliberately stays on the lower-level PagesProvider/usePagesContext primitives instead, for the
+// same reason EngineHost.tsx stays on <Editor>'s primitives rather than <DesignEditor>'s default
+// chrome: it needs PageCanvasHost's pan/zoom + page-boundary-rect treatment and its own AppShell.
+// What *is* shared with EngineHost: AppShell itself (Header/LeftToolRail/RightSidebar/StatusBar)
+// and pan/zoom — see AppShell.tsx's "pages" mode and PageCanvasHost.tsx, which gives each page's
+// canvas the same fixed-viewport-plus-page-boundary-rect treatment CanvasWorkspace.tsx gives the
+// single document.
 //
 // preset="default" already bundles shapes/clipboard/svg-import/image/effects/export-pdf/qrcode
 // (see packages/react/src/preset/builtinPresets.ts) — this `plugins.add` override adds only what

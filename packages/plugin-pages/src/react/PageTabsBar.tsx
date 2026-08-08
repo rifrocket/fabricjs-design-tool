@@ -1,17 +1,20 @@
 import { useState } from "react";
 import type { KeyboardEvent, ReactElement } from "react";
 import { ChevronLeft, ChevronRight, Copy, Lock, Pencil, Plus, Trash2, Unlock } from "lucide-react";
-import { usePagesContext } from "@rifrocket/fdt-plugin-pages/react";
-import type { PageMeta } from "@rifrocket/fdt-plugin-pages";
-
-export const MAX_PAGES = 12;
+import { usePagesContext } from "./usePagesContext";
+import type { PageMeta } from "../types";
 
 const ICON_BUTTON_CLASS =
   "flex h-4 w-4 items-center justify-center rounded text-fdt-fg-muted transition-colors duration-150 hover:bg-fdt-bg hover:text-fdt-fg disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent";
 
+// Batteries-included page strip: add/duplicate/delete/reorder/rename/lock, entirely on top of
+// usePagesContext()'s manager API. Reads the real configured cap via manager.getMaxPages()
+// rather than a hardcoded constant, so it stays correct for whatever maxPages a consumer passed
+// to <MultiPageDesignEditor>/<PagesProvider>.
 export function PageTabsBar(): ReactElement {
   const { pages, activePageId, manager } = usePagesContext();
   const [renamingId, setRenamingId] = useState<string | null>(null);
+  const maxPages = manager.getMaxPages();
 
   return (
     <div className="flex items-center gap-1.5 overflow-x-auto border-t border-fdt-border bg-fdt-bg px-2 py-1">
@@ -39,8 +42,8 @@ export function PageTabsBar(): ReactElement {
       ))}
       <button
         type="button"
-        title={pages.length >= MAX_PAGES ? `Maximum of ${MAX_PAGES} pages reached` : "Add page"}
-        disabled={pages.length >= MAX_PAGES}
+        title={pages.length >= maxPages ? `Maximum of ${maxPages} pages reached` : "Add page"}
+        disabled={pages.length >= maxPages}
         onClick={() => {
           const page = manager.addPage();
           void manager.setActivePage(page.id);

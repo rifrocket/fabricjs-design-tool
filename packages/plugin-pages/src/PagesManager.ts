@@ -108,6 +108,12 @@ export class PagesManager {
     return this.getState().activePageId;
   }
 
+  // The configured cap addPage() enforces — lets UI (e.g. PageTabsBar) disable its "add page"
+  // affordance at the real configured limit instead of duplicating it as a second constant.
+  getMaxPages(): number {
+    return this.maxPages;
+  }
+
   // Undefined until the page has been activated at least once — see class comment on lazy
   // creation. Use setActivePage() to both create-if-needed and activate.
   getEngine(id: string): CanvasEngine | undefined {

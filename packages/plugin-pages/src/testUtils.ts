@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 import type { FabricObject } from "fabric";
+import { KeyboardShortcutManager, PanelRegistry } from "@rifrocket/fabricjs-design-tool";
 import type { CanvasEngine, OffscreenCanvasFactory } from "@rifrocket/fabricjs-design-tool";
 import type { EngineFactory } from "./PagesManager";
 
@@ -76,6 +77,15 @@ export function createFakeEngine(): FakeEngine {
       const index = objects.indexOf(object);
       if (index !== -1) objects.splice(index, 1);
     }),
+    // Real KeyboardShortcutManager (not a mock) + no-op tools/selection stubs — enough for
+    // setupDefaultShortcuts()/useKeyboardShortcuts() to run against this fake exactly like a
+    // real engine, for tests exercising MultiPageDesignEditor's shortcut wiring.
+    shortcuts: new KeyboardShortcutManager(),
+    undo: vi.fn(),
+    redo: vi.fn(),
+    deleteSelection: vi.fn(),
+    selection: { clear: vi.fn(), getActiveObjects: () => [] },
+    registry: { tools: { list: () => [], get: () => undefined, activate: vi.fn() }, panels: new PanelRegistry() },
   } as unknown as FakeEngine;
 
   engine.__fake = {

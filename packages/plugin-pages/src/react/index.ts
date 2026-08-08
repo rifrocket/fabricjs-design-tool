@@ -8,3 +8,6 @@ export { usePageCanvasRef } from "./usePageCanvasRef";
 export type { UsePageCanvasRefResult } from "./usePageCanvasRef";
 export { PagesCanvas } from "./PagesCanvas";
 export type { PagesCanvasProps } from "./PagesCanvas";
+export { PageTabsBar } from "./PageTabsBar";
+export { MultiPageDesignEditor } from "./MultiPageDesignEditor";
+export type { MultiPageDesignEditorProps } from "./MultiPageDesignEditor";

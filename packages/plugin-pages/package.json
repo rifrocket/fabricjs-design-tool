@@ -41,7 +41,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@rifrocket/fabricjs-design-tool": "workspace:*"
+    "@rifrocket/fabricjs-design-tool": "workspace:*",
+    "lucide-react": "^0.487.0"
   },
   "peerDependencies": {
     "fabric": "^6.6.7",
