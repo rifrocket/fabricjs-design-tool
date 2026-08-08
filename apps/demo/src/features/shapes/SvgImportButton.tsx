@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { ChangeEvent, ReactElement } from "react";
 import { FileCode } from "lucide-react";
 import { useEditor } from "@rifrocket/fdt-react";
+import { importSvgToEngine } from "@rifrocket/fdt-plugin-svg-import";
 import { logUiEvent } from "../../dev-tools/uiEventLog";
 
 const ICON_BUTTON_CLASS =
@@ -19,9 +20,7 @@ export function SvgImportButton(): ReactElement {
     event.target.value = "";
     if (!file) return;
     const svgText = await file.text();
-    const importer = engine.registry.importers.get("svg");
-    if (!importer) return;
-    await importer(engine.getFabricCanvas(), svgText);
+    await importSvgToEngine(engine, svgText);
     logUiEvent("Import SVG (not undoable)", { name: file.name });
   };
 
