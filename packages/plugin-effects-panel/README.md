@@ -5,7 +5,7 @@
 
   **A ready-made effects panel for [Fabric Design Tool](../../README.md).**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-effects-panel/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-effects-panel)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-effects-panel.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-effects-panel)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
@@ -15,7 +15,8 @@ A panel-slot wrapper plugin: [`@rifrocket/fdt-plugin-effects`](../plugin-effects
 ## Features
 
 - **`EffectsPanel`** — the full effects panel (gallery + stack + property controls), wired directly to `engine.registry.effects` and `useObjectEffects()`
-- **`createEffectsPanelPlugin()`** — installs `EffectsPanel` into `sidebar-right` via `registry.registerPanel()`; declares `dependsOn: ["effects"]`
+- **`createEffectsPanelPlugin()`** — installs `EffectsPanel` into `sidebar-right` via `registry.registerPanel()`; declares `dependsOn: ["effects"]`; `uninstall()` removes only its own engine's panel registration
+- **`effectsWithPanelPlugin(effects?)`** — one call installing both `@rifrocket/fdt-plugin-effects` and this package's own panel, for consumers who don't need to configure the two separately
 - Export `EffectGallery`, `EffectStackList`, `EffectPropertyControls`, and the individual controls directly if you want to compose your own layout
 
 ## Install
@@ -25,7 +26,7 @@ npm install @rifrocket/fdt-plugin-effects-panel
 ```
 
 Peer dependencies: `fabric`, `react`, `react-dom`.
-Depends on `@rifrocket/fabricjs-design-tool` and `@rifrocket/fdt-react` — not on `@rifrocket/fdt-plugin-effects` itself (it only reads `engine.registry.effects`, generic to whatever effects got registered).
+Depends on `@rifrocket/fabricjs-design-tool`, `@rifrocket/fdt-plugin-effects` (only for `effectsWithPanelPlugin()` — `createEffectsPanelPlugin()`/`EffectsPanel` themselves still only read `engine.registry.effects`, generic to whatever effects got registered, independent of which package registered them), and `@rifrocket/fdt-react`.
 
 ## Quick start
 
@@ -35,6 +36,14 @@ import { createEffectsPanelPlugin } from "@rifrocket/fdt-plugin-effects-panel";
 
 engine.use(createEffectsPlugin());
 engine.use(createEffectsPanelPlugin()); // renders EffectsPanel into "sidebar-right"
+```
+
+Or one call for both:
+
+```ts
+import { effectsWithPanelPlugin } from "@rifrocket/fdt-plugin-effects-panel";
+
+engine.useAll(effectsWithPanelPlugin()); // pass a curated EffectDefinition[] to skip the rest of the built-ins
 ```
 
 ```tsx

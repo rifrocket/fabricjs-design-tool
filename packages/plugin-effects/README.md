@@ -5,7 +5,7 @@
 
   **22 stackable object effects for [Fabric Design Tool](../../README.md) — shadow, glow, glitch, duotone, and more.**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-effects/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-effects)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-effects.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-effects)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
@@ -22,6 +22,7 @@ All 22 built-in effects, grouped by category (also exported as `BASIC_EFFECTS`, 
 - Every effect ships a matching `*Props` type (e.g. `ShadowProps`, `GlitchProps`) for its configurable parameters
 - Register your own effect alongside the built-ins via `engine.registry.effects.register(myCustomEffect)`
 - Included in both `<DesignEditor preset="default">` and `preset="minimal"` (with no arguments — every built-in effect)
+- Safe with multiple `CanvasEngine`s on the same page (e.g. `@rifrocket/fdt-plugin-pages`' one-engine-per-page model), including engines installed with *different* effect sets — each engine's own effect registry is resolved per-object at render time, not just whichever engine installed first. `uninstall()` cleanly removes one engine's own contribution without affecting any other still-live engine.
 
 ## Install
 

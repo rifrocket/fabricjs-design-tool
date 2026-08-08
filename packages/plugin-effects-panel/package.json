@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@rifrocket/fabricjs-design-tool": "workspace:*",
+    "@rifrocket/fdt-plugin-effects": "workspace:*",
     "@rifrocket/fdt-react": "workspace:*",
     "lucide-react": "^0.487.0"
   },

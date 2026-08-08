@@ -1,6 +1,6 @@
 export { EffectsPanel } from "./EffectsPanel";
 export type { EffectsPanelProps } from "./EffectsPanel";
-export { createEffectsPanelPlugin } from "./plugin";
+export { createEffectsPanelPlugin, effectsWithPanelPlugin } from "./plugin";
 export { EffectGallery } from "./EffectGallery";
 export type { EffectGalleryProps } from "./EffectGallery";
 export { EffectStackList } from "./EffectStackList";

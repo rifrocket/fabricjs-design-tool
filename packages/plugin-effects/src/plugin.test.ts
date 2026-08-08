@@ -15,7 +15,15 @@ afterEach(() => {
 });
 
 function createFakeEngine(): CanvasEngine {
-  return { registry: new PluginRegistry() } as unknown as CanvasEngine;
+  // A distinct object per fake engine, standing in for the real, per-engine singleton
+  // getFabricCanvas() returns — installRenderPatch keys its per-engine registry map off this
+  // reference, so two fake engines must return two distinct objects, the same way two real
+  // CanvasEngines' canvases are two distinct Fabric Canvas instances.
+  const fabricCanvas = {};
+  return {
+    registry: new PluginRegistry(),
+    getFabricCanvas: () => fabricCanvas,
+  } as unknown as CanvasEngine;
 }
 
 describe("createEffectsPlugin", () => {
@@ -48,6 +56,21 @@ describe("createEffectsPlugin", () => {
     const second = createFakeEngine();
     createEffectsPlugin([shadowEffect]).install(first);
     expect(() => createEffectsPlugin([shadowEffect]).install(second)).not.toThrow();
+    expect(second.registry.effects.has("shadow")).toBe(true);
+  });
+
+  it("uninstall() removes this engine's own canvas from the render-patch registry map, without disturbing another still-live engine", () => {
+    // Deep behavioral coverage of the per-canvas registry resolution itself lives in
+    // installRenderPatch.test.ts; this checks the plugin wires its own engine's canvas through
+    // correctly on both install() and uninstall().
+    const first = createFakeEngine();
+    const second = createFakeEngine();
+    const pluginA = createEffectsPlugin([shadowEffect]);
+    const pluginB = createEffectsPlugin([shadowEffect]);
+    pluginA.install(first);
+    pluginB.install(second);
+
+    expect(() => pluginA.uninstall?.(first)).not.toThrow();
     expect(second.registry.effects.has("shadow")).toBe(true);
   });
 });
