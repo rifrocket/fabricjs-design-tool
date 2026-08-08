@@ -6,6 +6,10 @@ import { restoreSnapshot } from "@rifrocket/fabricjs-design-tool";
 import { useContainerSize, centerContent, createPageBoundaryRect } from "@rifrocket/fdt-plugin-pan-zoom";
 import { importJsonPlugin } from "@rifrocket/fdt-plugin-import-json";
 import { localStoragePlugin, loadDesignFromStorage } from "@rifrocket/fdt-plugin-local-storage";
+import { alignmentPlugin } from "@rifrocket/fdt-plugin-alignment";
+import { snappingPlugin } from "@rifrocket/fdt-plugin-snapping";
+import { devtoolsPlugin } from "@rifrocket/fdt-plugin-devtools";
+import { createEffectsPanelPlugin } from "@rifrocket/fdt-plugin-effects-panel";
 import { stampToolPlugin } from "../plugins/stampToolPlugin";
 import { useTemplateContext } from "../templates/TemplateContext";
 import { useThemeContext } from "../theme/ThemeContext";
@@ -53,13 +57,23 @@ export function EngineHost({ onOpenPagesExample }: { onOpenPagesExample: () => v
   activeTemplateRef.current = activeTemplate;
 
   // preset="default" already installs shapes/clipboard/svg-import/image/effects/export-pdf/qrcode;
-  // this `add` override adds only what it doesn't bundle. Memoized since <DesignEditor> only
-  // reads `plugins` at construction, not on every render.
+  // this `add` override adds only what it doesn't bundle. alignment/snapping/devtools/effects-panel
+  // are excluded from every built-in preset (they depend on @rifrocket/fdt-react themselves, which
+  // would be a circular package dependency if fdt-react bundled them back) — installed here instead
+  // so their registries/uninstall semantics are real, not just their headless hooks working by
+  // accident against always-on core managers. Their sidebar-right panels are suppressed below
+  // (`slots`) since AppShell/RightSidebar renders its own styled equivalents (alignment/snapping)
+  // or the plugin's own EffectsPanel directly inside its own tab (effects), not <Editor>'s own slot.
+  // Memoized since <DesignEditor> only reads `plugins` at construction, not on every render.
   const plugins = useMemo<PluginOverrides>(
     () => ({
       add: [
         importJsonPlugin,
         stampToolPlugin,
+        alignmentPlugin,
+        snappingPlugin,
+        devtoolsPlugin,
+        createEffectsPanelPlugin(),
         localStoragePlugin<StarterDesignMeta>({
           captureSnapshot: captureDesignSnapshot,
           captureMeta: () => ({
@@ -144,7 +158,7 @@ export function EngineHost({ onOpenPagesExample }: { onOpenPagesExample: () => v
             height={viewportSize.height}
             className="relative"
             ariaLabel={`${activeTemplate.label} canvas`}
-            slots={{ "toolbar-start": SelectionQuickActions }}
+            slots={{ "toolbar-start": SelectionQuickActions, "sidebar-right": () => null }}
             onReady={(next) => void handleReady(next)}
           />
         }
