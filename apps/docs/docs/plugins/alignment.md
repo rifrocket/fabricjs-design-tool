@@ -29,6 +29,8 @@ import { AlignmentControls } from "@rifrocket/fdt-plugin-alignment";
 </MyCustomSidebar>;
 ```
 
+`alignmentPlugin.uninstall(engine)` removes only its own engine's panel registration.
+
 ## Exports
 
 - `alignmentPlugin` — the `EditorPlugin`

@@ -21,7 +21,7 @@ Remember that snapping itself (the `SnapEngine` behavior) is **disabled by defau
 const engine = createEngine(canvasEl, { snapping: { enabled: true } });
 ```
 
-`SnappingToggle` is also exported directly, for manual placement outside the panel-registry mechanism.
+`SnappingToggle` is also exported directly, for manual placement outside the panel-registry mechanism. `snappingPlugin.uninstall(engine)` removes only its own engine's panel registration.
 
 ## Exports
 

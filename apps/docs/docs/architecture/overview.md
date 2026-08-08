@@ -50,7 +50,7 @@ See [The CanvasEngine](/docs/architecture/canvas-engine) for how these compose, 
 
 ## The plugin system
 
-Every extension point — object types, tools, panels, property fields, export/import formats — is a registry inside `engine.registry`. A plugin is a plain object: `{ name, dependsOn?, install(engine), uninstall?(engine) }`. All 13 official `@rifrocket/fdt-plugin-*` packages are built against this same public API, with no special internal access — see [Plugins Overview](/docs/plugins/overview) and [Extension Points](/docs/extension-points/custom-object-types) for the full picture.
+Every extension point — object types, tools, panels, property fields, export/import formats — is a registry inside `engine.registry`. A plugin is a plain object: `{ name, dependsOn?, install(engine), uninstall?(engine) }`. All 17 official `@rifrocket/fdt-plugin-*` packages are built against this same public API, with no special internal access — see [Plugins Overview](/docs/plugins/overview) and [Extension Points](/docs/extension-points/custom-object-types) for the full picture.
 
 ## Package export subpaths
 

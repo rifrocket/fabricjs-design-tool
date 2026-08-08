@@ -31,7 +31,7 @@ This is a real, not hypothetical, race — most commonly hit under React 19 Stri
 
 ## "`engine.unuse("some-plugin")` didn't clean everything up"
 
-Only plugins that implement a real `uninstall()` clean up after themselves — of the shipped plugins, that's currently only `@rifrocket/fdt-plugin-local-storage`. Calling `unuse()` on most other plugins removes it from the installed-plugins list but leaves whatever it registered (object types, importers, shortcuts) in place. If you need a genuinely different plugin set, remount with a new `key` instead of relying on `unuse()` for cleanup. See [Installing Plugins](/docs/plugins/installing-plugins).
+Only plugins that implement a real `uninstall()` clean up after themselves — of the shipped plugins, 8 do today (`local-storage`, `alignment`, `snapping`, `devtools`, `clipboard`, `effects`, `effects-panel`, `shapes-basic-panel`). Calling `unuse()` on one of the other 9 removes it from the installed-plugins list but leaves whatever it registered (object types, importers) in place. If you need a genuinely different plugin set, remount with a new `key` instead of relying on `unuse()` for cleanup. See [Installing Plugins](/docs/plugins/installing-plugins).
 
 ## "Registering the same object type / effect / exporter twice throws"
 

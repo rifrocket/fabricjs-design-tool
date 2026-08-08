@@ -7,7 +7,7 @@ title: FAQ
 
 ### Is this published to npm yet?
 
-Not yet. Every `@rifrocket/fdt-*` package is currently `private: true` in the monorepo. See the [migration guide](/docs/migration/v1-to-v2) if you're looking for the previously-published v1 package (`@rifrocket/fabricjs-design-tool`), and the [GitHub repository](https://github.com/rifrocket/fabricjs-design-tool) for current release status.
+Yes — every `@rifrocket/fdt-*` package (and `@rifrocket/fabricjs-design-tool` itself) is published, at `3.0.0` and up. See the [migration guide](/docs/migration/v1-to-v2) if you're upgrading from the previously-published v1 package, and the [GitHub repository](https://github.com/rifrocket/fabricjs-design-tool) for current release status.
 
 ### Does this work outside React?
 
@@ -39,7 +39,7 @@ They each peer-depend on `@rifrocket/fdt-react` itself (they render components v
 
 ### Is `@rifrocket/fdt-plugin-pan-zoom` really not an `EditorPlugin`?
 
-Correct — it's the one deliberate exception among the 13 official plugin packages. It exports plain hooks (`useCanvasPanZoom`, `useContainerSize`), not an `install()`-shaped object, because it's a side-effecting DOM-listener hook that needs a host-supplied container selector, not a renderable panel. See [its page](/docs/plugins/pan-zoom).
+Correct. It's one of three deliberate exceptions among the 17 official plugin packages that aren't `engine.use()`-able `EditorPlugin`s: `pan-zoom` exports plain hooks (`useCanvasPanZoom`, `useContainerSize`) because it's a side-effecting DOM-listener hook that needs a host-supplied container selector, not a renderable panel; `plugin-pages` orchestrates a whole collection of `CanvasEngine`s rather than extending one; `plugin-media-fields` is pure shared data (a `PropertyFieldDefinition[]`) with no engine-level behavior at all. See [Plugins Overview](/docs/plugins/overview) for the full taxonomy, and [`pan-zoom`'s own page](/docs/plugins/pan-zoom) for its usage pattern.
 
 ### Can I disable snapping, or turn it on by default?
 
