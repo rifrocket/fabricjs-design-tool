@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@rifrocket/fabricjs-design-tool": "workspace:*",
-    "@rifrocket/fdt-properties": "workspace:*",
+    "@rifrocket/fdt-plugin-media-fields": "workspace:*",
     "qr-code-styling": "^1.9.2"
   },
   "peerDependencies": {

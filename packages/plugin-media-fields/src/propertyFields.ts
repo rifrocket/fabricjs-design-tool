@@ -12,9 +12,13 @@ const field = (
 
 const BLEND_MODE_OPTIONS = BLEND_MODES.map((mode) => ({ label: mode, value: mode }));
 
-// Shared by every media-like object type (image, qrcode) — duplicated per-plugin rather than
-// centralized since neither packages/core (framework-agnostic) nor packages/properties (bare
-// field components) is the right home for it.
+// Shared by every media-like object type (image, qrcode) — previously duplicated byte-for-byte
+// in each plugin's own package (neither packages/core, framework-agnostic, nor
+// packages/properties, scoped to bare type-agnostic field components rather than curated
+// per-object-type field sets, was the right home for either copy). Extracted here instead: a
+// small, install()-less data package both plugins depend on, same shape as
+// @rifrocket/fdt-properties itself but scoped to this one specific field set rather than
+// individual bare components.
 export const MEDIA_FIELDS: PropertyFieldDefinition[] = [
   field("left", "X", NumberField, { step: 1 }, { section: "Position", span: "half" }),
   field("top", "Y", NumberField, { step: 1 }, { section: "Position", span: "half" }),

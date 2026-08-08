@@ -1,14 +1,14 @@
 {
-  "name": "@rifrocket/fdt-plugin-image",
+  "name": "@rifrocket/fdt-plugin-media-fields",
   "version": "3.0.0",
   "private": false,
-  "description": "Image object type for the FabricJS Design Tool v2, registered via the core plugin system.",
+  "description": "Shared property-field definitions for media-like object types (image, qrcode) in the FabricJS Design Tool.",
   "repository": {
     "type": "git",
     "url": "https://github.com/rifrocket/fabricjs-design-tool.git",
-    "directory": "packages/plugin-image"
+    "directory": "packages/plugin-media-fields"
   },
-  "homepage": "https://github.com/rifrocket/fabricjs-design-tool/tree/main/packages/plugin-image#readme",
+  "homepage": "https://github.com/rifrocket/fabricjs-design-tool/tree/main/packages/plugin-media-fields#readme",
   "bugs": {
     "url": "https://github.com/rifrocket/fabricjs-design-tool/issues"
   },
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@rifrocket/fabricjs-design-tool": "workspace:*",
-    "@rifrocket/fdt-plugin-media-fields": "workspace:*"
+    "@rifrocket/fdt-properties": "workspace:*"
   },
   "peerDependencies": {
     "fabric": "^6.6.7",
