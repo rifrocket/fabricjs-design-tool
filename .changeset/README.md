@@ -2,9 +2,9 @@
 
 This directory manages versioning and changelogs for the v2 monorepo packages under `packages/*`.
 
-`access` is `public` and the repo is in Changesets prerelease mode (`.changeset/pre.json`, tag `alpha`) — every `version`/`publish` run produces `X.Y.Z-alpha.N` and publishes under the `alpha` npm dist-tag.
+`access` is `public`. The repo exited Changesets prerelease mode as of the v3.0.0 stable release (no `.changeset/pre.json` present) — every `version`/`publish` run produces a normal `X.Y.Z` bump and publishes under the `latest` npm dist-tag.
 
-Usage once packages are being actively developed:
+Usage:
 
 ```bash
 pnpm changeset          # record a change
