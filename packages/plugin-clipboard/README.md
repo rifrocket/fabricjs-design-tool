@@ -5,7 +5,7 @@
 
   **Copy/paste/duplicate/group and nudge keyboard shortcuts for [Fabric Design Tool](../../README.md).**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-clipboard/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-clipboard)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-clipboard.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-clipboard)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
@@ -26,6 +26,8 @@ A pure engine plugin — `install()` registers a full set of clipboard/selection
 | `Shift` + arrow keys | Nudge 10px |
 
 Every combo is registered through `engine.shortcuts.register()`. Included in both `<DesignEditor preset="default">` and `preset="minimal"`.
+
+`clipboardPlugin.uninstall(engine)` unregisters every shortcut this plugin added to that engine, and only that engine — safe to call under `plugin-pages`' multi-engine model without affecting any other page.
 
 ## Install
 

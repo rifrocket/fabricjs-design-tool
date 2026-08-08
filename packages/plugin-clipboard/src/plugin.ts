@@ -1,9 +1,14 @@
-import type { EditorPlugin } from "@rifrocket/fabricjs-design-tool";
+import type { CanvasEngine, EditorPlugin } from "@rifrocket/fabricjs-design-tool";
 import type { FabricObject } from "fabric";
 import { cloneFabricObject } from "./cloneFabricObject";
 
 const NUDGE_STEP = 1;
 const NUDGE_STEP_LARGE = 10;
+
+// Keyed per-engine (not a single shared array) because this same EditorPlugin object can be
+// installed on more than one engine — e.g. plugin-pages installs one shared plugin list across
+// every page's own engine — same rationale as plugin-effects' installRenderPatch.ts WeakMap.
+const unregisterFnsByEngine = new WeakMap<CanvasEngine, Array<() => void>>();
 
 // Copy/paste/duplicate/select-all/nudge have no equivalent anywhere in @rifrocket/fabricjs-design-tool —
 // this plugin builds them entirely from public API (engine.selection, engine.shortcuts,
@@ -14,9 +19,11 @@ export const clipboardPlugin: EditorPlugin = {
   install(engine) {
     let clipboard: FabricObject[] = [];
     let pasteCount = 0;
+    const unregisterFns: Array<() => void> = [];
+    unregisterFnsByEngine.set(engine, unregisterFns);
 
     const register = (combo: string, handler: () => void, description: string) =>
-      engine.shortcuts.register(combo, handler, description);
+      unregisterFns.push(engine.shortcuts.register(combo, handler, description));
 
     register(
       "ctrl+c",
@@ -80,5 +87,9 @@ export const clipboardPlugin: EditorPlugin = {
     register("shift+arrowdown", () => nudge(0, NUDGE_STEP_LARGE), "Nudge down (large step)");
     register("shift+arrowleft", () => nudge(-NUDGE_STEP_LARGE, 0), "Nudge left (large step)");
     register("shift+arrowright", () => nudge(NUDGE_STEP_LARGE, 0), "Nudge right (large step)");
+  },
+  uninstall(engine) {
+    unregisterFnsByEngine.get(engine)?.forEach((unregister) => unregister());
+    unregisterFnsByEngine.delete(engine);
   },
 };

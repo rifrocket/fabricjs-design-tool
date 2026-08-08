@@ -122,4 +122,16 @@ describe("clipboardPlugin", () => {
     await trigger("shift+arrowdown");
     expect(rect.top).toBe(15);
   });
+
+  it("uninstall() unregisters every shortcut this plugin registered, on only its own engine", () => {
+    const a = createFakeEngine();
+    const b = createFakeEngine();
+    clipboardPlugin.install(a.engine);
+    clipboardPlugin.install(b.engine);
+
+    clipboardPlugin.uninstall?.(a.engine);
+
+    expect(a.engine.shortcuts.list()).toHaveLength(0);
+    expect(b.engine.shortcuts.list().length).toBeGreaterThan(0);
+  });
 });

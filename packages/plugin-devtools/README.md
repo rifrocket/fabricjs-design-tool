@@ -5,7 +5,7 @@
 
   **Five diagnostic panels for developing against [Fabric Design Tool](../../README.md).**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-devtools/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-devtools)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-devtools.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-devtools)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
@@ -21,6 +21,8 @@ A panel-slot wrapper plugin: five debugging panels, all built entirely from the 
 - **`PerformanceStats`** / **`usePerformanceStats`** — render-loop performance stats, as a component or a hook
 
 Recommended dev-only, e.g. `plugins: { add: [...(import.meta.env.DEV ? [devtoolsPlugin] : [])] }`. Not bundled into either `<DesignEditor>` preset.
+
+`devtoolsPlugin.uninstall(engine)` removes all 5 panels from only that engine.
 
 ## Install
 

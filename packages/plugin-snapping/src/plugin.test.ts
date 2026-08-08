@@ -18,4 +18,16 @@ describe("snappingPlugin", () => {
 
     expect(registry.panels.getSlot("sidebar-right")).toEqual([{ component: SnappingToggle }]);
   });
+
+  it("uninstall() removes only its own engine's panel registration", () => {
+    const a = createFakeEngine();
+    const b = createFakeEngine();
+    snappingPlugin.install(a.engine);
+    snappingPlugin.install(b.engine);
+
+    snappingPlugin.uninstall?.(a.engine);
+
+    expect(a.registry.panels.getSlot("sidebar-right")).toEqual([]);
+    expect(b.registry.panels.getSlot("sidebar-right")).toEqual([{ component: SnappingToggle }]);
+  });
 });
