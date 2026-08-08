@@ -1,10 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { FabricObject } from "fabric";
 import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
-import { createPageBoundaryRect, findPageBoundary } from "./pageBoundary";
+import { captureSnapshotExcludingBoundary, createPageBoundaryRect, findPageBoundary } from "./pageBoundary";
 
-function createFakeEngine(objects: FabricObject[]): CanvasEngine {
-  return { layers: { getObjects: () => objects } } as unknown as CanvasEngine;
+function createFakeEngine(objects: FabricObject[], toObject = vi.fn(() => ({ objects: [] }))): CanvasEngine {
+  return {
+    layers: { getObjects: () => objects },
+    getFabricCanvas: () => ({ toObject, backgroundColor: "#abcdef" }),
+  } as unknown as CanvasEngine;
 }
 
 describe("createPageBoundaryRect", () => {
@@ -38,5 +41,49 @@ describe("findPageBoundary", () => {
     other.set("isPageBoundary", false);
     const engine = createFakeEngine([other, boundary]);
     expect(findPageBoundary(engine)).toBe(boundary);
+  });
+});
+
+describe("captureSnapshotExcludingBoundary", () => {
+  it("excludes the boundary rect from export only for the duration of the capture, then restores it", () => {
+    const boundary = createPageBoundaryRect({ width: 10, height: 10 });
+    let excludeDuringCapture: boolean | undefined;
+    const toObject = vi.fn(() => {
+      excludeDuringCapture = boundary.excludeFromExport;
+      return { objects: [] };
+    });
+    const engine = createFakeEngine([boundary], toObject);
+
+    captureSnapshotExcludingBoundary(engine);
+
+    expect(excludeDuringCapture).toBe(true);
+    expect(boundary.excludeFromExport).toBeFalsy(); // restored to its (unset) prior value
+  });
+
+  it("preserves an already-true excludeFromExport instead of clobbering it to false afterward", () => {
+    const boundary = createPageBoundaryRect({ width: 10, height: 10 });
+    boundary.excludeFromExport = true;
+    const engine = createFakeEngine([boundary]);
+
+    captureSnapshotExcludingBoundary(engine);
+
+    expect(boundary.excludeFromExport).toBe(true);
+  });
+
+  it("restores excludeFromExport even if the capture itself throws", () => {
+    const boundary = createPageBoundaryRect({ width: 10, height: 10 });
+    const toObject = vi.fn(() => {
+      throw new Error("boom");
+    });
+    const engine = createFakeEngine([boundary], toObject);
+
+    expect(() => captureSnapshotExcludingBoundary(engine)).toThrow("boom");
+    expect(boundary.excludeFromExport).toBeFalsy();
+  });
+
+  it("works normally when there is no boundary rect at all", () => {
+    const engine = createFakeEngine([]);
+    const snapshot = captureSnapshotExcludingBoundary(engine);
+    expect(snapshot.backgroundColor).toBe("#abcdef");
   });
 });

@@ -15,7 +15,7 @@ export type { ContainerSize } from "./useContainerSize";
 
 export { centerContent, getContainerSize } from "./centerContent";
 
-export { createPageBoundaryRect, findPageBoundary } from "./pageBoundary";
+export { createPageBoundaryRect, findPageBoundary, captureSnapshotExcludingBoundary } from "./pageBoundary";
 
 export { usePannableDocument } from "./usePannableDocument";
 export type { UsePannableDocumentOptions } from "./usePannableDocument";
