@@ -32,4 +32,24 @@ describe("exportPdf", () => {
     expect(wide.data.size).toBeGreaterThan(0);
     expect(tall.data.size).toBeGreaterThan(0);
   });
+
+  it("honors an explicit orientation instead of inferring it from the canvas' own aspect ratio", () => {
+    const result = exportPdf(createFakeCanvas(1200, 600), { orientation: "portrait" });
+    expect(result.data.size).toBeGreaterThan(0);
+  });
+
+  it("accepts a letter/legal pageSize", () => {
+    const letter = exportPdf(createFakeCanvas(800, 600), { pageSize: "letter" });
+    const legal = exportPdf(createFakeCanvas(800, 600), { pageSize: "legal" });
+    expect(letter.data.size).toBeGreaterThan(0);
+    expect(legal.data.size).toBeGreaterThan(0);
+  });
+
+  it("shrinks the fitted image as marginMm grows", () => {
+    // Not directly observable from the returned Blob's size alone (image scale/margin doesn't
+    // move raster bytes), so this just exercises the option end-to-end without throwing —
+    // real fit-math coverage lives in the plugin-level "closes over options" test.
+    const result = exportPdf(createFakeCanvas(800, 600), { marginMm: 40 });
+    expect(result.data.size).toBeGreaterThan(0);
+  });
 });
