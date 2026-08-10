@@ -56,6 +56,7 @@ export type {
   OffscreenCanvas,
   OffscreenCanvasFactory,
 } from "./document/snapshot";
+export type { DesignDocument, DesignDocumentPage } from "./document/designDocument";
 
 export { Registry } from "./plugin/registry";
 
