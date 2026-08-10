@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-pages",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": false,
   "description": "Multi-page document orchestration (add/duplicate/delete/reorder pages, front/back pairing) for the FabricJS Design Tool v2, built on @rifrocket/fabricjs-design-tool's CanvasEngine.",
   "repository": {
@@ -51,9 +51,15 @@
     "@rifrocket/fdt-react": "workspace:*"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "react-dom": { "optional": true },
-    "@rifrocket/fdt-react": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "@rifrocket/fdt-react": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

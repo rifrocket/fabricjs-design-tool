@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-alignment",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": false,
   "description": "Bare align/distribute controls for the FabricJS Design Tool v2, wired to AlignmentManager (already in @rifrocket/fabricjs-design-tool with no UI anywhere).",
   "repository": {
