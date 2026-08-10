@@ -74,7 +74,7 @@ describe("PagesProvider / usePagesContext", () => {
   });
 
   it("does not destroy a page's engine under React StrictMode's dev-only mount->cleanup->mount simulation", async () => {
-    // Mirrors apps/demo's MultiPageExample.tsx auto-seed pattern exactly: a child component's own
+    // Mirrors apps/demo's EngineHost.tsx MultiPageWorkspace auto-seed pattern exactly: a child component's own
     // mount effect calls addPage()/setActivePage() during the *same* initial commit as
     // usePages()'s own effects, which is what actually races against StrictMode's phantom
     // cleanup — asserting from outside that render cycle (e.g. via a captured `manager` reference

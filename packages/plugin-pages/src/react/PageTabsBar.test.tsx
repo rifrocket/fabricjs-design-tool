@@ -61,4 +61,44 @@ describe("PageTabsBar", () => {
     const deleteButton = screen.getByTitle("Cannot delete the last page") as HTMLButtonElement;
     expect(deleteButton.disabled).toBe(true);
   });
+
+  it("disables 'Add page pair' when fewer than 2 slots remain", async () => {
+    renderTabsBar(2);
+    await waitFor(() => expect(screen.getByTitle(/1 of 2 page slots remain/)).toBeTruthy());
+    const addPairButton = screen.getByTitle(/1 of 2 page slots remain/) as HTMLButtonElement;
+    expect(addPairButton.disabled).toBe(true);
+  });
+
+  it("clicking 'Add page pair' adds two linked pages", async () => {
+    renderTabsBar(5);
+    await waitFor(() => expect(screen.getByTitle("Add page pair (front + back)")).toBeTruthy());
+
+    fireEvent.click(screen.getByTitle("Add page pair (front + back)"));
+
+    await waitFor(() => expect(screen.getByTitle(/pair \(front\)/)).toBeTruthy());
+    expect(screen.getByTitle(/pair \(back\)/)).toBeTruthy();
+  });
+
+  it("duplicating a paired tab duplicates both sides, and deleting it removes both", async () => {
+    renderTabsBar(10);
+    await waitFor(() => expect(screen.getByTitle("Add page pair (front + back)")).toBeTruthy());
+    fireEvent.click(screen.getByTitle("Add page pair (front + back)"));
+    await waitFor(() => expect(screen.getAllByTitle("Duplicate pair")).toHaveLength(2));
+
+    fireEvent.click(screen.getAllByTitle("Duplicate pair")[0]);
+    await waitFor(() => expect(screen.getAllByTitle("Duplicate pair")).toHaveLength(4));
+
+    fireEvent.click(screen.getAllByTitle("Delete pair (front & back)")[0]);
+    await waitFor(() => expect(screen.getAllByTitle("Duplicate pair")).toHaveLength(2));
+  });
+
+  it("an unpaired tab's Duplicate/Delete still call the plain single-page methods", async () => {
+    renderTabsBar(5);
+    await waitFor(() => expect(screen.getByTitle("Duplicate")).toBeTruthy());
+
+    fireEvent.click(screen.getByTitle("Duplicate"));
+    await waitFor(() => expect(screen.getByText("Page 1 copy")).toBeTruthy());
+    // Only one extra page (not two) — confirms the pair-level path wasn't taken.
+    expect(screen.getAllByTitle("Duplicate")).toHaveLength(2);
+  });
 });

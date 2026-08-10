@@ -21,9 +21,30 @@ export interface PageMeta {
   visible?: boolean;
   templateId?: string;
   thumbnail?: string;
+  // Front/back pairing (business cards, ID cards, invitations, certificates, flyers, brochures,
+  // packaging, product labels). Both undefined for a freestanding page. pairId always equals the
+  // *front* side's own PageMeta.id — no separate pair-id counter/namespace is needed. The two
+  // fields are always set/cleared together — see PagesManager.addPagePair()/deletePage()'s
+  // auto-unpair. Pairs start adjacent at creation but reorderPages()/drag stays free-form and
+  // unconstrained, so a pair can end up non-adjacent — consumers must not assume adjacency.
+  pairId?: string;
+  pairSide?: "front" | "back";
 }
 
 export type NewPageInit = Partial<Pick<PageMeta, "name" | "width" | "height" | "backgroundColor" | "templateId">>;
+
+// width/height/name/backgroundColor are shared across both sides — this is what "linked
+// dimensions" means in practice, since there is no API to resize a page after creation for any
+// page today (see PagesManager class comment). front/back only override the fields that
+// legitimately differ per side (name, background, starter template).
+export interface NewPagePairInit {
+  width?: number;
+  height?: number;
+  name?: string;
+  backgroundColor?: string;
+  front?: Partial<Pick<NewPageInit, "name" | "backgroundColor" | "templateId">>;
+  back?: Partial<Pick<NewPageInit, "name" | "backgroundColor" | "templateId">>;
+}
 
 export interface PagesState {
   pages: PageMeta[];

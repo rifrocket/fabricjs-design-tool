@@ -23,7 +23,7 @@ export function StatusBar({
   const engine = useEngineOrNull();
 
   return (
-    <footer className="flex h-9 items-center justify-between border-t border-fdt-border bg-fdt-bg px-3 text-xs text-fdt-fg-muted">
+    <footer data-tour="status-bar" className="flex h-9 items-center justify-between border-t border-fdt-border bg-fdt-bg px-3 text-xs text-fdt-fg-muted">
       <div className="hidden items-center gap-2 sm:flex">
         <Keyboard size={13} strokeWidth={2} />
         <span>

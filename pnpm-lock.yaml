@@ -56,6 +56,9 @@ importers:
       '@rifrocket/fdt-plugin-effects-panel':
         specifier: workspace:*
         version: link:../../packages/plugin-effects-panel
+      '@rifrocket/fdt-plugin-export-pdf':
+        specifier: workspace:*
+        version: link:../../packages/plugin-export-pdf
       '@rifrocket/fdt-plugin-import-json':
         specifier: workspace:*
         version: link:../../packages/plugin-import-json
@@ -86,6 +89,9 @@ importers:
       '@rifrocket/fdt-theme':
         specifier: workspace:*
         version: link:../../packages/theme
+      driver.js:
+        specifier: ^1.8.0
+        version: 1.8.0
       fabric:
         specifier: ^6.6.7
         version: 6.9.1
@@ -5425,6 +5431,9 @@ packages:
   dot-prop@6.0.1:
     resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
     engines: {node: '>=10'}
+
+  driver.js@1.8.0:
+    resolution: {integrity: sha512-+8/IO7h1v14IzWh2GP60N7T3PFZweXwdn5e5POuxRSBoCYUojsBxzqawPeXh3YZIibRy7EehYNEyxe7slwwtdg==}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -14675,6 +14684,8 @@ snapshots:
   dot-prop@6.0.1:
     dependencies:
       is-obj: 2.0.0
+
+  driver.js@1.8.0: {}
 
   dunder-proto@1.0.1:
     dependencies:

@@ -2,6 +2,7 @@ import {
   Store,
   createEngine,
   getObjectId,
+  getSerializedProperties,
   captureSnapshot as captureDocumentSnapshot,
   restoreSnapshot,
   renderSnapshotThumbnail,
@@ -16,7 +17,14 @@ import type {
   OffscreenCanvasFactory,
   PluginOverrides,
 } from "@rifrocket/fabricjs-design-tool";
-import type { CanvasElementFactory, NewPageInit, PageMeta, PagesManagerOptions, PagesState } from "./types";
+import type {
+  CanvasElementFactory,
+  NewPageInit,
+  NewPagePairInit,
+  PageMeta,
+  PagesManagerOptions,
+  PagesState,
+} from "./types";
 import { applyTemplateToEngine } from "./templates";
 import type { TemplateDefinition } from "./templates";
 
@@ -124,6 +132,15 @@ export class PagesManager {
     return this.runtimes.get(id)?.engine;
   }
 
+  // undefined both for a freestanding page and for a dangling pairId with no live sibling (the
+  // latter shouldn't occur — see deletePage()'s auto-unpair — but this stays defensive rather
+  // than throwing, since it's a read, not a mutation).
+  getPairSibling(id: string): PageMeta | undefined {
+    const meta = this.requireMeta(id);
+    if (!meta.pairId) return undefined;
+    return this.getState().pages.find((page) => page.pairId === meta.pairId && page.id !== meta.id);
+  }
+
   addPage(init: NewPageInit = {}): PageMeta {
     const { pages } = this.getState();
     if (pages.length >= this.maxPages) {
@@ -146,6 +163,44 @@ export class PagesManager {
 
     this.store.setState({ pages: [...pages, meta] });
     return meta;
+  }
+
+  // Creates a front+back pair in one call. Capacity is checked up front for *both* slots before
+  // either side is created, so a manager with only 1 slot free never ends up with a dangling,
+  // unpaired front half. The back page is pinned to the front page's *resolved* width/height
+  // (not init.width/height directly) so the two sides end up genuinely identical even when the
+  // size came from a template default rather than an explicit init value. pairId reuses the
+  // front page's own id rather than a separate id scheme — no new state to keep in sync.
+  addPagePair(init: NewPagePairInit = {}): { front: PageMeta; back: PageMeta } {
+    const remaining = this.maxPages - this.getState().pages.length;
+    if (remaining < 2) {
+      throw new Error(
+        `Cannot add a page pair: only ${remaining} of ${this.maxPages} page slots remain (a pair needs 2)`,
+      );
+    }
+
+    const front = this.addPage({
+      name: init.front?.name ?? init.name,
+      width: init.width,
+      height: init.height,
+      backgroundColor: init.front?.backgroundColor ?? init.backgroundColor,
+      templateId: init.front?.templateId,
+    });
+    const back = this.addPage({
+      name: init.back?.name ?? init.name,
+      width: front.width,
+      height: front.height,
+      backgroundColor: init.back?.backgroundColor ?? init.backgroundColor,
+      templateId: init.back?.templateId,
+    });
+
+    const pairId = front.id;
+    const frontName = init.front?.name ?? `${front.name} (Front)`;
+    const backName = init.back?.name ?? `${back.name} (Back)`;
+    this.patchMeta(front.id, { pairId, pairSide: "front", name: frontName });
+    this.patchMeta(back.id, { pairId, pairSide: "back", name: backName });
+
+    return { front: this.requireMeta(front.id), back: this.requireMeta(back.id) };
   }
 
   // Captures the source page's content (creating its engine first if it hasn't been activated
@@ -174,6 +229,54 @@ export class PagesManager {
     return this.duplicatePage(id);
   }
 
+  // Duplicates both sides of a pair together, producing a *fresh* pairId (the new front page's
+  // id) rather than reusing the source pair's — matching how plain duplicatePage() never reuses
+  // the source page's own id. Capacity is checked up front, before any engine/snapshot work, for
+  // the same fail-fast reason addPagePair() checks it early.
+  async duplicatePagePair(id: string): Promise<{ front: PageMeta; back: PageMeta }> {
+    const meta = this.requireMeta(id);
+    if (!meta.pairId) {
+      throw new Error(`Page "${id}" is not part of a pair; use duplicatePage() instead`);
+    }
+    const sibling = this.getPairSibling(id);
+    if (!sibling) {
+      throw new Error(`Page "${id}" has a dangling pairId with no sibling`);
+    }
+
+    const remaining = this.maxPages - this.getState().pages.length;
+    if (remaining < 2) {
+      throw new Error(
+        `Cannot duplicate page pair: only ${remaining} of ${this.maxPages} page slots remain (a pair needs 2)`,
+      );
+    }
+
+    const [frontSource, backSource] = meta.pairSide === "front" ? [meta, sibling] : [sibling, meta];
+    const frontSnapshot = this.captureSnapshot(await this.getOrCreateEngine(frontSource.id));
+    const backSnapshot = this.captureSnapshot(await this.getOrCreateEngine(backSource.id));
+
+    const front = this.addPage({
+      name: `${frontSource.name} copy`,
+      width: frontSource.width,
+      height: frontSource.height,
+      backgroundColor: frontSource.backgroundColor,
+    });
+    this.pendingSnapshots.set(front.id, frontSnapshot);
+
+    const back = this.addPage({
+      name: `${backSource.name} copy`,
+      width: backSource.width,
+      height: backSource.height,
+      backgroundColor: backSource.backgroundColor,
+    });
+    this.pendingSnapshots.set(back.id, backSnapshot);
+
+    const pairId = front.id;
+    this.patchMeta(front.id, { pairId, pairSide: "front" });
+    this.patchMeta(back.id, { pairId, pairSide: "back" });
+
+    return { front: this.requireMeta(front.id), back: this.requireMeta(back.id) };
+  }
+
   // The supported bridge for "make my existing document page 1" migrations — adopts a snapshot
   // the caller already has (typically captureSnapshot() run against a single-CanvasEngine app
   // being migrated onto plugin-pages) as a new page, via the exact same lazy-apply mechanism
@@ -187,29 +290,70 @@ export class PagesManager {
     return page;
   }
 
+  // The reverse of seedFromDocument() — collapses one page back to a plain single-document
+  // payload (typically to hand to restoreSnapshot() against a single-CanvasEngine app moving off
+  // plugin-pages). Defaults to the lowest-`order` page when pageId is omitted, so "give me the
+  // document" has a sensible answer without the caller needing to know a specific page id.
+  // Returns undefined only when the manager has no pages at all and none was specified; an
+  // unknown pageId throws via requireMeta(), consistent with this class's other id-taking methods.
+  exportPageAsDocument(
+    pageId?: string,
+  ): { snapshot: DocumentSnapshotData; page: Pick<PageMeta, "name" | "width" | "height" | "backgroundColor"> } | undefined {
+    const { pages } = this.getState();
+    const meta = pageId
+      ? this.requireMeta(pageId)
+      : [...pages].sort((a, b) => a.order - b.order)[0];
+    if (!meta) return undefined;
+
+    const snapshot = this.getSnapshotForPersistence(meta.id);
+    return {
+      // An untouched page (never activated, no pending snapshot) collapses to a blank document
+      // rather than leaving the caller to special-case "no content" — { objects: [] } is the same
+      // empty-canvas shape a real, activated-but-untouched page's own snapshot would have.
+      snapshot: snapshot ?? { json: { objects: [] }, backgroundColor: meta.backgroundColor ?? "#ffffff" },
+      page: { name: meta.name, width: meta.width, height: meta.height, backgroundColor: meta.backgroundColor },
+    };
+  }
+
   deletePage(id: string): void {
-    const { pages, activePageId } = this.getState();
+    const { pages } = this.getState();
     if (pages.length <= 1) {
       throw new Error("Cannot delete the last remaining page");
     }
-    const index = pages.findIndex((page) => page.id === id);
-    if (index === -1) return;
+    const meta = pages.find((page) => page.id === id);
+    if (!meta) return;
 
-    this.thumbnailCleanup.get(id)?.();
-    this.thumbnailCleanup.delete(id);
-    const timer = this.thumbnailTimers.get(id);
-    if (timer) clearTimeout(timer);
-    this.thumbnailTimers.delete(id);
+    this.removePages([id]);
 
-    this.runtimes.get(id)?.engine.destroy();
-    this.runtimes.delete(id);
-    this.pendingSnapshots.delete(id);
+    // Auto-unpair the sibling — otherwise it's left carrying a pairId/pairSide pointing at a
+    // page that no longer exists. Handled here, inside the plain single-page method, so the
+    // invariant ("pairId always resolves to a real sibling, or is undefined") holds for every
+    // caller, not only PageTabsBar's pair-aware UI wiring.
+    if (meta.pairId) {
+      const sibling = pages.find((page) => page.pairId === meta.pairId && page.id !== meta.id);
+      if (sibling) this.patchMeta(sibling.id, { pairId: undefined, pairSide: undefined });
+    }
+  }
 
-    const remaining = pages.filter((page) => page.id !== id).map((page, i) => ({ ...page, order: i }));
-    const nextActiveId =
-      activePageId === id ? (remaining[Math.min(index, remaining.length - 1)]?.id ?? null) : activePageId;
+  // Deletes both sides of a pair atomically. Can't be built from two deletePage() calls: its own
+  // "can't delete the last page" guard checks pages.length at call time, which would let the
+  // first side through and then throw on the second when exactly the pair's own two pages
+  // remain, leaving a half-deleted state. removePages() (below) does the actual batch removal
+  // with no such guard; this method owns the combined-removal validation instead.
+  deletePagePair(id: string): void {
+    const meta = this.requireMeta(id);
+    if (!meta.pairId) {
+      throw new Error(`Page "${id}" is not part of a pair; use deletePage() instead`);
+    }
 
-    this.store.setState({ pages: remaining, activePageId: nextActiveId });
+    const { pages } = this.getState();
+    const sibling = pages.find((page) => page.pairId === meta.pairId && page.id !== meta.id);
+    const idsToDelete = sibling ? [meta.id, sibling.id] : [meta.id];
+
+    if (pages.length - idsToDelete.length < 1) {
+      throw new Error("Cannot delete the last remaining page");
+    }
+    this.removePages(idsToDelete);
   }
 
   renamePage(id: string, name: string): void {
@@ -270,6 +414,27 @@ export class PagesManager {
     for (const object of objects) {
       fromEngine.removeObject(object);
       toEngine.addObject(object);
+    }
+  }
+
+  // Clones rather than moves — the source page keeps its own copy. Primary use case: sharing an
+  // asset (e.g. a logo) between the front and back of a pair without re-uploading it. Uses
+  // object.clone(getSerializedProperties()) — the same core primitive
+  // @rifrocket/fdt-plugin-clipboard's cloneFabricObject uses — rather than a bare object.clone(),
+  // since Fabric's clone() only carries over properties explicitly passed to it; a bare clone()
+  // would silently drop custom registered properties like shapeKind or an effect stack, the same
+  // bug class already fixed for JSON export/snapshot capture.
+  async copyObjectsBetweenPages(objectIds: string[], fromId: string, toId: string): Promise<void> {
+    if (fromId === toId) return;
+    const fromEngine = await this.getOrCreateEngine(fromId);
+    const toEngine = await this.getOrCreateEngine(toId);
+
+    const idSet = new Set(objectIds);
+    const objects = fromEngine.layers.getObjects().filter((object) => idSet.has(getObjectId(object)));
+
+    for (const object of objects) {
+      const clone = await object.clone(getSerializedProperties());
+      toEngine.addObject(clone);
     }
   }
 
@@ -346,6 +511,35 @@ export class PagesManager {
     this.store.setState({
       pages: pages.map((page) => (page.id === id ? { ...page, ...patch } : page)),
     });
+  }
+
+  // Batch removal with no "last page" guard of its own — deletePage()/deletePagePair() each own
+  // that validation for their respective single/paired cases, then call this to actually tear
+  // down runtimes/timers/pending snapshots and update the store in one atomic write.
+  private removePages(ids: readonly string[]): void {
+    const { pages, activePageId } = this.getState();
+    const idSet = new Set(ids);
+
+    for (const id of ids) {
+      this.thumbnailCleanup.get(id)?.();
+      this.thumbnailCleanup.delete(id);
+      const timer = this.thumbnailTimers.get(id);
+      if (timer) clearTimeout(timer);
+      this.thumbnailTimers.delete(id);
+
+      this.runtimes.get(id)?.engine.destroy();
+      this.runtimes.delete(id);
+      this.pendingSnapshots.delete(id);
+    }
+
+    const activeIndex = activePageId ? pages.findIndex((page) => page.id === activePageId) : -1;
+    const remaining = pages.filter((page) => !idSet.has(page.id)).map((page, i) => ({ ...page, order: i }));
+    const nextActiveId =
+      activePageId && idSet.has(activePageId)
+        ? (remaining[Math.min(activeIndex, remaining.length - 1)]?.id ?? null)
+        : activePageId;
+
+    this.store.setState({ pages: remaining, activePageId: nextActiveId });
   }
 
   private async getOrCreateEngine(id: string): Promise<CanvasEngine> {

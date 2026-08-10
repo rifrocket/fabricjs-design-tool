@@ -13,7 +13,7 @@ export function TemplatePicker(): ReactElement {
   const containerRef = useFocusTrap<HTMLDivElement>({ active: open, onEscape: handleEscape });
 
   return (
-    <div className="relative">
+    <div className="relative" data-tour="template-picker">
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}

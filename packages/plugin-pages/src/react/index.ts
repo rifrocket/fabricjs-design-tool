@@ -9,5 +9,6 @@ export type { UsePageCanvasRefResult } from "./usePageCanvasRef";
 export { PagesCanvas } from "./PagesCanvas";
 export type { PagesCanvasProps } from "./PagesCanvas";
 export { PageTabsBar } from "./PageTabsBar";
+export { PairSideToggle } from "./PairSideToggle";
 export { MultiPageDesignEditor } from "./MultiPageDesignEditor";
 export type { MultiPageDesignEditorProps, MultiPageAutosaveOptions } from "./MultiPageDesignEditor";
