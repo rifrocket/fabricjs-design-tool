@@ -1,5 +1,21 @@
 # @rifrocket/fdt-plugin-local-storage
 
+## 3.0.3
+
+### Patch Changes
+
+- 8822338: `saveDesignToStorage`/`loadDesignFromStorage`'s public API and `StoredDesign` type are unchanged,
+  but what's actually written to `localStorage` internally is now a one-page `DesignDocument` (see
+  `@rifrocket/fabricjs-design-tool`'s new shared type) instead of a flat `{ snapshot, meta }`
+  object — the same shape `@rifrocket/fdt-plugin-pages`' own storage format is built on, so a
+  single-document save and a multi-page save are byte-compatible JSON. A pre-existing entry saved
+  under the old flat shape is treated as unusable (returns `null` from `loadDesignFromStorage`,
+  same as any other unreadable data) rather than migrated.
+- 8822338: release version 4
+- Updated dependencies [8822338]
+- Updated dependencies [8822338]
+  - @rifrocket/fabricjs-design-tool@3.0.3
+
 ## 3.0.2
 
 ### Patch Changes

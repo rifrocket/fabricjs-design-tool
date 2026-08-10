@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-devtools",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "private": false,
   "description": "Bare dev-tools panels (event log, canvas state, history, object hierarchy, perf stats) for the FabricJS Design Tool v2, built entirely from public API.",
   "repository": {

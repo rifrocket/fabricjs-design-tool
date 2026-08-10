@@ -1,5 +1,11 @@
 # @rifrocket/fdt-docs
 
+## 0.0.3
+
+### Patch Changes
+
+- 8822338: release version 4
+
 ## 0.0.2
 
 ### Patch Changes
