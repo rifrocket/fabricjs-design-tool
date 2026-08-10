@@ -16,6 +16,7 @@
     "@rifrocket/fdt-plugin-alignment": "workspace:*",
     "@rifrocket/fdt-plugin-clipboard": "workspace:*",
     "@rifrocket/fdt-plugin-effects-panel": "workspace:*",
+    "@rifrocket/fdt-plugin-export-pdf": "workspace:*",
     "@rifrocket/fdt-plugin-import-json": "workspace:*",
     "@rifrocket/fdt-plugin-devtools": "workspace:*",
     "@rifrocket/fdt-plugin-local-storage": "workspace:*",

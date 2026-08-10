@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ReactElement } from "react";
 import { X } from "lucide-react";
+import type { DocumentSnapshotData } from "@rifrocket/fabricjs-design-tool";
 import { useEngineOrNull } from "../engine/useEngineOrNull";
 import { Header } from "./Header";
 import { LeftToolRail } from "./LeftToolRail";
@@ -9,27 +10,35 @@ import { RightSidebar } from "./RightSidebar";
 import { StatusBar } from "./StatusBar";
 import { FloatingPanelsLayer } from "./FloatingPanelsLayer";
 
+// What turning multi-page back off hands back — the result of PagesManager.exportPageAsDocument()
+// (the first page's content, collapsed to a plain single-document payload), structurally typed
+// here rather than importing plugin-pages' own PageMeta just for this prop boundary.
+export interface PagesCollapseResult {
+  snapshot: DocumentSnapshotData;
+  page: { name?: string; width?: number; height?: number; backgroundColor?: string };
+}
+
 // Two modes share this one shell (Header minus TemplatePicker/autosave, LeftToolRail,
-// RightSidebar, StatusBar, FloatingPanelsLayer) rather than each maintaining its own copy — see
-// design-docs for the session this was split out in. "workspace" is the tuned single-document
-// editor (EngineHost.tsx); "pages" is the @rifrocket/fdt-plugin-pages example
-// (MultiPageExample.tsx), which supplies its own tab strip and canvas host since those have no
-// single-document equivalent. Pan/zoom (containerSelector) is real in both modes now — each
-// mode's canvasArea/editor renders its own fixed-size viewport at that selector (see
-// CanvasWorkspace.tsx and pages-example/PageCanvasHost.tsx) — so Header/StatusBar's
-// zoom-dependent pieces (ExportMenu, ZoomControls) work unmodified in either.
+// RightSidebar, StatusBar, FloatingPanelsLayer) rather than each maintaining its own copy.
+// "workspace" is the single-document editor; "pages" is @rifrocket/fdt-plugin-pages, toggled on
+// in place within the same EngineHost.tsx screen (not a separate one) — see its own comment for
+// why — which supplies its own tab strip and canvas host since those have no single-document
+// equivalent. Pan/zoom (containerSelector) is real in both modes — each mode's canvasArea/editor
+// renders its own fixed-size viewport at that selector (see CanvasWorkspace.tsx and
+// engine/PageCanvasHost.tsx) — so Header/StatusBar's zoom-dependent pieces (ExportMenu,
+// ZoomControls) work unmodified in either.
 type AppShellProps =
   | {
       mode: "workspace";
       editor: ReactElement;
-      onOpenPagesExample: () => void;
+      onEnableMultiPage: () => void;
       documentLabel: string;
       documentSize: { width: number; height: number };
       containerSelector: string;
     }
   | {
       mode: "pages";
-      onExit: () => void;
+      onDisableMultiPage: (doc: PagesCollapseResult) => void;
       tabsBar: ReactElement;
       canvasArea: ReactElement;
       documentSize: { width: number; height: number } | null;
@@ -45,8 +54,8 @@ export function AppShell(props: AppShellProps): ReactElement {
     <div className="grid h-screen grid-rows-[auto_1fr_auto_auto] overflow-hidden bg-fdt-bg text-fdt-fg">
       <Header
         onTogglePanels={() => setMobilePanelsOpen((prev) => !prev)}
-        onOpenPagesExample={props.mode === "workspace" ? props.onOpenPagesExample : undefined}
-        onExitPages={props.mode === "pages" ? props.onExit : undefined}
+        onEnableMultiPage={props.mode === "workspace" ? props.onEnableMultiPage : undefined}
+        onDisableMultiPage={props.mode === "pages" ? props.onDisableMultiPage : undefined}
         documentSize={props.documentSize}
         containerSelector={props.containerSelector}
       />

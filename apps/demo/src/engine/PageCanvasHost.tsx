@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { usePageCanvasRef, usePagesContext } from "@rifrocket/fdt-plugin-pages/react";
 import { usePannableDocument } from "@rifrocket/fdt-plugin-pan-zoom";
-import { ZoomBadge } from "../viewport/ZoomBadge";
+import { ZoomBadge } from "../features/viewport/ZoomBadge";
 import { PAGES_CANVAS_CONTAINER_SELECTOR } from "./pagesCanvasContainerSelector";
 
 // Pan/zoom parity with the single-page workspace (see shell/CanvasWorkspace.tsx + EngineHost.tsx's

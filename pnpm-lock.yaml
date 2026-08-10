@@ -56,6 +56,9 @@ importers:
       '@rifrocket/fdt-plugin-effects-panel':
         specifier: workspace:*
         version: link:../../packages/plugin-effects-panel
+      '@rifrocket/fdt-plugin-export-pdf':
+        specifier: workspace:*
+        version: link:../../packages/plugin-export-pdf
       '@rifrocket/fdt-plugin-import-json':
         specifier: workspace:*
         version: link:../../packages/plugin-import-json
