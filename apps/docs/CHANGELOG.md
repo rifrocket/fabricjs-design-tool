@@ -1,5 +1,11 @@
 # @rifrocket/fdt-docs
 
+## 0.0.2
+
+### Patch Changes
+
+- 5d22168: release version 4
+
 ## 0.0.1
 
 ### Patch Changes

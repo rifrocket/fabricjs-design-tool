@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-shapes-basic-panel",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "private": false,
   "description": "A ready-made shape-creation UI for @rifrocket/fdt-plugin-shapes-basic's registered object types, registered into the \"tool-rail\" panel slot.",
   "repository": {

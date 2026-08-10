@@ -1,5 +1,16 @@
 # @rifrocket/fdt-plugin-import-json
 
+## 3.0.3
+
+### Patch Changes
+
+- 5d22168: release version 4
+- Updated dependencies [5d22168]
+- Updated dependencies [5d22168]
+- Updated dependencies [5d22168]
+  - @rifrocket/fdt-react@3.2.0
+  - @rifrocket/fabricjs-design-tool@3.0.2
+
 ## 3.0.2
 
 ### Patch Changes
