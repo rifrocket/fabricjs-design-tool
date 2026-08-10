@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 import { X } from "lucide-react";
 import type { DocumentSnapshotData } from "@rifrocket/fabricjs-design-tool";
 import { useEngineOrNull } from "../engine/useEngineOrNull";
+import { useTourAutoStart } from "../tour/useTourAutoStart";
 import { Header } from "./Header";
 import { LeftToolRail } from "./LeftToolRail";
 import { CanvasWorkspace } from "./CanvasWorkspace";
@@ -49,6 +50,7 @@ export function AppShell(props: AppShellProps): ReactElement {
   const engine = useEngineOrNull();
   const [mobilePanelsOpen, setMobilePanelsOpen] = useState(false);
   const pagesMode = props.mode === "pages";
+  useTourAutoStart(props.mode, engine);
 
   return (
     <div className="grid h-screen grid-rows-[auto_1fr_auto_auto] overflow-hidden bg-fdt-bg text-fdt-fg">

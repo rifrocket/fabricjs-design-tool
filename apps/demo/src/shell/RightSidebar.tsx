@@ -26,7 +26,7 @@ export function RightSidebar({ showCanvasSize = true }: { showCanvasSize?: boole
 
   return (
     <aside className="flex h-full flex-col overflow-hidden border-l border-fdt-border bg-fdt-bg">
-      <div role="tablist" aria-label="Sidebar panels" className="flex border-b border-fdt-border">
+      <div role="tablist" aria-label="Sidebar panels" data-tour="sidebar-tabs" className="flex border-b border-fdt-border">
         {TABS.map((t) => (
           <button
             key={t.id}

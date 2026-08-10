@@ -11,9 +11,10 @@ import { ExportMenu } from "../features/export/ExportMenu";
 import { ImportJsonMenu } from "../features/export/ImportJsonMenu";
 import { ClearSavedDesignButton } from "../features/persistence/ClearSavedDesignButton";
 import { ShortcutsCheatSheet } from "../features/shortcuts/ShortcutsCheatSheet";
+import { ReplayTourButton } from "../tour/ReplayTourButton";
 import { logUiEvent } from "../dev-tools/uiEventLog";
 
-const ICON_BUTTON_CLASS =
+export const ICON_BUTTON_CLASS =
   "flex h-8 w-8 items-center justify-center rounded-lg text-fdt-fg-muted transition-colors duration-150 hover:bg-fdt-bg-elevated hover:text-fdt-fg disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent";
 
 // Shared by both AppShell modes (see AppShell.tsx) — exactly one of onEnableMultiPage/
@@ -112,6 +113,8 @@ export function Header({
         </button>
       )}
 
+      <ReplayTourButton pagesMode={pagesMode} />
+
       <ThemeToggle />
 
       <button type="button" onClick={onTogglePanels} aria-label="Toggle panels" className={`${ICON_BUTTON_CLASS} lg:hidden`}>
@@ -154,7 +157,7 @@ function UndoRedoButtonsContent(): ReactElement {
   const canRedo = useEditorState((state) => state.canRedo);
 
   return (
-    <div className="flex items-center gap-0.5">
+    <div className="flex items-center gap-0.5" data-tour="header-actions">
       <button
         type="button"
         title="Undo"

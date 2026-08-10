@@ -47,6 +47,7 @@ export function PagesToolbar(): ReactElement {
       <div className="flex flex-wrap items-center gap-1.5">
         <button
           type="button"
+          data-tour="new-pair-button"
           className={TOOL_BUTTON_CLASS}
           onClick={() => {
             const { front } = manager.addPagePair({
@@ -62,7 +63,9 @@ export function PagesToolbar(): ReactElement {
           New business card
         </button>
 
-        <PairSideToggle />
+        <div data-tour="pair-toggle" className="inline-flex">
+          <PairSideToggle />
+        </div>
 
         <button
           type="button"
@@ -87,7 +90,9 @@ export function PagesToolbar(): ReactElement {
         </button>
       </div>
 
-      <PageTabsBar />
+      <div data-tour="page-tabs-bar" className="w-full">
+        <PageTabsBar />
+      </div>
     </div>
   );
 }

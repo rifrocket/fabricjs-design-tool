@@ -149,7 +149,7 @@ export function ExportMenu({
   };
 
   return (
-    <div className="relative flex items-center gap-1">
+    <div className="relative flex items-center gap-1" data-tour="export-menu">
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}

@@ -12,6 +12,7 @@ export function LeftToolRail(): ReactElement {
   return (
     <nav
       aria-label="Tools"
+      data-tour="tool-rail"
       className="flex w-14 flex-col items-center gap-0.5 overflow-y-auto border-r border-fdt-border bg-fdt-bg py-2"
     >
       {engine ? <LeftToolRailContent /> : <LeftToolRailSkeleton />}
