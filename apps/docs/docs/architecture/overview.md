@@ -15,7 +15,7 @@ flowchart TB
     react["@rifrocket/fdt-react<br/>(thin adapter)"]
     theme["@rifrocket/fdt-theme<br/>(pure CSS)"]
     properties["@rifrocket/fdt-properties<br/>(shared field components)"]
-    plugins["@rifrocket/fdt-plugin-*<br/>(13 packages)"]
+    plugins["@rifrocket/fdt-plugin-*<br/>(17 packages)"]
     demo["apps/demo<br/>(reference consumer)"]
 
     core --> react

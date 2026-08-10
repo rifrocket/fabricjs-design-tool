@@ -20,7 +20,13 @@ export interface PdfExportOptions {
   pageSize?: "a4" | "letter" | "legal" | "match-canvas" | { widthMm: number; heightMm: number };
   /** Only consulted for `pageSize: "match-canvas"`. Defaults to 96 (web px) — pass e.g. 300 for print-grade output. */
   dpi?: number;
-  /** Defaults to "auto": landscape for a wider-than-tall canvas, portrait otherwise. */
+  /**
+   * Defaults to "auto": landscape for a wider-than-tall canvas, portrait otherwise. With
+   * `pageSize: "match-canvas"`, forcing an explicit orientation that conflicts with the canvas's
+   * own aspect ratio makes jsPDF swap the resolved width/height to honor it — defeating "the page
+   * is the design's exact physical size". Leave this at "auto" (the default) when the physical
+   * size itself matters.
+   */
   orientation?: "portrait" | "landscape" | "auto";
   /** Defaults to 10mm. Empty space kept around the fitted image on every side of the page. */
   marginMm?: number;

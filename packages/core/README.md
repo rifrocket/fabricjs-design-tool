@@ -19,7 +19,7 @@
 - **Selection, layers, alignment & snapping** — `SelectionManager`, `LayerManager`, `AlignmentManager` (+ `computeDistribution`), `SnapEngine`
 - **Effects stack** — `getEffectStack`/`addEffect`/`removeEffect`/`reorderEffect`/... with its own `EffectStackCommand` for undo integration
 - **Export** — `CanvasExporter` for PNG/JPEG/SVG/JSON output
-- **Document snapshots** — `captureSnapshot`/`restoreSnapshot`/`renderSnapshotThumbnail`, storage-agnostic (used by [`plugin-local-storage`](../plugin-local-storage))
+- **Document snapshots** — `captureSnapshot`/`restoreSnapshot`/`renderSnapshotThumbnail`, storage-agnostic (used by [`plugin-local-storage`](../plugin-local-storage) and [`plugin-pages`](../plugin-pages)); `DesignDocument`/`DesignDocumentPage` is the shared `{ meta, pages: [...] }` shape both packages' storage formats build on, so a saved single document and a saved multi-page document are the same shape
 - **Image & color utilities** — `cropImage`/`resetCrop`, `replaceImage`, `createLinearGradient`/`createRadialGradient`, `BLEND_MODES`
 - **Keyboard shortcuts** — `KeyboardShortcutManager` with cross-platform key-combo normalization
 - **Presets** — `createEditor()` + `definePreset()` for bundling a reusable plugin set (see `@rifrocket/fdt-react`'s `preset="default"`/`"minimal"` for the named presets built on top of this)

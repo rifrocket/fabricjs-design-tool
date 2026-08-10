@@ -19,7 +19,7 @@ const TABS: Array<{ id: Tab; label: string }> = [
 
 // Only ever mounted once an engine is confirmed ready by the caller (see the
 // {engine ? <RightSidebar/> : ...} gate in AppShell.tsx, and the equivalent gate in
-// MultiPageExample.tsx), so every hook here can safely assume a live CanvasEngine in context.
+// EngineHost.tsx's MultiPageWorkspace), so every hook here can safely assume a live CanvasEngine in context.
 export function RightSidebar({ showCanvasSize = true }: { showCanvasSize?: boolean }): ReactElement {
   const [tab, setTab] = useState<Tab>("properties");
   const selectedCount = useEditorState((state) => state.selectedObjectIds.length);

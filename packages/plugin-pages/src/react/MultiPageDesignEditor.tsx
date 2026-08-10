@@ -214,7 +214,7 @@ function MultiPageChrome({
 
   // PagesManager starts with zero pages by design (PagesManagerOptions has no seed-count
   // option) — a batteries-included component seeds page 1 itself, matching apps/demo's own
-  // MultiPageExample.tsx first-run convenience before this component existed. A prior autosave
+  // first-run convenience (now EngineHost.tsx's MultiPageWorkspace) before this component existed. A prior autosave
   // (if one exists) takes priority over `initialDocument`, matching <DesignEditor autosave>'s own
   // "restore wins over a freshly-provided starting document" precedent (EngineHost.tsx's
   // handleReady). Otherwise, `initialDocument` (read once, guarded by seededRef the same way

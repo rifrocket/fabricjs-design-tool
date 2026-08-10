@@ -30,7 +30,7 @@ engine.use(createExportPdfPlugin({ pageSize: "letter", orientation: "portrait", 
 
 - `pageSize?: "a4" | "letter" | "legal" | "match-canvas" | { widthMm: number; heightMm: number }` — defaults to `"a4"`. `"match-canvas"` derives the page size directly from the canvas' own pixel dimensions and `dpi` — the PDF page *is* the design's physical size instead of the design being fitted with whitespace onto a fixed paper sheet.
 - `dpi?: number` — only used by `pageSize: "match-canvas"`; defaults to `96` (web px), pass e.g. `300` for print-grade output
-- `orientation?: "portrait" | "landscape" | "auto"` — defaults to `"auto"`: landscape for a wider-than-tall canvas, portrait otherwise
+- `orientation?: "portrait" | "landscape" | "auto"` — defaults to `"auto"`: landscape for a wider-than-tall canvas, portrait otherwise. With `pageSize: "match-canvas"`, forcing an explicit orientation that conflicts with the canvas's own aspect ratio makes jsPDF swap the resolved width/height to honor it — defeating the exact-physical-size guarantee. Leave this at `"auto"` when using `"match-canvas"`.
 - `marginMm?: number` — defaults to `10`
 
 Options are fixed at registration time, not per export call — core's `Exporter` type (`(canvas) => unknown`) is shared by every export format, so there's no per-call options channel through `engine.export("pdf")`. Register under a different format id, or call `exportPdf(canvas, options)` directly, if you need more than one configuration in the same app.

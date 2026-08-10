@@ -20,7 +20,7 @@ export interface UsePagesOptions extends Omit<PagesManagerOptions, "preset"> {
   // default (undo/redo/delete/deselect, plus every installed tool's own shortcut) <Editor> ships
   // unconditionally. Previously only <MultiPageDesignEditor> wired this — standalone
   // PagesProvider/usePagesContext/<PagesCanvas> consumers (e.g. apps/demo's own
-  // MultiPageExample.tsx) had zero keyboard shortcuts in multi-page mode until now.
+  // EngineHost.tsx MultiPageWorkspace) had zero keyboard shortcuts in multi-page mode until now.
   shortcuts?: PresetShortcutsConfig;
 }
 

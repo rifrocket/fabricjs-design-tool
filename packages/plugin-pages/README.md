@@ -26,7 +26,7 @@ Unlike every other `@rifrocket/fdt-plugin-*` package, this one is **not** an `Ed
 - `PagesManagerOptions.captureSnapshot` — overrides how `duplicatePage()`/`getSnapshotForPersistence()`/`refreshThumbnail()` capture a page's content, for apps whose page engines render their own non-content chrome (e.g. `@rifrocket/fdt-plugin-pan-zoom`'s page-boundary rect) that shouldn't leak into saved/duplicated/thumbnailed output — same option shape as `@rifrocket/fdt-plugin-local-storage`'s own `captureSnapshot`
 - Optional React binding at the `./react` subpath (`usePages`, `<PagesProvider>`, `usePagesContext`, `<PagesCanvas>`, `usePageCanvasRef`) — `<PagesProvider>` re-provides `@rifrocket/fdt-react`'s `EditorContext` with whichever page is active, so existing `EditorContext`-consuming UI (PropertiesPanel, LayersPanel, toolbar) follows page switches with no changes on their part; `<PagesCanvas>` mounts and relocates the active page's canvas declaratively, no manual DOM code required. `usePages`/`<PagesProvider>` also wire the same default keyboard shortcuts (undo/redo/delete/deselect, plus every installed tool's own shortcut) `<Editor>` ships unconditionally — pass a `shortcuts` option (`{ disable?, add? }`, same shape as `<DesignEditor shortcuts>`) to customize them; omit it for the defaults
 - `<MultiPageDesignEditor>` (`./react` subpath) — the batteries-included, one-line multi-page counterpart to `@rifrocket/fdt-react`'s `<DesignEditor>`: same `preset`/`plugins`/`theme`/`shortcuts`/`slots`/`propertyFields` prop shape, auto-seeds page 1, and renders a `<PageTabsBar>` (add/duplicate/delete/reorder/rename/lock) below the canvas by default. Also has an `autosave` prop — sugar for this package's own `capturePagesSnapshot`/`savePagesToStorage`/`loadPagesFromStorage`, not `@rifrocket/fdt-plugin-local-storage` (which only ever handles one document)
-- `<PageTabsBar>` (`./react` subpath) — the page-strip UI `<MultiPageDesignEditor>` uses by default, exported separately for consumers building their own chrome on `usePagesContext()` directly (see `apps/demo`'s `MultiPageExample.tsx`)
+- `<PageTabsBar>` (`./react` subpath) — the page-strip UI `<MultiPageDesignEditor>` uses by default, exported separately for consumers building their own chrome on `usePagesContext()` directly (see `apps/demo`'s `EngineHost.tsx`)
 - Front/back page pairing (`addPagePair` / `duplicatePagePair` / `deletePagePair` / `getPairSibling` / `copyObjectsBetweenPages`, plus a `<PairSideToggle>` React component) — for two-sided documents like business cards, ID cards, invitations, certificates, flyers, brochures, packaging, and product labels. See "Front/back page pairing" below.
 
 ## Install
@@ -87,7 +87,7 @@ import { MultiPageDesignEditor } from "@rifrocket/fdt-plugin-pages/react";
 <MultiPageDesignEditor preset="default" maxPages={20} />;
 ```
 
-Not a prop on `<DesignEditor>` itself — `@rifrocket/fdt-react` can't depend on this package without a circular package dependency (this package's `./react` subpath already depends on `fdt-react`), the same constraint documented in `packages/react/src/preset/builtinPresets.ts` for the panel-slot-wrapper plugins. Deliberately has no pan/zoom or page-boundary-rect treatment, mirroring `<Editor>`'s own bare-canvas scope for the single-page case — build your own chrome on `usePagesContext()`/`<PagesCanvas>` directly if you need that (see `apps/demo`'s `MultiPageExample.tsx`).
+Not a prop on `<DesignEditor>` itself — `@rifrocket/fdt-react` can't depend on this package without a circular package dependency (this package's `./react` subpath already depends on `fdt-react`), the same constraint documented in `packages/react/src/preset/builtinPresets.ts` for the panel-slot-wrapper plugins. Deliberately has no pan/zoom or page-boundary-rect treatment, mirroring `<Editor>`'s own bare-canvas scope for the single-page case — build your own chrome on `usePagesContext()`/`<PagesCanvas>` directly if you need that (see `apps/demo`'s `EngineHost.tsx`).
 
 With property fields and autosave — parity with `<DesignEditor propertyFields>`/`<DesignEditor autosave>`:
 
@@ -119,7 +119,7 @@ await pages.setActivePage(front.id);
 
 **Independent object editing**: each side is still its own `CanvasEngine` under the hood (`PagesManager`'s foundational design), so editing one side's objects, undo/redo, and history never touches the other side.
 
-**Front/Back toggle**: `<PairSideToggle>` (`./react` subpath) renders a compact switch that jumps to the active page's pair sibling — `null` when the active page isn't paired. Place it canvas-adjacent, since that's where you're looking while editing (see `apps/demo`'s `MultiPageExample.tsx`).
+**Front/Back toggle**: `<PairSideToggle>` (`./react` subpath) renders a compact switch that jumps to the active page's pair sibling — `null` when the active page isn't paired. Place it canvas-adjacent, since that's where you're looking while editing (see `apps/demo`'s `EngineHost.tsx`).
 
 **Shared assets**: `copyObjectsBetweenPages(objectIds, fromId, toId)` clones objects (e.g. a logo) from one page to another — the source keeps its own copy, unlike `moveObjectsBetweenPages`. Works between any two pages, but its main use is sharing an asset between the front and back of a pair without re-uploading it.
 
@@ -182,7 +182,7 @@ const pages = new PagesManager({
 });
 ```
 
-Real PNG/SVG/PDF export is unaffected either way — this only changes what `duplicatePage()`/`getSnapshotForPersistence()`/`refreshThumbnail()` (i.e. JSON-shaped output) capture. See `apps/demo`'s `MultiPageExample.tsx` for a live example.
+Real PNG/SVG/PDF export is unaffected either way — this only changes what `duplicatePage()`/`getSnapshotForPersistence()`/`refreshThumbnail()` (i.e. JSON-shaped output) capture. See `apps/demo`'s `EngineHost.tsx` for a live example.
 
 ## License
 
