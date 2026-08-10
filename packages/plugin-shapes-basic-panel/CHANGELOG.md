@@ -1,8 +1,19 @@
-# @rifrocket/fdt-plugin-export-pdf
+# @rifrocket/fdt-plugin-shapes-basic-panel
 
 ## 3.1.0
 
 ### Minor Changes
+
+- a645689: Add a `"tool-rail"` panel slot, rendered by default alongside the existing three
+  (`toolbar-start`, `sidebar-right`, `properties-footer`) in `<Editor>`/`<DesignEditor>`/
+  `<MultiPageDesignEditor>`. New package `@rifrocket/fdt-plugin-shapes-basic-panel` ships a bare
+  `ShapePicker` (one button per shape type registered by `@rifrocket/fdt-plugin-shapes-basic`) via
+  `createShapesBasicPanelPlugin()`, registering into `"tool-rail"` and declaring
+  `dependsOn: ["shapes-basic"]` — mirrors the existing `plugin-effects`/`plugin-effects-panel`
+  sibling-package split to avoid a circular dependency on `@rifrocket/fdt-react`. Demo wired for
+  real in both single- and multi-page modes.
+
+### Patch Changes
 
 - a645689: Clears the P1 backlog from `design-docs/PLUG_AND_PLAY_GAP_ANALYSIS_2026-08-08.md` (items #6, #7,
   #10–#15):
@@ -30,53 +41,6 @@ svgString)` lookup-then-call.
     gains working keyboard shortcuts as a side effect of the `plugin-pages` fix above;
     `SvgImportButton` uses the new `importSvgToEngine` convenience.
 
-## 3.0.1
-
-### Patch Changes
-
-- 6a408a4: update documentation
-- Updated dependencies [6a408a4]
-  - @rifrocket/fabricjs-design-tool@3.0.1
-
-## 3.0.0
-
-### Major Changes
-
-- First stable release. Beta testing (2.0.0-beta.0/beta.1) is complete — this is the first release published under npm's `latest` tag with no prerelease suffix, published directly as 3.0.0 rather than 2.0.0 so the version number isn't tied to the beta cycle. No breaking API changes beyond what already shipped in the betas.
-
-### Patch Changes
-
-- Updated dependencies
-  - @rifrocket/fabricjs-design-tool@3.0.0
-
-## 2.0.0
-
-### Major Changes
-
-- ebe6ca3: Initial public beta release of the v2 monorepo packages.
-
-### Patch Changes
-
-- f096f8f: Rename the core engine package from `@rifrocket/fdt-core` to `@rifrocket/fabricjs-design-tool` — the well-known, higher-traffic package name. No API changes; `import { createEditor } from "@rifrocket/fabricjs-design-tool"` replaces `@rifrocket/fdt-core`, including its `/history`, `/effects`, and `/export` subpaths. All dependent packages update their internal dependency to match.
-- Updated dependencies [ebe6ca3]
-- Updated dependencies [f096f8f]
-  - @rifrocket/fabricjs-design-tool@2.0.0
-
-## 2.0.0-beta.1
-
-### Patch Changes
-
-- f096f8f: Rename the core engine package from `@rifrocket/fdt-core` to `@rifrocket/fabricjs-design-tool` — the well-known, higher-traffic package name. No API changes; `import { createEditor } from "@rifrocket/fabricjs-design-tool"` replaces `@rifrocket/fdt-core`, including its `/history`, `/effects`, and `/export` subpaths. All dependent packages update their internal dependency to match.
-- Updated dependencies [f096f8f]
-  - @rifrocket/fabricjs-design-tool@2.0.0-beta.1
-
-## 2.0.0-beta.0
-
-### Major Changes
-
-- ebe6ca3: Initial public beta release of the v2 monorepo packages.
-
-### Patch Changes
-
-- Updated dependencies [ebe6ca3]
-  - @rifrocket/fdt-core@2.0.0-beta.0
+- Updated dependencies [a645689]
+- Updated dependencies [a645689]
+  - @rifrocket/fdt-react@3.1.0

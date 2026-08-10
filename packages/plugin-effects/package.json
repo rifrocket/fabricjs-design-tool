@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-effects",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": false,
   "description": "Object effects system (shadow, glow, blur, glitch, duotone, ...) for the FabricJS Design Tool v2, registered via the core plugin system.",
   "repository": {
