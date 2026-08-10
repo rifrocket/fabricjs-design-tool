@@ -1,5 +1,13 @@
 # @rifrocket/fdt-plugin-local-storage
 
+## 3.0.2
+
+### Patch Changes
+
+- 5d22168: release version 4
+- Updated dependencies [5d22168]
+  - @rifrocket/fabricjs-design-tool@3.0.2
+
 ## 3.0.1
 
 ### Patch Changes

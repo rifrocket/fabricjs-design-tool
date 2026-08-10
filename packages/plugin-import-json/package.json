@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-import-json",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "private": false,
   "description": "JSON import (engine plugin + a bare React trigger button) for the FabricJS Design Tool v2.",
   "repository": {

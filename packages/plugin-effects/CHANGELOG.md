@@ -1,5 +1,22 @@
 # @rifrocket/fdt-plugin-effects
 
+## 3.2.0
+
+### Minor Changes
+
+- 5d22168: Fix `installRenderPatch()` closing over whichever `CanvasEngine`'s effects registry installed
+  first, silently wrong under multiple engines with different effect sets (e.g.
+  `@rifrocket/fdt-plugin-pages`' one-engine-per-page model). Registries are now keyed per-canvas in
+  a `WeakMap`, resolved from `this.canvas` at render time. Added a real `uninstall(engine)` that
+  removes only that engine's own canvas entry — the shared `FabricObject.prototype.render()` patch
+  itself is left in place, since other live engines may still depend on it.
+
+### Patch Changes
+
+- 5d22168: release version 4
+- Updated dependencies [5d22168]
+  - @rifrocket/fabricjs-design-tool@3.0.2
+
 ## 3.1.0
 
 ### Minor Changes
