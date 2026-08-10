@@ -16,9 +16,11 @@ A pure engine plugin that registers a `"pdf"` exporter. `@rifrocket/fabricjs-des
 
 - Registers `"pdf"` as an `engine.export()` format
 - The canvas is fitted onto the page (A4 by default, 10mm margin), preserving aspect ratio
-- `createExportPdfPlugin({ pageSize, orientation, marginMm })` — configure the page size (`"a4"` / `"letter"` / `"legal"`), orientation (defaults to auto: landscape for a wider-than-tall canvas, portrait otherwise), and margin
+- `createExportPdfPlugin({ pageSize, orientation, marginMm, dpi })` — configure the page size (`"a4"` / `"letter"` / `"legal"` / `"match-canvas"` / a literal `{ widthMm, heightMm }`), orientation (defaults to auto: landscape for a wider-than-tall canvas, portrait otherwise), and margin
+- `pageSize: "match-canvas"` — derives the page size directly from the canvas' own pixel dimensions and `dpi` (default 96), so the PDF page *is* the design's physical size instead of the design being fitted with whitespace onto a fixed paper sheet. Combined with `marginMm: 0`, this is what makes output print-ready.
 - `engine.export()` returns raw data — `{ format, fileName, mimeType, data: Blob }` — triggering the actual browser download is left to your app
 - Also exports `exportPdf(canvas, options?)` directly if you want the conversion logic without going through the plugin/registry
+- `exportPdfMultiPage(canvases, options?)` — one PDF, one page per canvas, for exporting a two-sided document (e.g. a [`plugin-pages`](../plugin-pages) front/back pair) as a single file. Page size/orientation is resolved from the first canvas and reused for every page.
 
 ## Install
 
@@ -51,6 +53,28 @@ engine.use(createExportPdfPlugin({ pageSize: "letter", orientation: "portrait", 
 ```
 
 Options are fixed at registration time (core's `Exporter` type is `(canvas) => unknown`, shared by every export format, so there's no per-call options channel through `engine.export("pdf")`) — register under a different format id, or call `exportPdf(canvas, options)` directly, if you need more than one configuration in the same app.
+
+Print-ready, exact-physical-size output:
+
+```ts
+import { exportPdf } from "@rifrocket/fdt-plugin-export-pdf";
+
+exportPdf(canvas, { pageSize: "match-canvas", marginMm: 0, dpi: 300 });
+```
+
+Exporting both sides of a two-sided document (e.g. a [`plugin-pages`](../plugin-pages) front/back pair) as one file:
+
+```ts
+import { exportPdfMultiPage } from "@rifrocket/fdt-plugin-export-pdf";
+
+const result = exportPdfMultiPage(
+  [frontEngine.getFabricCanvas(), backEngine.getFabricCanvas()],
+  { pageSize: "match-canvas", marginMm: 0 },
+);
+// { format: "pdf", fileName, mimeType, data: Blob } — same shape as exportPdf()'s result
+```
+
+Not an `EditorPlugin` — it operates across multiple canvases/engines rather than extending one, the same category of concern `@rifrocket/fdt-plugin-pages` is; this package stays free of any dependency on it, so the caller composes the two canvases itself.
 
 ## Documentation
 
