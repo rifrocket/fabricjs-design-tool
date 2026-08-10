@@ -152,8 +152,17 @@ describe("MultiPageDesignEditor", () => {
     storage.set(
       "fdt:pages",
       JSON.stringify({
-        pages: [{ id: "page_1", name: "Restored", order: 0, width: 800, height: 600 }],
-        snapshots: { page_1: { json: { objects: [] }, backgroundColor: "#00ff00" } },
+        meta: null,
+        pages: [
+          {
+            id: "page_1",
+            name: "Restored",
+            order: 0,
+            width: 800,
+            height: 600,
+            snapshot: { json: { objects: [] }, backgroundColor: "#00ff00" },
+          },
+        ],
       }),
     );
 

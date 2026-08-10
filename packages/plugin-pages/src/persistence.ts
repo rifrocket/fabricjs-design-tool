@@ -1,4 +1,4 @@
-import type { DocumentSnapshotData } from "@rifrocket/fabricjs-design-tool";
+import type { DesignDocument, DocumentSnapshotData } from "@rifrocket/fabricjs-design-tool";
 import type { PageMeta } from "./types";
 import type { PagesManager } from "./PagesManager";
 
@@ -40,6 +40,33 @@ export function capturePagesSnapshot(manager: PagesManager): PagesStorageData {
   return { pages, snapshots };
 }
 
+// Public PagesStorageData shape is unchanged — callers keep thinking in terms of pages + a
+// snapshots map. What's actually written to storage, internally, is a DesignDocument (each
+// page's snapshot inlined onto its own entry instead of a parallel map) — the same shape
+// @rifrocket/fdt-plugin-local-storage's own storage format is built on (see its storage.ts), so
+// a multi-page save and a single-document save are byte-compatible JSON, not two independently
+// evolving formats.
+function toDesignDocument(data: PagesStorageData): DesignDocument {
+  return {
+    meta: null,
+    pages: data.pages.map((page) => ({ ...page, snapshot: data.snapshots[page.id] })),
+  };
+}
+
+function fromDesignDocument(document: DesignDocument): PagesStorageData {
+  const pages: PageMeta[] = [];
+  const snapshots: Record<string, DocumentSnapshotData> = {};
+  for (const page of document.pages) {
+    const { snapshot, ...meta } = page;
+    // Cast: a persisted page entry always carries the full PageMeta shape this package itself
+    // wrote (id/name/order/width/height/...) — DesignDocumentPage's own fields are a subset with
+    // some marked optional for plugin-local-storage's leaner usage, not a narrower runtime type.
+    pages.push(meta as PageMeta);
+    if (snapshot) snapshots[page.id] = snapshot;
+  }
+  return { pages, snapshots };
+}
+
 // Deliberately manual/on-demand rather than auto-debounced on every change — a consumer that
 // wants autosave should call this from its own debounced handler (e.g. subscribed to
 // manager.store and to each activated page's content changes), the same way an app wires up
@@ -53,16 +80,18 @@ export function savePagesToStorage(
 ): void {
   if (!storage) return;
   try {
-    storage.setItem(key, JSON.stringify(capturePagesSnapshot(manager)));
+    storage.setItem(key, JSON.stringify(toDesignDocument(capturePagesSnapshot(manager))));
   } catch {
     // Ignored — see comment above.
   }
 }
 
 // Returns null both when nothing was ever saved and when what's stored can't be used (missing
-// storage, invalid JSON, or JSON that isn't a { pages: [...] } object) — callers shouldn't need
-// to distinguish "nothing saved" from "unusable data", since either way there's nothing to
-// restore. Pass the result straight to PagesManager.hydrate().
+// storage, invalid JSON, or JSON that isn't a usable DesignDocument) — callers shouldn't need to
+// distinguish "nothing saved" from "unusable data", since either way there's nothing to restore.
+// Also returns null for a pre-existing entry saved under the old { pages, snapshots } shape —
+// same "unusable data -> null" contract, no explicit migration of old entries. Pass the result
+// straight to PagesManager.hydrate().
 export function loadPagesFromStorage(
   key: string = DEFAULT_PAGES_STORAGE_KEY,
   storage: StorageLike | null = defaultStorage(),
@@ -71,9 +100,15 @@ export function loadPagesFromStorage(
   const raw = storage.getItem(key);
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw) as Partial<PagesStorageData> | null;
+    const parsed = JSON.parse(raw) as (Partial<DesignDocument> & { snapshots?: unknown }) | null;
     if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.pages)) return null;
-    return { pages: parsed.pages, snapshots: parsed.snapshots ?? {} };
+    // The old { pages, snapshots } shape also has a top-level `pages` array, so that check alone
+    // can't tell the two apart — a `snapshots` field is the old shape's own signature (the new
+    // shape has no such field; each page carries its own `snapshot` inline instead). Without this
+    // check, old data would silently "load" with every page's content dropped rather than being
+    // correctly treated as unusable.
+    if ("snapshots" in parsed) return null;
+    return fromDesignDocument({ meta: parsed.meta ?? null, pages: parsed.pages });
   } catch {
     return null;
   }

@@ -207,6 +207,31 @@ describe("PagesManager", () => {
     expect(rehydratedEngine.__fake.importFile).toHaveBeenCalledTimes(1);
   });
 
+  // The public PagesStorageData shape (pages + a snapshots map) is unchanged, but what's
+  // actually written to storage is a DesignDocument (each page's snapshot inlined) — the same
+  // shape @rifrocket/fdt-plugin-local-storage's own storage format is built on.
+  it("writes a DesignDocument (inline per-page snapshot, no top-level snapshots map) to storage internally", async () => {
+    const storage = createFakeStorage();
+    const writer = createManager();
+    const page = writer.addPage({ name: "Cover" });
+    await writer.setActivePage(page.id);
+
+    savePagesToStorage(writer, "test-key", storage);
+
+    const raw = JSON.parse(storage.getItem("test-key")!);
+    expect(raw.snapshots).toBeUndefined();
+    expect(raw.pages).toHaveLength(1);
+    expect(raw.pages[0].id).toBe(page.id);
+    expect(raw.pages[0].snapshot).toBeDefined();
+  });
+
+  it("returns null for a pre-existing entry saved under the old { pages, snapshots } shape", () => {
+    const storage = createFakeStorage();
+    storage.setItem("test-key", JSON.stringify({ pages: [{ id: "page_1" }], snapshots: {} }));
+
+    expect(loadPagesFromStorage("test-key", storage)).toBeNull();
+  });
+
   it("refuses to hydrate a manager that already has pages", () => {
     const manager = createManager();
     manager.addPage();
@@ -300,6 +325,204 @@ describe("PagesManager", () => {
     const engine = (await manager.setActivePage("page_1")) as FakeEngine;
     expect(engine.__fake.importFile).toHaveBeenCalledTimes(1);
     expect(engine.__fake.addObjectOfType).not.toHaveBeenCalled();
+  });
+});
+
+describe("PagesManager page pairing", () => {
+  it("creates a front/back pair sharing a pairId, correct sides, and adjacent order", () => {
+    const manager = createManager();
+    const { front, back } = manager.addPagePair({ name: "Card" });
+
+    expect(front.pairId).toBe(front.id);
+    expect(back.pairId).toBe(front.id);
+    expect(front.pairSide).toBe("front");
+    expect(back.pairSide).toBe("back");
+    expect(front.order).toBe(0);
+    expect(back.order).toBe(1);
+    expect(front.name).toBe("Card (Front)");
+    expect(back.name).toBe("Card (Back)");
+  });
+
+  it("throws and creates zero pages when fewer than 2 slots remain", () => {
+    const manager = createManager({ maxPages: 2 });
+    manager.addPage();
+    expect(() => manager.addPagePair()).toThrow(/a pair needs 2/);
+    expect(manager.getPages()).toHaveLength(1);
+  });
+
+  it("pins the back page's dimensions to the front page's resolved size", () => {
+    const manager = createManager({
+      templates: {
+        "card-front": { id: "card-front", label: "Front", width: 350, height: 200 },
+      },
+    });
+    const { back } = manager.addPagePair({ front: { templateId: "card-front" } });
+    expect(back.width).toBe(350);
+    expect(back.height).toBe(200);
+  });
+
+  it("duplicates a pair with a fresh pairId, carrying both sides' content over", async () => {
+    const manager = createManager();
+    const { front, back } = manager.addPagePair();
+    const frontEngine = (await manager.setActivePage(front.id)) as FakeEngine;
+    frontEngine.__fake.canvas.backgroundColor = "#front";
+    const backEngine = (await manager.setActivePage(back.id)) as FakeEngine;
+    backEngine.__fake.canvas.backgroundColor = "#back";
+
+    const duplicate = await manager.duplicatePagePair(front.id);
+    expect(duplicate.front.pairId).toBe(duplicate.front.id);
+    expect(duplicate.front.pairId).not.toBe(front.pairId);
+    expect(duplicate.back.pairId).toBe(duplicate.front.pairId);
+
+    const dupFrontEngine = (await manager.setActivePage(duplicate.front.id)) as FakeEngine;
+    expect(dupFrontEngine.__fake.importFile).toHaveBeenCalledTimes(1);
+    const dupBackEngine = (await manager.setActivePage(duplicate.back.id)) as FakeEngine;
+    expect(dupBackEngine.__fake.importFile).toHaveBeenCalledTimes(1);
+  });
+
+  it("duplicatePagePair throws on an unpaired page or insufficient capacity", async () => {
+    const manager = createManager({ maxPages: 3 });
+    const lone = manager.addPage();
+    await expect(manager.duplicatePagePair(lone.id)).rejects.toThrow(/not part of a pair/);
+
+    const capped = createManager({ maxPages: 2 });
+    const { front } = capped.addPagePair();
+    await expect(capped.duplicatePagePair(front.id)).rejects.toThrow(/a pair needs 2/);
+  });
+
+  it("deletes both sides of a pair atomically, and refuses to leave zero pages", () => {
+    const manager = createManager();
+    const { front } = manager.addPagePair();
+    expect(() => manager.deletePagePair(front.id)).toThrow(/last remaining page/);
+    expect(manager.getPages()).toHaveLength(2);
+
+    manager.addPage();
+    manager.deletePagePair(front.id);
+    expect(manager.getPages()).toHaveLength(1);
+  });
+
+  it("deletePagePair throws on an unpaired page", () => {
+    const manager = createManager();
+    const lone = manager.addPage();
+    manager.addPage();
+    expect(() => manager.deletePagePair(lone.id)).toThrow(/not part of a pair/);
+  });
+
+  it("auto-unpairs the sibling when the plain deletePage() removes one side", () => {
+    const manager = createManager();
+    const { front, back } = manager.addPagePair();
+    manager.addPage(); // so deleting `front` doesn't hit the last-page guard
+
+    manager.deletePage(front.id);
+    const remainingBack = manager.getPages().find((page) => page.id === back.id);
+    expect(remainingBack?.pairId).toBeUndefined();
+    expect(remainingBack?.pairSide).toBeUndefined();
+  });
+
+  it("getPairSibling returns the sibling, and undefined for an unpaired page", () => {
+    const manager = createManager();
+    const { front, back } = manager.addPagePair();
+    const lone = manager.addPage();
+
+    expect(manager.getPairSibling(front.id)?.id).toBe(back.id);
+    expect(manager.getPairSibling(back.id)?.id).toBe(front.id);
+    expect(manager.getPairSibling(lone.id)).toBeUndefined();
+  });
+
+  it("round-trips pairId/pairSide through save/load/hydrate", async () => {
+    const storage = createFakeStorage();
+    const writer = createManager();
+    const { front, back } = writer.addPagePair();
+    await writer.setActivePage(front.id);
+    savePagesToStorage(writer, "pair-key", storage);
+
+    const loaded = loadPagesFromStorage("pair-key", storage);
+    const reader = createManager();
+    reader.hydrate(loaded!);
+
+    expect(reader.getPairSibling(front.id)?.id).toBe(back.id);
+  });
+
+  it("copyObjectsBetweenPages clones an object onto the destination while keeping the source's copy", async () => {
+    const manager = createManager();
+    const { front, back } = manager.addPagePair();
+    const frontEngine = (await manager.setActivePage(front.id)) as FakeEngine;
+    const backEngine = (await manager.setActivePage(back.id)) as FakeEngine;
+
+    const rect = new Rect({ left: 1, top: 2, width: 10, height: 10 });
+    frontEngine.addObject(rect);
+    const rectId = getObjectId(rect);
+
+    await manager.copyObjectsBetweenPages([rectId], front.id, back.id);
+
+    expect(frontEngine.__fake.objects).toHaveLength(1);
+    expect(backEngine.__fake.objects).toHaveLength(1);
+    expect(backEngine.__fake.objects[0]).not.toBe(rect);
+    expect(backEngine.addObject).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps each side of a pair's content fully independent", async () => {
+    const manager = createManager();
+    const { front, back } = manager.addPagePair();
+    const frontEngine = (await manager.setActivePage(front.id)) as FakeEngine;
+    await manager.setActivePage(back.id);
+
+    frontEngine.addObject(new Rect({ left: 0, top: 0, width: 5, height: 5 }));
+
+    const frontSnapshot = manager.getSnapshotForPersistence(front.id);
+    const backSnapshot = manager.getSnapshotForPersistence(back.id);
+    expect((frontSnapshot?.json as { objects: unknown[] }).objects).toHaveLength(1);
+    expect((backSnapshot?.json as { objects: unknown[] }).objects).toHaveLength(0);
+  });
+});
+
+describe("PagesManager.exportPageAsDocument", () => {
+  it("defaults to the lowest-order page when no pageId is given", () => {
+    const manager = createManager();
+    manager.addPage({ name: "B" });
+    const a = manager.addPage({ name: "A" });
+    manager.reorderPages(1, 0); // "A" is now order 0
+
+    const result = manager.exportPageAsDocument();
+    expect(result?.page.name).toBe(a.name);
+  });
+
+  it("returns a specific page by id, with its own width/height/backgroundColor", () => {
+    const manager = createManager();
+    manager.addPage({ name: "A", width: 100, height: 100 });
+    const b = manager.addPage({ name: "B", width: 350, height: 200, backgroundColor: "#eeeeee" });
+
+    const result = manager.exportPageAsDocument(b.id);
+    expect(result?.page).toEqual({ name: "B", width: 350, height: 200, backgroundColor: "#eeeeee" });
+  });
+
+  it("carries the page's real content when it has been activated and edited", async () => {
+    const manager = createManager();
+    const page = manager.addPage();
+    const engine = (await manager.setActivePage(page.id)) as FakeEngine;
+    engine.__fake.canvas.backgroundColor = "#123456";
+
+    const result = manager.exportPageAsDocument(page.id);
+    expect(result?.snapshot.backgroundColor).toBe("#123456");
+  });
+
+  it("collapses an untouched page to a blank document instead of leaving snapshot undefined", () => {
+    const manager = createManager();
+    const page = manager.addPage({ backgroundColor: "#abcdef" });
+
+    const result = manager.exportPageAsDocument(page.id);
+    expect(result?.snapshot).toEqual({ json: { objects: [] }, backgroundColor: "#abcdef" });
+  });
+
+  it("throws on an unknown pageId", () => {
+    const manager = createManager();
+    manager.addPage();
+    expect(() => manager.exportPageAsDocument("nope")).toThrow(/No page with id/);
+  });
+
+  it("returns undefined for an empty manager with no pageId given", () => {
+    const manager = createManager();
+    expect(manager.exportPageAsDocument()).toBeUndefined();
   });
 });
 

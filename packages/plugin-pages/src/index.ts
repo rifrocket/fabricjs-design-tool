@@ -4,6 +4,7 @@ export type { EngineFactory } from "./PagesManager";
 export type {
   CanvasElementFactory,
   NewPageInit,
+  NewPagePairInit,
   PageMeta,
   PagesManagerOptions,
   PagesState,
