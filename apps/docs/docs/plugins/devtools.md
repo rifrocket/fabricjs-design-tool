@@ -37,6 +37,8 @@ Every panel is also exported directly, for placement in a custom shell instead o
 import { HistoryPanel, PerformanceStats } from "@rifrocket/fdt-plugin-devtools";
 ```
 
+`devtoolsPlugin.uninstall(engine)` removes all five panels from only that engine.
+
 ## Exports
 
 - `devtoolsPlugin` — the `EditorPlugin`

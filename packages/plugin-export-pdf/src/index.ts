@@ -1,3 +1,3 @@
 export { exportPdf } from "./exportPdf";
-export type { PdfExportResult } from "./exportPdf";
-export { exportPdfPlugin } from "./plugin";
+export type { PdfExportOptions, PdfExportResult } from "./exportPdf";
+export { createExportPdfPlugin, exportPdfPlugin } from "./plugin";

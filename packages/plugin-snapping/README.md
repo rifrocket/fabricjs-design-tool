@@ -5,7 +5,7 @@
 
   **An on/off toggle panel for smart-guide snapping in [Fabric Design Tool](../../README.md).**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-snapping/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-snapping)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-snapping.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-snapping)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
@@ -15,7 +15,7 @@ A panel-slot wrapper plugin: [`@rifrocket/fabricjs-design-tool`](../core) alread
 ## Features
 
 - **`SnappingToggle`** — the toggle component, wired to `engine.snapping`
-- **`snappingPlugin`** — installs `SnappingToggle` into `sidebar-right`
+- **`snappingPlugin`** — installs `SnappingToggle` into `sidebar-right`. `uninstall(engine)` removes only its own engine's panel registration
 - **⚠️ This plugin only adds the UI toggle — it does not itself turn snapping on.** `SnapEngine` behavior is disabled by default at the engine level. If you want snapping on-by-default with the toggle just letting users turn it off, enable it separately: `createEngine(canvasEl, { snapping: { enabled: true } })`.
 
 Not bundled into either `<DesignEditor>` preset — it peer-depends on `@rifrocket/fdt-react`. Add via `plugins.add`.

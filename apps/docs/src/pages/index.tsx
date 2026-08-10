@@ -61,7 +61,7 @@ function HomepageHeader() {
             <span className={styles.heroTitleGradient}>actually extend</span>
           </Heading>
           <p className={styles.heroSubtitle}>
-            A framework-agnostic core, a thin React adapter, and a 13-plugin
+            A framework-agnostic core, a thin React adapter, and a 17-plugin
             ecosystem — split into small, independently installable packages.
             Ship a batteries-included editor in one line, or build something
             entirely your own.

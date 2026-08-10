@@ -58,7 +58,7 @@ This applies identically whether you're using `<Editor>`, `<DesignEditor>`, or `
 engine.unuse("local-storage"); // calls uninstall?.(engine) if the plugin defines one, then forgets it
 ```
 
-Worth knowing before you rely on it: of the plugins that ship today, only `plugin-local-storage` implements a real `uninstall()`. Calling `unuse()` on most other plugins removes it from the installed-plugins list but leaves whatever it registered (object types, importers, keyboard shortcuts) in place — there's no automatic "undo everything this plugin did." Treat `unuse()` as reliable for plugins you know implement `uninstall()`, and prefer the remount-with-a-new-`key` pattern above for a full plugin-set change.
+Worth knowing before you rely on it: of the plugins that ship today, 8 implement a real `uninstall()` — `local-storage`, `alignment`, `snapping`, `devtools`, `clipboard`, `effects`, `effects-panel`, and `shapes-basic-panel` (all either unregister their panel(s) or their keyboard shortcuts). Calling `unuse()` on the other 9 removes it from the installed-plugins list but leaves whatever it registered (object types, importers) in place — there's no automatic "undo everything this plugin did," since what "uninstalling an object type with live objects of that type still on canvas" should even mean isn't a settled question. Treat `unuse()` as reliable for plugins you know implement `uninstall()`, and prefer the remount-with-a-new-`key` pattern above for a full plugin-set change.
 
 ## Overriding a preset's plugin list
 

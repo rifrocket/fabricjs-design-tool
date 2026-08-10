@@ -1,0 +1,68 @@
+{
+  "name": "@rifrocket/fdt-plugin-effects-panel",
+  "version": "3.0.0",
+  "private": false,
+  "description": "A ready-made panel UI (browse/apply/stack/edit) for @rifrocket/fdt-plugin-effects's effect registry.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rifrocket/fabricjs-design-tool.git",
+    "directory": "packages/plugin-effects-panel"
+  },
+  "homepage": "https://github.com/rifrocket/fabricjs-design-tool/tree/main/packages/plugin-effects-panel#readme",
+  "bugs": {
+    "url": "https://github.com/rifrocket/fabricjs-design-tool/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rifrocket/fabricjs-design-tool": "workspace:*",
+    "@rifrocket/fdt-plugin-effects": "workspace:*",
+    "@rifrocket/fdt-react": "workspace:*",
+    "lucide-react": "^0.487.0"
+  },
+  "peerDependencies": {
+    "fabric": "^6.6.7",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "fabric": "^6.6.7",
+    "globals": "^16.0.0",
+    "jsdom": "^25.0.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tsup": "^8.3.5",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vitest": "^2.1.8"
+  }
+}

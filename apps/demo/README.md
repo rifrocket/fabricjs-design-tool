@@ -38,6 +38,10 @@ pnpm --filter @rifrocket/fdt-demo lint
 
 There's currently no hosted live demo — this app isn't deployed anywhere yet, only the [documentation site](https://rifrocket.github.io/fabricjs-design-tool/docs/) is. Run it locally to try it.
 
+## A note on bundle size
+
+This app statically imports every plugin package in the ecosystem at once — that's the point of a kitchen-sink reference implementation, not a reflection of what a real consumer app pays. The production build has one ~1.1MB (~350KB gzip) main chunk as a direct result: React, `fabric.js`, and ~13 plugin packages with no per-plugin code-splitting here. Every package in `packages/*` ships `sideEffects: false`, so a real app that installs only the 2–3 plugins it actually needs does **not** inherit this cost — that's a property of the packages themselves, verified independently of this demo. Treat this app's bundle size as a narrative/showcase cost, not a framework cost.
+
 ## Tech stack
 
 React 19, Vite, Tailwind CSS v4, [Fabric.js](http://fabricjs.com/) (via `@rifrocket/fabricjs-design-tool`), [Lucide](https://lucide.dev/) icons — TypeScript throughout, strict mode.

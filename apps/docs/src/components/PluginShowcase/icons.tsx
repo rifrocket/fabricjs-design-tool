@@ -165,3 +165,41 @@ export function PanZoomIcon({className}: IconProps): ReactNode {
     </svg>
   );
 }
+
+export function PagesIcon({className}: IconProps): ReactNode {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" role="img" aria-hidden="true">
+      <rect x="6.5" y="3.5" width="12" height="9" rx="1.4" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M4 8v9.5a1.5 1.5 0 0 0 1.5 1.5H16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function EffectsPanelIcon({className}: IconProps): ReactNode {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" role="img" aria-hidden="true">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M7 8h10M7 12h6M7 16h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ShapesBasicPanelIcon({className}: IconProps): ReactNode {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" role="img" aria-hidden="true">
+      <rect x="3.5" y="3.5" width="7" height="7" rx="1.4" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="17" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M6.5 20 10 13.5 13.5 20Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <rect x="15" y="15" width="6" height="6" rx="1.4" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+export function MediaFieldsIcon({className}: IconProps): ReactNode {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" role="img" aria-hidden="true">
+      <rect x="3.5" y="5" width="9" height="9" rx="1.4" stroke="currentColor" strokeWidth="1.6" />
+      <rect x="11.5" y="10" width="9" height="9" rx="1.4" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}

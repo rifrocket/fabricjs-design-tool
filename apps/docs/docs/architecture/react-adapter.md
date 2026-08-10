@@ -5,7 +5,7 @@ title: The React Adapter
 
 # The React Adapter
 
-`@rifrocket/fdt-react` is intentionally thin. `<Editor>` doesn't add any capability `@rifrocket/fabricjs-design-tool` doesn't already have — it wires `createEngine()` into React's lifecycle, provides the resulting `CanvasEngine` through context, and renders three named panel slots.
+`@rifrocket/fdt-react` is intentionally thin. `<Editor>` doesn't add any capability `@rifrocket/fabricjs-design-tool` doesn't already have — it wires `createEngine()` into React's lifecycle, provides the resulting `CanvasEngine` through context, and renders four named panel slots.
 
 ## What `<Editor>` actually does
 
@@ -20,6 +20,7 @@ export function Editor(props: EditorProps): ReactElement {
       {engine && (
         <EditorContext.Provider value={engine}>
           <PanelSlot name="toolbar-start" override={slots["toolbar-start"]} />
+          <PanelSlot name="tool-rail" override={slots["tool-rail"]} />
           <PanelSlot name="sidebar-right" override={slots["sidebar-right"]} />
           <PanelSlot name="properties-footer" override={slots["properties-footer"]} />
         </EditorContext.Provider>
@@ -43,7 +44,7 @@ This is a deliberate, documented limitation, not an oversight — treat any prop
 
 ## Building a custom shell: `EditorContext` re-provision
 
-`<Editor>`/`<DesignEditor>` only render 3 fixed panel slots inside their own wrapping `<div>`. That's enough for a self-contained editor widget, but not a real application shell — a header, multiple sidebars, a status bar, or floating panels laid out around the canvas rather than inside `<Editor>`'s own markup.
+`<Editor>`/`<DesignEditor>` only render 4 fixed panel slots inside their own wrapping `<div>`. That's enough for a self-contained editor widget, but not a real application shell — a header, multiple sidebars, a status bar, or floating panels laid out around the canvas rather than inside `<Editor>`'s own markup.
 
 For that, drop to `useCanvasEngine()` directly and **re-provide `EditorContext`** around your own layout — this is the exact pattern `<Editor>` uses internally, exposed as a first-class, fully-supported option:
 

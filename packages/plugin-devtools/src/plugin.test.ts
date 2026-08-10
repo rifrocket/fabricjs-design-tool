@@ -28,4 +28,16 @@ describe("devtoolsPlugin", () => {
       PerformanceStats,
     ]);
   });
+
+  it("uninstall() removes all 5 panels from only its own engine", () => {
+    const a = createFakeEngine();
+    const b = createFakeEngine();
+    devtoolsPlugin.install(a.engine);
+    devtoolsPlugin.install(b.engine);
+
+    devtoolsPlugin.uninstall?.(a.engine);
+
+    expect(a.registry.panels.getSlot("sidebar-right")).toEqual([]);
+    expect(b.registry.panels.getSlot("sidebar-right")).toHaveLength(5);
+  });
 });

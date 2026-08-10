@@ -18,4 +18,16 @@ describe("alignmentPlugin", () => {
 
     expect(registry.panels.getSlot("sidebar-right")).toEqual([{ component: AlignmentControls }]);
   });
+
+  it("uninstall() removes only its own engine's panel registration", () => {
+    const a = createFakeEngine();
+    const b = createFakeEngine();
+    alignmentPlugin.install(a.engine);
+    alignmentPlugin.install(b.engine);
+
+    alignmentPlugin.uninstall?.(a.engine);
+
+    expect(a.registry.panels.getSlot("sidebar-right")).toEqual([]);
+    expect(b.registry.panels.getSlot("sidebar-right")).toEqual([{ component: AlignmentControls }]);
+  });
 });

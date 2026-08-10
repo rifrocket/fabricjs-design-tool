@@ -19,8 +19,10 @@ export interface TemplateDefinition {
 
 // The captureMeta shape saved alongside every autosaved design (localStoragePlugin's
 // StoredDesign<TMeta>) — lets TemplateContext.tsx pick the initial template/size synchronously
-// before first render.
-export interface PageMeta {
+// before first render. Deliberately not named PageMeta: @rifrocket/fdt-plugin-pages has its own,
+// unrelated PageMeta (one page of a multi-page document) — this is a single document's
+// starter-design metadata.
+export interface StarterDesignMeta {
   templateId: string;
   width: number;
   height: number;

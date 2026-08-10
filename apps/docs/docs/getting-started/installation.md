@@ -5,8 +5,8 @@ title: Installation
 
 # Installation
 
-:::info Not yet on npm
-Every `@rifrocket/fdt-*` package is currently `private: true` in the [monorepo](https://github.com/rifrocket/fabricjs-design-tool) and has not been published yet. The install commands below describe the package layout you'll use once v2.0.0 ships — see the [migration guide](/docs/migration/v1-to-v2) for the previously-published v1 package.
+:::info Coming from v1?
+This is the v2+ rewrite of the previously-published `@rifrocket/fabricjs-design-tool` (v1), now split into `@rifrocket/fabricjs-design-tool` (core) plus the `@rifrocket/fdt-*` packages described below. See the [migration guide](/docs/migration/v1-to-v2) if you're upgrading.
 :::
 
 ## Choose a starting point
@@ -36,7 +36,7 @@ This gets you `<DesignEditor>`/`<Editor>` and every hook, but **no plugins are i
 npm install @rifrocket/fdt-plugin-shapes-basic @rifrocket/fdt-plugin-qrcode
 ```
 
-Each plugin declares its own peer dependencies (always `fabric`; plugins with UI panels also peer-depend on `react`/`react-dom`) — see the [plugin overview](/docs/plugins/overview) for the full list and which of the 13 plugins need React.
+Each plugin declares its own peer dependencies (always `fabric`; plugins with UI panels also peer-depend on `react`/`react-dom`) — see the [plugin overview](/docs/plugins/overview) for the full list and which of the 17 plugin packages need React.
 
 ## Framework-agnostic (no React) consumers
 

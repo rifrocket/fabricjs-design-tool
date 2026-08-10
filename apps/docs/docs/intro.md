@@ -15,7 +15,7 @@ It's built for two different audiences at once:
 
 ## Why a framework-agnostic core?
 
-Most Fabric.js-based editors hard-wire the canvas, the UI, and the feature set together, which makes them impossible to extend without forking. `@rifrocket/fabricjs-design-tool` owns exactly one thing — a single Fabric.js `Canvas` instance — and exposes every other capability (object types, tools, panels, property fields, import/export formats) as a **registry** that plugins register into. The React package, and every one of the 13 official plugins, are built entirely on top of that same public registry API — nothing in this framework has special internal access that a third-party plugin doesn't also have.
+Most Fabric.js-based editors hard-wire the canvas, the UI, and the feature set together, which makes them impossible to extend without forking. `@rifrocket/fabricjs-design-tool` owns exactly one thing — a single Fabric.js `Canvas` instance — and exposes every other capability (object types, tools, panels, property fields, import/export formats) as a **registry** that plugins register into. The React package, and every one of the 17 official plugin packages, are built entirely on top of that same public registry API — nothing in this framework has special internal access that a third-party plugin doesn't also have.
 
 ## Two ways in
 
@@ -38,11 +38,11 @@ Head to **[Getting Started](/docs/getting-started/installation)** to install the
 
 ## Project status
 
-Every `@rifrocket/fdt-*` package is currently `private: true` in the monorepo and not yet published to npm — this is the v2.0.0 rewrite of a previously-published `@rifrocket/fabricjs-design-tool` (v1). See the [migration guide](/docs/migration/v1-to-v2) if you're coming from v1, and the [GitHub repository](https://github.com/rifrocket/fabricjs-design-tool) for release status.
+Every `@rifrocket/fdt-*` package (and `@rifrocket/fabricjs-design-tool` itself) is published to npm, at `3.0.0` and up — this is the v2+ rewrite of a previously-published `@rifrocket/fabricjs-design-tool` (v1). See the [migration guide](/docs/migration/v1-to-v2) if you're coming from v1, and the [GitHub repository](https://github.com/rifrocket/fabricjs-design-tool) for release status.
 
 ## Where to go next
 
 - **[Choosing your entry point](/docs/getting-started/choosing-your-entry-point)** — `<DesignEditor>` vs `<Editor>` vs `createEngine()`, and which one fits your app.
 - **[Architecture overview](/docs/architecture/overview)** — how the monorepo, the `CanvasEngine`, and the React adapter fit together.
-- **[Plugins overview](/docs/plugins/overview)** — the 13 official plugins, and an important distinction between two different plugin shapes you'll want to know about before you install one.
+- **[Plugins overview](/docs/plugins/overview)** — the 17 official plugin packages, and the different plugin shapes you'll want to know about before you install one.
 - **[Writing a plugin](/docs/guides/writing-a-plugin)** — build your own extension end-to-end.

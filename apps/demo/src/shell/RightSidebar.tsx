@@ -1,10 +1,10 @@
 import { lazy, Suspense, useState } from "react";
 import type { ReactElement } from "react";
 import { PropertiesPanel, useEditorState } from "@rifrocket/fdt-react";
+import { EffectsPanel } from "@rifrocket/fdt-plugin-effects-panel";
 import { AlignmentToolbar } from "../features/selection/AlignmentToolbar";
 import { EnhancedLayersPanel } from "../features/layers/EnhancedLayersPanel";
 import { CanvasSizeFields } from "../features/canvas/CanvasSizeFields";
-import { EffectsSection } from "../features/effects/EffectsSection";
 import { InfoTooltip } from "../docs/InfoTooltip";
 
 const DevToolsPanel = lazy(() => import("../dev-tools/DevToolsPanel").then((m) => ({ default: m.DevToolsPanel })));
@@ -17,10 +17,10 @@ const TABS: Array<{ id: Tab; label: string }> = [
   { id: "dev", label: "Dev Tools" },
 ];
 
-// Only ever mounted once EngineHost/AppShell confirm the engine is ready (see the
-// {engine ? <RightSidebar/> : ...} gate in AppShell.tsx), so every hook here can safely
-// assume a live CanvasEngine in context.
-export function RightSidebar(): ReactElement {
+// Only ever mounted once an engine is confirmed ready by the caller (see the
+// {engine ? <RightSidebar/> : ...} gate in AppShell.tsx, and the equivalent gate in
+// MultiPageExample.tsx), so every hook here can safely assume a live CanvasEngine in context.
+export function RightSidebar({ showCanvasSize = true }: { showCanvasSize?: boolean }): ReactElement {
   const [tab, setTab] = useState<Tab>("properties");
   const selectedCount = useEditorState((state) => state.selectedObjectIds.length);
 
@@ -60,7 +60,7 @@ export function RightSidebar(): ReactElement {
                 <PropertiesPanel />
               )}
             </div>
-            {selectedCount === 0 && (
+            {showCanvasSize && selectedCount === 0 && (
               <div className="border-t border-fdt-border pt-4">
                 <CanvasSizeFields />
               </div>
@@ -72,7 +72,7 @@ export function RightSidebar(): ReactElement {
           (selectedCount === 0 ? (
             <p className="text-xs text-fdt-fg-muted">Select an object on the canvas to apply effects.</p>
           ) : (
-            <EffectsSection />
+            <EffectsPanel headingExtra={<InfoTooltip featureKey="effects" />} />
           ))}
 
         {tab === "layers" && <EnhancedLayersPanel />}

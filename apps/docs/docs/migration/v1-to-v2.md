@@ -13,7 +13,7 @@ v1 remains published and functional under its own dist-tag indefinitely — upgr
 
 **v1**: one package, two subpaths (`.` for "core" hooks/utils, `./ui` for React components).
 
-**v2**: a monorepo of small, independently-installable packages (`@rifrocket/fabricjs-design-tool`, `@rifrocket/fdt-react`, `@rifrocket/fdt-theme`, `@rifrocket/fdt-properties`, 13 `@rifrocket/fdt-plugin-*` packages). See [Installation](/docs/getting-started/installation).
+**v2**: a monorepo of small, independently-installable packages (`@rifrocket/fabricjs-design-tool`, `@rifrocket/fdt-react`, `@rifrocket/fdt-theme`, `@rifrocket/fdt-properties`, 17 `@rifrocket/fdt-plugin-*` packages). See [Installation](/docs/getting-started/installation).
 
 ## Peer dependencies, not hard dependencies
 

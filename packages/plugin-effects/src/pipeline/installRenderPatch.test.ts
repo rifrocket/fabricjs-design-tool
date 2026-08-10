@@ -1,7 +1,31 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { Canvas } from "fabric";
 import { FabricObject, Group, Rect } from "fabric";
 import { EFFECTS_PROPERTY, EffectRegistry } from "@rifrocket/fabricjs-design-tool";
-import { __resetRenderPatchForTests, installRenderPatch, isRenderPatchInstalled } from "./installRenderPatch";
+import {
+  __resetRenderPatchForTests,
+  installRenderPatch,
+  isRenderPatchInstalled,
+  uninstallRenderPatchForCanvas,
+} from "./installRenderPatch";
+
+function shadowRegistry(onRenderBehind: () => void): EffectRegistry {
+  const registry = new EffectRegistry();
+  registry.register({
+    id: "shadow",
+    category: "basic",
+    label: "Shadow",
+    track: "compositing",
+    schema: [],
+    defaults: {},
+    renderBehind: onRenderBehind,
+  });
+  return registry;
+}
+
+function shadowStackProperty(): unknown {
+  return [{ instanceId: "shadow_1", effectId: "shadow", enabled: true, props: {} }];
+}
 
 const originalRender = FabricObject.prototype.render;
 
@@ -71,6 +95,77 @@ describe("installRenderPatch", () => {
     rect.render(fakeCtx());
 
     expect(nativeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("resolves the correct engine's registry per-object when multiple canvases install different effect sets", () => {
+    // Regression test for the real, previously-flagged multi-engine bug: the render patch used
+    // to close over whichever registry installed *first*, so a second engine's own, different
+    // effect set was silently ignored for its own objects.
+    const nativeSpy = vi.fn();
+    FabricObject.prototype.render = nativeSpy;
+
+    const canvasA = {} as unknown as Canvas;
+    const canvasB = {} as unknown as Canvas;
+    const order: string[] = [];
+    const registryA = shadowRegistry(() => order.push("A"));
+    const registryB = shadowRegistry(() => order.push("B"));
+
+    installRenderPatch(registryA, canvasA);
+    installRenderPatch(registryB, canvasB); // installed second — must not shadow registryA
+
+    const rectOnA = new Rect();
+    rectOnA.canvas = canvasA;
+    rectOnA.set(EFFECTS_PROPERTY, shadowStackProperty());
+
+    const rectOnB = new Rect();
+    rectOnB.canvas = canvasB;
+    rectOnB.set(EFFECTS_PROPERTY, shadowStackProperty());
+
+    rectOnA.render(fakeCtx());
+    rectOnB.render(fakeCtx());
+
+    expect(order).toEqual(["A", "B"]);
+  });
+
+  it("falls back to the first-installed registry for an object with no live canvas (e.g. an off-canvas thumbnail render)", () => {
+    const nativeSpy = vi.fn();
+    FabricObject.prototype.render = nativeSpy;
+    const order: string[] = [];
+    installRenderPatch(shadowRegistry(() => order.push("fallback")));
+
+    const detachedRect = new Rect(); // .canvas intentionally left unset
+    detachedRect.set(EFFECTS_PROPERTY, shadowStackProperty());
+    detachedRect.render(fakeCtx());
+
+    expect(order).toEqual(["fallback"]);
+  });
+
+  it("uninstallRenderPatchForCanvas removes only that canvas's entry, without disturbing another still-live engine", () => {
+    const nativeSpy = vi.fn();
+    FabricObject.prototype.render = nativeSpy;
+
+    const canvasA = {} as unknown as Canvas;
+    const canvasB = {} as unknown as Canvas;
+    const order: string[] = [];
+    installRenderPatch(shadowRegistry(() => order.push("A")), canvasA);
+    installRenderPatch(shadowRegistry(() => order.push("B")), canvasB);
+
+    uninstallRenderPatchForCanvas(canvasA);
+
+    const rectOnB = new Rect();
+    rectOnB.canvas = canvasB;
+    rectOnB.set(EFFECTS_PROPERTY, shadowStackProperty());
+    rectOnB.render(fakeCtx());
+    expect(order).toEqual(["B"]); // canvas B's engine is unaffected by canvas A's uninstall
+
+    // canvas A now has no per-canvas entry, so it falls back to the first-ever-installed
+    // registry (registry A itself, in this test) rather than losing effect rendering outright —
+    // the shared prototype patch is never reverted, only per-canvas entries are removed.
+    const rectOnA = new Rect();
+    rectOnA.canvas = canvasA;
+    rectOnA.set(EFFECTS_PROPERTY, shadowStackProperty());
+    rectOnA.render(fakeCtx());
+    expect(order).toEqual(["B", "A"]);
   });
 
   it("reaches a Group instance through its own render() override via super.render()", () => {

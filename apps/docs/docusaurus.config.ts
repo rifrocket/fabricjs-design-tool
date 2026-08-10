@@ -95,7 +95,7 @@ const config: Config = {
       items: [
         {
           type: 'html',
-          value: '<span class="navbar-version-badge">v2.0.0</span>',
+          value: '<span class="navbar-version-badge">v3.0.0</span>',
           position: 'left',
         },
         {

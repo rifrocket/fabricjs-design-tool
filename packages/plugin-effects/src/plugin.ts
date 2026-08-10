@@ -1,13 +1,16 @@
 import type { EditorPlugin, EffectDefinition } from "@rifrocket/fabricjs-design-tool";
 import { registerSerializedProperty } from "@rifrocket/fabricjs-design-tool";
 import { EFFECTS_PROPERTY } from "@rifrocket/fabricjs-design-tool";
-import { installRenderPatch } from "./pipeline/installRenderPatch";
+import { installRenderPatch, uninstallRenderPatchForCanvas } from "./pipeline/installRenderPatch";
 import { ALL_BUILTIN_EFFECTS } from "./effects";
 
 // Registers the given effects (every built-in by default — pass a curated subset to exclude the
 // rest from your bundle, since every built-in effect is an independent, side-effect-free export)
 // and installs the shared rendering pipeline once. Safe to call more than once across multiple
-// engines: registerEffect throws on a genuine duplicate id, and installRenderPatch is idempotent.
+// engines: registerEffect throws on a genuine duplicate id, and installRenderPatch is idempotent
+// — each call also records this engine's own canvas -> registry mapping, so multiple engines
+// with *different* effect sets (e.g. plugin-pages' one-engine-per-page model) each render
+// against their own registry, not whichever engine happened to install first.
 //
 // A curated list like [shadowEffect, glowEffect] mixes several different EffectDefinition<TProps>
 // instantiations; `any` here is what lets that list be passed in directly without every caller
@@ -24,7 +27,15 @@ export function createEffectsPlugin(effects: EffectDefinition<any>[] = ALL_BUILT
         }
       }
       registerSerializedProperty(EFFECTS_PROPERTY);
-      installRenderPatch(engine.registry.effects);
+      installRenderPatch(engine.registry.effects, engine.getFabricCanvas());
+    },
+    // Removes this engine's own canvas -> registry entry (see installRenderPatch.ts) so a
+    // destroyed/unused engine stops influencing render lookups. Does NOT revert the shared
+    // FabricObject.prototype.render() patch itself — that stays installed for the process's
+    // lifetime, since any other still-live engine may depend on it; it's a no-op for any object
+    // with no live `.canvas` entry and no effect stack, so leaving it in place is harmless.
+    uninstall(engine) {
+      uninstallRenderPatchForCanvas(engine.getFabricCanvas());
     },
   };
 }

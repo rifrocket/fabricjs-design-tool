@@ -6,18 +6,9 @@ import { PanelSlot } from "./PanelSlot";
 import { setupDefaultShortcuts } from "./setupDefaultShortcuts";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 import { useCanvasEngine } from "./useCanvasEngine";
+import { resolveTheme } from "./resolveTheme";
 
 export type EditorTheme = "light" | "dark" | "system";
-
-// tokens.css only defines "light"/"dark" token sets — "system" is a resolved-at-render-time
-// convenience, never a literal attribute value; setting it verbatim (the previous behavior)
-// meant it never matched either token set and no --fdt-* variable ever applied for the default
-// theme value.
-function resolveTheme(theme: EditorTheme): "light" | "dark" {
-  if (theme !== "system") return theme;
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
 
 export interface EditorProps {
   // Read once, at construction: installing a different set of plugins on a live engine has no
@@ -87,6 +78,7 @@ export function Editor(props: EditorProps): ReactElement {
       {engine && (
         <EditorContext.Provider value={engine}>
           <PanelSlot name="toolbar-start" override={slots["toolbar-start"]} />
+          <PanelSlot name="tool-rail" override={slots["tool-rail"]} />
           <PanelSlot name="sidebar-right" override={slots["sidebar-right"]} />
           <PanelSlot name="properties-footer" override={slots["properties-footer"]} />
         </EditorContext.Provider>

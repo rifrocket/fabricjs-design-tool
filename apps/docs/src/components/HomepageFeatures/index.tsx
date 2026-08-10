@@ -32,7 +32,7 @@ const FeatureList: FeatureItem[] = [
       <>
         Object types, tools, panels, property fields, and export/import
         pipelines are all registry extension points. Ship your own plugin
-        the same way the 13 built-in <code>@rifrocket/fdt-plugin-*</code>{' '}
+        the same way the 17 built-in <code>@rifrocket/fdt-plugin-*</code>{' '}
         packages do.
       </>
     ),

@@ -2,9 +2,7 @@ import type { ReactElement } from "react";
 import { Minus, Plus, Maximize } from "lucide-react";
 import { useEditor, useEditorState } from "@rifrocket/fdt-react";
 import { setCanvasZoom, centerContent, getContainerSize } from "@rifrocket/fdt-plugin-pan-zoom";
-import { useTemplateContext } from "../../templates/TemplateContext";
 import { InfoTooltip } from "../../docs/InfoTooltip";
-import { CANVAS_CONTAINER_SELECTOR } from "./canvasContainerSelector";
 
 const ZOOM_STEP = 0.1;
 const MIN_ZOOM_UI = 0.1;
@@ -14,25 +12,35 @@ const RULER_AND_PADDING_ALLOWANCE = 100;
 const BUTTON_CLASS =
   "flex h-6 w-6 items-center justify-center rounded text-fdt-fg-muted transition-colors duration-150 hover:bg-fdt-bg-elevated hover:text-fdt-fg";
 
+// documentSize/containerSelector are threaded down from AppShell.tsx so this works against
+// either mode (the workspace's activeTemplate size + CANVAS_CONTAINER_SELECTOR, or the active
+// page's own size + PAGES_CANVAS_CONTAINER_SELECTOR in the multi-page example) without this
+// component needing to know which one it's in.
+//
 // applyZoom() always follows setCanvasZoom() with centerContent(): a plain setZoom() with no
 // anchor zooms from the viewport's top-left corner, drifting the page out of view over repeated
 // clicks otherwise. Continuous wheel-zoom anchors on the cursor instead and skips this.
-export function ZoomControls(): ReactElement {
+export function ZoomControls({
+  documentSize,
+  containerSelector,
+}: {
+  documentSize: { width: number; height: number };
+  containerSelector: string;
+}): ReactElement {
   const engine = useEditor();
-  const { activeTemplate } = useTemplateContext();
   const zoom = useEditorState((state) => state.zoom);
 
   const applyZoom = (value: number) => {
     setCanvasZoom(engine, value);
-    centerContent(engine, activeTemplate.width, activeTemplate.height, CANVAS_CONTAINER_SELECTOR);
+    centerContent(engine, documentSize.width, documentSize.height, containerSelector);
   };
 
   const fitToScreen = () => {
-    const container = getContainerSize(CANVAS_CONTAINER_SELECTOR);
+    const container = getContainerSize(containerSelector);
     if (!container) return;
     const scale = Math.min(
-      (container.width - RULER_AND_PADDING_ALLOWANCE) / activeTemplate.width,
-      (container.height - RULER_AND_PADDING_ALLOWANCE) / activeTemplate.height,
+      (container.width - RULER_AND_PADDING_ALLOWANCE) / documentSize.width,
+      (container.height - RULER_AND_PADDING_ALLOWANCE) / documentSize.height,
       MAX_ZOOM_UI,
     );
     applyZoom(Math.max(scale, MIN_ZOOM_UI));

@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { Menu, Undo2, Redo2 } from "lucide-react";
+import { ArrowLeft, Files, Menu, Undo2, Redo2 } from "lucide-react";
 import { useEditor, useEditorState } from "@rifrocket/fdt-react";
 import { useEngineOrNull } from "../engine/useEngineOrNull";
 import { TemplatePicker } from "../templates/TemplatePicker";
@@ -13,8 +13,26 @@ import { logUiEvent } from "../dev-tools/uiEventLog";
 const ICON_BUTTON_CLASS =
   "flex h-8 w-8 items-center justify-center rounded-lg text-fdt-fg-muted transition-colors duration-150 hover:bg-fdt-bg-elevated hover:text-fdt-fg disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent";
 
-export function Header({ onTogglePanels }: { onTogglePanels: () => void }): ReactElement {
+// Shared by both AppShell modes (see AppShell.tsx) — exactly one of onOpenPagesExample/onExitPages
+// is provided at a time. In pages mode: TemplatePicker (single-document only) is replaced by a
+// "Back to editor" action, and ClearSavedDesignButton (single-document autosave only, no
+// equivalent wired up for plugin-pages yet) is omitted. Everything else (undo/redo, import/export,
+// shortcuts, theme) operates on whichever engine EditorContext currently holds, unmodified.
+export function Header({
+  onTogglePanels,
+  onOpenPagesExample,
+  onExitPages,
+  documentSize,
+  containerSelector,
+}: {
+  onTogglePanels: () => void;
+  onOpenPagesExample?: () => void;
+  onExitPages?: () => void;
+  documentSize: { width: number; height: number } | null;
+  containerSelector: string;
+}): ReactElement {
   const engine = useEngineOrNull();
+  const pagesMode = onExitPages !== undefined;
 
   return (
     <header className="flex h-14 items-center gap-3 border-b border-fdt-border bg-fdt-bg px-3">
@@ -29,22 +47,44 @@ export function Header({ onTogglePanels }: { onTogglePanels: () => void }): Reac
 
       {engine ? <UndoRedoButtonsContent /> : <UndoRedoButtonsSkeleton />}
 
-      <TemplatePicker />
+      {pagesMode ? (
+        <button
+          type="button"
+          onClick={onExitPages}
+          className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-fdt-fg-muted transition-colors duration-150 hover:bg-fdt-bg-elevated hover:text-fdt-fg"
+        >
+          <ArrowLeft size={16} strokeWidth={2} />
+          Back to editor
+        </button>
+      ) : (
+        <TemplatePicker />
+      )}
 
       <div className="flex-1" />
 
       <div className="hidden items-center gap-1.5 sm:flex">
-        {engine ? (
+        {engine && documentSize ? (
           <>
             <ImportJsonMenu />
-            <ClearSavedDesignButton />
+            {!pagesMode && <ClearSavedDesignButton />}
             <ShortcutsCheatSheet />
-            <ExportMenu />
+            <ExportMenu documentSize={documentSize} containerSelector={containerSelector} />
           </>
         ) : (
           <HeaderActionsSkeleton />
         )}
       </div>
+
+      {!pagesMode && onOpenPagesExample && (
+        <button
+          type="button"
+          onClick={onOpenPagesExample}
+          title="Multi-page example (@rifrocket/fdt-plugin-pages)"
+          className={`${ICON_BUTTON_CLASS} hidden sm:flex`}
+        >
+          <Files size={16} strokeWidth={2} />
+        </button>
+      )}
 
       <ThemeToggle />
 

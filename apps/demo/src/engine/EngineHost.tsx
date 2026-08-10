@@ -3,18 +3,27 @@ import type { ReactElement } from "react";
 import { DesignEditor, EditorContext } from "@rifrocket/fdt-react";
 import type { CanvasEngine, PluginOverrides } from "@rifrocket/fabricjs-design-tool";
 import { restoreSnapshot } from "@rifrocket/fabricjs-design-tool";
-import { useContainerSize, centerContent } from "@rifrocket/fdt-plugin-pan-zoom";
+import {
+  useContainerSize,
+  centerContent,
+  createPageBoundaryRect,
+  captureSnapshotExcludingBoundary,
+} from "@rifrocket/fdt-plugin-pan-zoom";
 import { importJsonPlugin } from "@rifrocket/fdt-plugin-import-json";
-import { localStoragePlugin, loadDesignFromStorage } from "@rifrocket/fdt-plugin-local-storage";
+import { loadDesignFromStorage } from "@rifrocket/fdt-plugin-local-storage";
+import { alignmentPlugin } from "@rifrocket/fdt-plugin-alignment";
+import { snappingPlugin } from "@rifrocket/fdt-plugin-snapping";
+import { devtoolsPlugin } from "@rifrocket/fdt-plugin-devtools";
+import { createEffectsPanelPlugin } from "@rifrocket/fdt-plugin-effects-panel";
+import { createShapesBasicPanelPlugin } from "@rifrocket/fdt-plugin-shapes-basic-panel";
 import { stampToolPlugin } from "../plugins/stampToolPlugin";
 import { useTemplateContext } from "../templates/TemplateContext";
 import { useThemeContext } from "../theme/ThemeContext";
 import { AppShell } from "../shell/AppShell";
 import { SelectionQuickActions } from "../features/selection/SelectionQuickActions";
 import { logUiEvent } from "../dev-tools/uiEventLog";
-import { createPageBoundaryRect, captureDesignSnapshot } from "../features/viewport/pageViewport";
 import { CANVAS_CONTAINER_SELECTOR } from "../features/viewport/canvasContainerSelector";
-import type { PageMeta } from "../templates/types";
+import type { StarterDesignMeta } from "../templates/types";
 
 interface ReadyState {
   templateId: string;
@@ -32,10 +41,10 @@ const FALLBACK_VIEWPORT_SIZE = { width: 800, height: 600 };
 // starter document, not a resize, so it needs a clean engine + fresh history.
 //
 // The canvas element's size tracks the workspace viewport (useContainerSize()), not the
-// template — the template's dimensions instead size a page-boundary rect (createPageBoundaryRect,
-// pageViewport.ts) so the page can pan/zoom within a fixed-size viewport. No backgroundColor is
-// passed to <Editor> for the same reason: the page background lives on that rect too.
-export function EngineHost(): ReactElement {
+// template — the template's dimensions instead size a page-boundary rect (createPageBoundaryRect)
+// so the page can pan/zoom within a fixed-size viewport. No backgroundColor is passed to <Editor>
+// for the same reason: the page background lives on that rect too.
+export function EngineHost({ onOpenPagesExample }: { onOpenPagesExample: () => void }): ReactElement {
   const { activeTemplate } = useTemplateContext();
   const { resolvedTheme } = useThemeContext();
   const [readyState, setReadyState] = useState<ReadyState | null>(null);
@@ -53,24 +62,47 @@ export function EngineHost(): ReactElement {
   activeTemplateRef.current = activeTemplate;
 
   // preset="default" already installs shapes/clipboard/svg-import/image/effects/export-pdf/qrcode;
-  // this `add` override adds only what it doesn't bundle. Memoized since <DesignEditor> only
-  // reads `plugins` at construction, not on every render.
+  // this `add` override adds only what it doesn't bundle. alignment/snapping/devtools/effects-panel/
+  // shapes-basic-panel are excluded from every built-in preset (each depends on @rifrocket/fdt-react
+  // itself, which would be a circular package dependency if fdt-react bundled them back) —
+  // installed here instead so their registries/uninstall semantics are real, not just their
+  // headless hooks working by accident against always-on core managers. Their sidebar-right/
+  // tool-rail panels are suppressed below (`slots`) since AppShell/LeftToolRail/RightSidebar render
+  // their own styled equivalents (alignment/snapping/shapes) or the plugin's own EffectsPanel
+  // directly inside its own tab (effects), not <Editor>'s own slots.
+  // Autosave (localStoragePlugin) is NOT added here — it's threaded through <DesignEditor
+  // autosave> below instead, exercising that sugar prop for real rather than hand-rolling what it
+  // already does (the two are equivalent: <DesignEditor autosave> just appends
+  // localStoragePlugin(options) to this same `add` array internally).
+  // Memoized since <DesignEditor> only reads `plugins` at construction, not on every render.
   const plugins = useMemo<PluginOverrides>(
     () => ({
       add: [
         importJsonPlugin,
         stampToolPlugin,
-        localStoragePlugin<PageMeta>({
-          captureSnapshot: captureDesignSnapshot,
-          captureMeta: () => ({
-            templateId: activeTemplateRef.current.id,
-            width: activeTemplateRef.current.width,
-            height: activeTemplateRef.current.height,
-          }),
-        }),
+        alignmentPlugin,
+        snappingPlugin,
+        devtoolsPlugin,
+        createEffectsPanelPlugin(),
+        createShapesBasicPanelPlugin(),
       ],
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  // Passed to <DesignEditor autosave> below. captureMeta reads activeTemplateRef.current (not
+  // activeTemplate directly) so a debounced autosave firing after a template switch still
+  // captures the *current* template, not whatever it was when this was constructed — same
+  // reasoning as the ref itself, just now feeding a prop instead of a directly-constructed plugin.
+  const autosaveOptions = useMemo(
+    () => ({
+      captureSnapshot: captureSnapshotExcludingBoundary,
+      captureMeta: (): StarterDesignMeta => ({
+        templateId: activeTemplateRef.current.id,
+        width: activeTemplateRef.current.width,
+        height: activeTemplateRef.current.height,
+      }),
+    }),
     [],
   );
 
@@ -85,7 +117,7 @@ export function EngineHost(): ReactElement {
 
     // Restoring a save only makes sense on the session's first load, not every template switch —
     // that would silently override the template the user just picked with whatever was last autosaved.
-    const savedDesign = isInitialLoadRef.current ? loadDesignFromStorage<PageMeta>() : null;
+    const savedDesign = isInitialLoadRef.current ? loadDesignFromStorage<StarterDesignMeta>() : null;
 
     try {
       if (savedDesign) {
@@ -130,17 +162,23 @@ export function EngineHost(): ReactElement {
   return (
     <EditorContext.Provider value={engine}>
       <AppShell
+        mode="workspace"
+        onOpenPagesExample={onOpenPagesExample}
+        documentLabel={`${activeTemplate.label} · ${activeTemplate.width} × ${activeTemplate.height}px`}
+        documentSize={{ width: activeTemplate.width, height: activeTemplate.height }}
+        containerSelector={CANVAS_CONTAINER_SELECTOR}
         editor={
           <DesignEditor
             key={activeTemplate.id}
             preset="default"
             plugins={plugins}
+            autosave={autosaveOptions}
             theme={resolvedTheme}
             width={viewportSize.width}
             height={viewportSize.height}
             className="relative"
             ariaLabel={`${activeTemplate.label} canvas`}
-            slots={{ "toolbar-start": SelectionQuickActions }}
+            slots={{ "toolbar-start": SelectionQuickActions, "sidebar-right": () => null, "tool-rail": () => null }}
             onReady={(next) => void handleReady(next)}
           />
         }

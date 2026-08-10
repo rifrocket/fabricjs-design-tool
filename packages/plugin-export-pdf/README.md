@@ -5,7 +5,7 @@
 
   **PDF export for [Fabric Design Tool](../../README.md), isolated so `jsPDF` is only paid for by consumers who install it.**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-export-pdf/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-export-pdf)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-export-pdf.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-export-pdf)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
@@ -15,9 +15,10 @@ A pure engine plugin that registers a `"pdf"` exporter. `@rifrocket/fabricjs-des
 ## Features
 
 - Registers `"pdf"` as an `engine.export()` format
-- The canvas is fitted onto a standard A4 page (210mm × 297mm) with a 10mm margin, preserving aspect ratio
+- The canvas is fitted onto the page (A4 by default, 10mm margin), preserving aspect ratio
+- `createExportPdfPlugin({ pageSize, orientation, marginMm })` — configure the page size (`"a4"` / `"letter"` / `"legal"`), orientation (defaults to auto: landscape for a wider-than-tall canvas, portrait otherwise), and margin
 - `engine.export()` returns raw data — `{ format, fileName, mimeType, data: Blob }` — triggering the actual browser download is left to your app
-- Also exports `exportPdf` directly if you want the conversion logic without going through the plugin/registry
+- Also exports `exportPdf(canvas, options?)` directly if you want the conversion logic without going through the plugin/registry
 
 ## Install
 
@@ -40,6 +41,16 @@ const result = await engine.export("pdf");
 ```
 
 Included in `<DesignEditor preset="default">`; dropped from `preset="minimal"`.
+
+With a custom page size/orientation/margin:
+
+```ts
+import { createExportPdfPlugin } from "@rifrocket/fdt-plugin-export-pdf";
+
+engine.use(createExportPdfPlugin({ pageSize: "letter", orientation: "portrait", marginMm: 20 }));
+```
+
+Options are fixed at registration time (core's `Exporter` type is `(canvas) => unknown`, shared by every export format, so there's no per-call options channel through `engine.export("pdf")`) — register under a different format id, or call `exportPdf(canvas, options)` directly, if you need more than one configuration in the same app.
 
 ## Documentation
 

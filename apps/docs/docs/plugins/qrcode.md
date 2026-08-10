@@ -26,7 +26,7 @@ await engine.addObjectOfType("qrcode", {
 
 - `qrCodePlugin` — the `EditorPlugin`
 - `registerQRCodeType(registry)` — the underlying registration function
-- `generateContentString`, `validateContent` — content-string generation/validation, useful for validating user input before calling `addObjectOfType`
+- `generateContentString`, `validateContent` — content-string generation/validation, useful for validating user input before calling `addObjectOfType` (`validateContent` returns a `ContentValidationResult`)
 - `generateQRCodeSVG` — the raw SVG generator, if you want the markup without creating a Fabric object
 - Types: `QRCodeObjectConfig`, `QRCodeContentMap`, `QRContentType`, `QRCodeStyleOptions`, `CornerDotType`, `CornerSquareType`, `DotType`, `ErrorCorrectionLevel`, `Gradient`, `GradientType`, `Mode`, `ShapeType`, `TypeNumber`
 

@@ -8,14 +8,18 @@ import { qrCodePlugin } from "@rifrocket/fdt-plugin-qrcode";
 import type { DesignEditorPreset } from "./types";
 
 // Deliberately excluded from every preset: @rifrocket/fdt-plugin-alignment, -snapping, -devtools,
-// and -import-json all depend on @rifrocket/fdt-react themselves (they render via useEditor()),
-// so bundling them here would be a circular package dependency (fdt-react -> plugin-x ->
-// fdt-react) that pnpm/tsup can't build. shapes-basic/image/qrcode look like the same risk but
-// aren't: they depend on @rifrocket/fdt-properties, which used to import a *type* from
-// @rifrocket/fdt-react and create this exact cycle; that type (PropertyFieldProps) now lives in
-// @rifrocket/fabricjs-design-tool instead (see core's objectTypeRegistry.ts). Excluded plugins stay available
-// the same way any third-party plugin is: `plugins: { add: [...] }` (see DesignEditor.tsx and
-// apps/demo/src/engine/EngineHost.tsx).
+// -import-json, -effects-panel, and -shapes-basic-panel all depend on @rifrocket/fdt-react
+// themselves (they render via useEditor()), so bundling them here would be a circular package
+// dependency (fdt-react -> plugin-x -> fdt-react) that pnpm/tsup can't build. shapes-basic/image/
+// qrcode look like the same risk but aren't: they depend on @rifrocket/fdt-properties, which used
+// to import a *type* from @rifrocket/fdt-react and create this exact cycle; that type
+// (PropertyFieldProps) now lives in @rifrocket/fabricjs-design-tool instead (see core's
+// objectTypeRegistry.ts). This is exactly why -effects-panel/-shapes-basic-panel exist as
+// separate sibling packages rather than living inside -effects/-shapes-basic themselves — giving
+// either of *those* (bundled here) a real @rifrocket/fdt-react dependency would reintroduce the
+// same cycle, confirmed live by pnpm's own cyclic-workspace-dependency warning when tried.
+// Excluded plugins stay available the same way any third-party plugin is:
+// `plugins: { add: [...] }` (see DesignEditor.tsx and apps/demo/src/engine/EngineHost.tsx).
 //
 // @rifrocket/fdt-plugin-local-storage is core-only (no circular risk) but still excluded here:
 // its real value needs an app-specific captureMeta/document-id callback, so it's surfaced as

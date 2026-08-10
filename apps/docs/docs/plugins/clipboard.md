@@ -30,6 +30,8 @@ engine.use(clipboardPlugin);
 
 Every registered combo goes through `engine.shortcuts.register()`, so it composes with any other plugin's shortcuts through the same `KeyboardShortcutManager` — see [Custom Property Fields](/docs/extension-points/custom-property-fields) and the [architecture overview](/docs/architecture/overview) for how the shortcut registry fits alongside the other registries.
 
+`clipboardPlugin.uninstall(engine)` unregisters every shortcut this plugin added to that engine, and only that engine — safe to call under `plugin-pages`' multi-engine model without affecting any other page.
+
 ## Exports
 
 - `clipboardPlugin` — the `EditorPlugin`

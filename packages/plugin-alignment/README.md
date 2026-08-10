@@ -5,7 +5,7 @@
 
   **A ready-made align/distribute panel for [Fabric Design Tool](../../README.md).**
 
-  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-alignment/beta.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-alignment)
+  [![npm](https://img.shields.io/npm/v/%40rifrocket%2Ffdt-plugin-alignment.svg)](https://www.npmjs.com/package/@rifrocket/fdt-plugin-alignment)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
   [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 </div>
@@ -15,7 +15,7 @@ A panel-slot wrapper plugin: [`@rifrocket/fabricjs-design-tool`](../core) alread
 ## Features
 
 - **`AlignmentControls`** — the align/distribute panel component (align left/center/right/top/middle/bottom, distribute horizontally/vertically), wired directly to `engine.alignment`
-- **`alignmentPlugin`** — installs `AlignmentControls` into `sidebar-right` via `registry.registerPanel()`; no engine-level behavior added, `AlignmentManager` already lives in core
+- **`alignmentPlugin`** — installs `AlignmentControls` into `sidebar-right` via `registry.registerPanel()`; no engine-level behavior added, `AlignmentManager` already lives in core. `uninstall(engine)` removes only its own engine's panel registration
 - Export `AlignmentControls` directly if you want to place it somewhere other than `sidebar-right` — it only needs `engine`, not the plugin's panel registration
 
 ## Install

@@ -1,15 +1,14 @@
-import { useState } from "react";
 import type { ReactElement } from "react";
 import { Magnet } from "lucide-react";
-import { useEditor } from "@rifrocket/fdt-react";
+import { useSnapping } from "@rifrocket/fdt-plugin-snapping";
 import { InfoTooltip } from "../../docs/InfoTooltip";
 import { logUiEvent } from "../../dev-tools/uiEventLog";
 
-// SnapEngine has no reactive "enabled changed" event, so this button's local state is the
-// source of truth (seeded once from isEnabled()), same pattern as StampToolButton.
+// State/toggle semantics come from @rifrocket/fdt-plugin-snapping's useSnapping, the single
+// source of truth also used by that package's own bare <SnappingToggle>. Only the styling and
+// the demo-local uiEventLog call are specific to this component.
 export function SnappingToggle(): ReactElement {
-  const engine = useEditor();
-  const [enabled, setEnabled] = useState(() => engine.snapping.isEnabled());
+  const { enabled, setEnabled } = useSnapping();
 
   return (
     <div className="flex items-center gap-1">
@@ -19,7 +18,6 @@ export function SnappingToggle(): ReactElement {
         title="Toggle smart-guide snapping"
         onClick={() => {
           const next = !enabled;
-          engine.snapping.setEnabled(next);
           setEnabled(next);
           logUiEvent(next ? "Enable snapping" : "Disable snapping");
         }}

@@ -116,4 +116,4 @@ This gets `engine.addObjectOfType("sticky-note", ...)` autocomplete/typo-checkin
 
 ## What you didn't need
 
-No file inside `packages/core` or `packages/react` needed to change. Every extension point used above — `registerObjectType`, `registerPropertyFields` (implicitly, via the same call), `engine.shortcuts.register`, `engine.events.on` — is the exact public API a first-party plugin uses. See [Extension Points](/docs/extension-points/custom-object-types) for the full reference on each seam, and [Plugins Overview](/docs/plugins/overview) for how the 13 official plugins are organized.
+No file inside `packages/core` or `packages/react` needed to change. Every extension point used above — `registerObjectType`, `registerPropertyFields` (implicitly, via the same call), `engine.shortcuts.register`, `engine.events.on` — is the exact public API a first-party plugin uses. See [Extension Points](/docs/extension-points/custom-object-types) for the full reference on each seam, and [Plugins Overview](/docs/plugins/overview) for how the 17 official plugin packages are organized.

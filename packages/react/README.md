@@ -29,7 +29,7 @@ import { DesignEditor } from "@rifrocket/fdt-react";
 
 **`preset`/`plugins` are construction-time only** — same contract as `<Editor plugins>` below: changing them on an already-mounted `<DesignEditor>` does nothing until it remounts (e.g. via a changing `key={documentId}`). There's no safe general story for hot-swapping an installed plugin set (uninstall ordering, plugin-held state), so this is a deliberate limitation, not a bug.
 
-Not bundled into either built-in preset: `@rifrocket/fdt-plugin-alignment`, `-snapping`, `-devtools`, and `-import-json`. Each of those depends on `@rifrocket/fdt-react` itself (they render panel components via `useEditor()`), so this package bundling them back would be a circular package dependency. Add them the same way you'd add any third-party plugin:
+Not bundled into either built-in preset: `@rifrocket/fdt-plugin-alignment`, `-snapping`, `-devtools`, `-import-json`, and `-effects-panel`. Each of those depends on `@rifrocket/fdt-react` itself (they render panel components via `useEditor()`), so this package bundling them back would be a circular package dependency. Add them the same way you'd add any third-party plugin:
 
 ```tsx
 import { alignmentPlugin } from "@rifrocket/fdt-plugin-alignment";
@@ -42,9 +42,9 @@ For everything below "one preset, minor overrides" — a from-scratch plugin lis
 
 ## Building a custom application shell
 
-`<Editor>`/`<DesignEditor>` only render 3 fixed panel slots (`toolbar-start`, `sidebar-right`, `properties-footer`) inside their own wrapping `<div>`. That covers a self-contained editor widget, but not a real application shell — a header, multiple sidebars, a status bar, floating panels, or anything else laid out around the canvas rather than inside `<Editor>`'s own markup.
+`<Editor>`/`<DesignEditor>` only render 4 fixed panel slots (`toolbar-start`, `tool-rail`, `sidebar-right`, `properties-footer`) inside their own wrapping `<div>`. That covers a self-contained editor widget, but not a real application shell — a header, multiple sidebars, a status bar, floating panels, or anything else laid out around the canvas rather than inside `<Editor>`'s own markup.
 
-For that, drop down to `useCanvasEngine()` — the same headless hook `<Editor>` is built on — and **re-provide `EditorContext`** around your own layout. This is the one, fully-supported pattern for going beyond the 3 slots; it's not a workaround.
+For that, drop down to `useCanvasEngine()` — the same headless hook `<Editor>` is built on — and **re-provide `EditorContext`** around your own layout. This is the one, fully-supported pattern for going beyond the 4 slots; it's not a workaround.
 
 ```tsx
 import { useRef } from "react";

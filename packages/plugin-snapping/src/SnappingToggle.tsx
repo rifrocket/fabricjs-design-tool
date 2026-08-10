@@ -1,22 +1,13 @@
-import { useState } from "react";
 import type { ReactElement } from "react";
-import { useEditor } from "@rifrocket/fdt-react";
+import { useSnapping } from "./useSnapping";
 
 // Bare/unstyled, matching the convention @rifrocket/fdt-react's own shipped components
-// already follow. Local useState mirrors SnapEngine.isEnabled() since SnapEngine only exposes
-// an imperative getter/setter, not a reactive "enabled changed" store field or event.
+// already follow.
 export function SnappingToggle(): ReactElement {
-  const engine = useEditor();
-  const [enabled, setEnabled] = useState(() => engine.snapping.isEnabled());
-
-  const toggle = () => {
-    const next = !enabled;
-    engine.snapping.setEnabled(next);
-    setEnabled(next);
-  };
+  const { enabled, setEnabled } = useSnapping();
 
   return (
-    <button type="button" aria-pressed={enabled} onClick={toggle}>
+    <button type="button" aria-pressed={enabled} onClick={() => setEnabled(!enabled)}>
       Snapping: {enabled ? "On" : "Off"}
     </button>
   );

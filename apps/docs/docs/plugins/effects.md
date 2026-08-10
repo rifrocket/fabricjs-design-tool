@@ -27,7 +27,9 @@ engine.registry.effects.register(myCustomEffect); // add your own effect definit
 engine.registry.effects.has("shadow"); // check before registering, if you might install the plugin twice
 ```
 
-`createEffectsPlugin()` is itself safe to call more than once across multiple engines — it skips re-registering an effect id that's already present rather than throwing, and its rendering-pipeline installation is idempotent.
+`createEffectsPlugin()` is itself safe to call more than once across multiple engines — it skips re-registering an effect id that's already present rather than throwing, and its rendering-pipeline installation is idempotent (keyed per-canvas, so multiple engines with *different* effect sets — e.g. `plugin-pages`' one-engine-per-page model — each render against their own registry). `uninstall(engine)` removes only that engine's own canvas-to-registry entry; it does **not** revert the shared `FabricObject.prototype.render()` patch itself, since another still-live engine may depend on it.
+
+This package has no UI of its own — pair it with [`effects-panel`](/docs/plugins/effects-panel) for a ready-made panel, or use `effectsWithPanelPlugin()` (exported from `effects-panel`) to install both in one call.
 
 ## Exports
 
