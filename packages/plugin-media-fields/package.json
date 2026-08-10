@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-media-fields",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "private": false,
   "description": "Shared property-field definitions for media-like object types (image, qrcode) in the FabricJS Design Tool.",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@rifrocket/fdt-plugin-snapping",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "private": false,
   "description": "A bare on/off toggle for smart-guide snapping, for the FabricJS Design Tool v2.",
   "repository": {
