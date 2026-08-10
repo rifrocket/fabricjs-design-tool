@@ -30,8 +30,30 @@ describe("saveDesignToStorage / loadDesignFromStorage", () => {
 
     saveDesignToStorage(design, DEFAULT_STORAGE_KEY, storage);
 
-    expect(storage.setItem).toHaveBeenCalledWith(DEFAULT_STORAGE_KEY, JSON.stringify(design));
     expect(loadDesignFromStorage<PageMeta>(DEFAULT_STORAGE_KEY, storage)).toEqual(design);
+  });
+
+  // The public StoredDesign shape is unchanged, but what's actually written to storage is a
+  // one-page DesignDocument — the same shape @rifrocket/fdt-plugin-pages' own persistence.ts
+  // writes — so a single-document save and a multi-page save are byte-compatible JSON.
+  it("writes a one-page DesignDocument to storage internally", () => {
+    const storage = createFakeStorage();
+    const design: StoredDesign<PageMeta> = { snapshot, meta: { width: 800, height: 600 } };
+
+    saveDesignToStorage(design, DEFAULT_STORAGE_KEY, storage);
+
+    const raw = JSON.parse(storage.getItem(DEFAULT_STORAGE_KEY)!);
+    expect(raw).toEqual({
+      meta: { width: 800, height: 600 },
+      pages: [{ id: "page-1", order: 0, snapshot }],
+    });
+  });
+
+  it("returns null for a pre-existing entry saved under the old flat { snapshot, meta } shape", () => {
+    const storage = createFakeStorage();
+    storage.setItem(DEFAULT_STORAGE_KEY, JSON.stringify({ snapshot, meta: null }));
+
+    expect(loadDesignFromStorage(DEFAULT_STORAGE_KEY, storage)).toBeNull();
   });
 
   it("round-trips a design with no meta as meta: null", () => {
