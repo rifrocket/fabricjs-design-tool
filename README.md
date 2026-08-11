@@ -21,7 +21,7 @@ This is a pnpm/turborepo monorepo. Every package under `packages/*` publishes to
 | [`@rifrocket/fdt-properties`](packages/properties) | Shared property-field components (slider, number, color, toggle, select, text) |
 | `@rifrocket/fdt-plugin-*` | Optional engine plugins — shapes, QR codes, SVG import, images, clipboard, PDF export, JSON import, effects, local-storage autosave, alignment, snapping, dev tools, pan/zoom |
 
-See [`packages/README.md`](packages/README.md) for the full plugin list and what each one does, and [`apps/demo`](apps/demo) for a working consumer that wires these packages together through the public `<Editor>` API.
+See [`packages/README.md`](packages/README.md) for the full plugin list and what each one does, and [`apps/demo`](apps/demo) for a working consumer that wires these packages together through the public `<Editor>` API — and [`apps/npm-verify`](apps/npm-verify) for verifying the published npm packages themselves (not workspace source) install and work correctly.
 
 ## Getting started (working in this repo)
 

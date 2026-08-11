@@ -1,0 +1,21 @@
+/*
+ * Token bridge: imports the library's --fdt-* CSS custom properties, then re-exposes them as
+ * Tailwind v4 theme colors via @theme — the same pattern apps/demo uses. Every ready-made
+ * component this app renders (LayersPanel, PropertiesPanel, ShapePicker, AlignmentControls,
+ * SnappingToggle, EffectsPanel, PageTabsBar, PagesCanvas, devtools panels, ...) is styled with
+ * these bg-fdt-..., text-fdt-..., border-fdt-... utility classes — without this bridge they
+ * render unstyled (functional, but effectively invisible/overlapping).
+ */
+@import "@rifrocket/fdt-theme/src/tokens.css";
+@import "tailwindcss";
+
+@theme {
+  --color-fdt-bg: var(--fdt-bg);
+  --color-fdt-bg-elevated: var(--fdt-bg-elevated);
+  --color-fdt-fg: var(--fdt-fg);
+  --color-fdt-fg-muted: var(--fdt-fg-muted);
+  --color-fdt-border: var(--fdt-border);
+  --color-fdt-accent: var(--fdt-accent);
+  --color-fdt-accent-hover: var(--fdt-accent-hover);
+  --color-fdt-danger: var(--fdt-danger);
+}

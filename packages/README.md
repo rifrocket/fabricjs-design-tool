@@ -51,4 +51,4 @@ pnpm packages:dev       # turbo run dev (watch mode), scoped to packages/*
 
 Versioning/publishing goes through [Changesets](../.changeset/README.md): add a changeset (`pnpm changeset`) describing your change, and merging it triggers the automated version-PR → npm publish flow described in the [root README](../README.md#contributing).
 
-See [`../apps/demo`](../apps/demo) for a working consumer that wires these packages together through the public `<Editor>` API.
+See [`../apps/demo`](../apps/demo) for a working consumer that wires these packages together through the public `<Editor>` API, and [`../apps/npm-verify`](../apps/npm-verify) for verifying the same packages as installed from the real npm registry rather than workspace source.
