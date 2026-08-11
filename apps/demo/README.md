@@ -16,6 +16,7 @@ This app is a full editor shell — toolbar, sidebars, panels, templates, dev to
 - **Every plugin package installed**: `plugin-alignment`, `plugin-clipboard`, `plugin-effects`, `plugin-effects-panel`, `plugin-export-pdf`, `plugin-image`, `plugin-import-json`, `plugin-devtools`, `plugin-local-storage`, `plugin-pages`, `plugin-pan-zoom`, `plugin-qrcode`, `plugin-shapes-basic`, `plugin-shapes-basic-panel`, `plugin-snapping`, `plugin-svg-import`, plus `theme` for light/dark theming
 - **A custom plugin from scratch** ([`src/plugins/stampToolPlugin.ts`](src/plugins/stampToolPlugin.ts)) — proof that the extension points work outside the monorepo's own plugin packages, not just inside them
 - **Dev tools** ([`src/dev-tools`](src/dev-tools)) — event log, object hierarchy panel, and a debug-mode toggle, all built from `plugin-devtools`'s public surface
+- **First-time-user product tour** ([`src/tour`](src/tour)) — a [driver.js](https://driverjs.com/)-powered spotlight walkthrough: a 7-step core workspace tour that auto-plays once, and a 4-step multi-page mini-tour that auto-plays the first time multi-page mode is enabled. Replayable anytime via the header's help button; "seen" state is a demo-local `localStorage` flag, so it's demo UX, not a package feature
 - **Feature modules** ([`src/features`](src/features)) — canvas, shapes, layers, selection, effects, export, viewport, persistence, and keyboard shortcuts, each demonstrating one slice of the engine API in isolation
 
 ## Running locally
