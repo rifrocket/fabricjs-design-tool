@@ -17,6 +17,7 @@ export { resolveObjectTypeId } from "./engine/resolveObjectTypeId";
 export { AsyncLock } from "./engine/asyncLock";
 export { applyViewportTransform } from "./engine/viewportTransform";
 export { ViewportManager } from "./engine/viewportManager";
+export type { SetZoomOptions } from "./engine/viewportManager";
 export { SelectionManager } from "./engine/selectionManager";
 export { LayerManager } from "./engine/layerManager";
 export { AlignmentManager } from "./engine/alignmentManager";
@@ -44,6 +45,9 @@ export { computeRulerTicks } from "./engine/ruler";
 export type { RulerOptions, RulerTick } from "./engine/ruler";
 
 export { CanvasEngine, createEngine } from "./engine/canvasEngine";
+
+export type { RendererApi, SceneApi, SelectionApi, ViewportApi, SerializationApi, LifecycleApi } from "./engine/rendererApi";
+export { FabricRendererApi } from "./engine/fabricRendererApi";
 
 export { CanvasExporter } from "./export/canvasExporter";
 export type { ExportFormat, ExportResult } from "./export/canvasExporter";

@@ -13,6 +13,8 @@ import { SelectionManager } from "./selectionManager";
 import { LayerManager } from "./layerManager";
 import { AlignmentManager } from "./alignmentManager";
 import { SnapEngine } from "./snapEngine";
+import { FabricRendererApi } from "./fabricRendererApi";
+import type { RendererApi } from "./rendererApi";
 import { getObjectId } from "./objectId";
 import { PluginRegistry } from "../plugin/pluginRegistry";
 import type { ObjectTypeId } from "../plugin/objectTypeRegistry";
@@ -48,6 +50,11 @@ export class CanvasEngine {
   readonly store: Store<EngineState>;
   readonly registry: PluginRegistry;
   readonly shortcuts: KeyboardShortcutManager;
+  // Renderer-agnostic seam (FUTURE_IMPLEMENTATION.md Stage 2) — everything above this field
+  // stays Fabric-typed for now (see the "Explicitly out of scope" section of that plan), but
+  // consumers/plugins that only need scene/selection/viewport/serialization/lifecycle
+  // operations can depend on this instead of getFabricCanvas().
+  readonly renderer: RendererApi<FabricObject>;
 
   private readonly installedPlugins = new Map<string, EditorPlugin>();
   private readonly importLock = new AsyncLock();
@@ -67,6 +74,7 @@ export class CanvasEngine {
     this.store = new Store(INITIAL_STATE);
     this.registry = new PluginRegistry();
     this.shortcuts = new KeyboardShortcutManager();
+    this.renderer = new FabricRendererApi(canvas, this.viewport, this.selection);
     this.registerDefaultExporters();
     this.bindCanvasEvents();
   }
@@ -308,6 +316,10 @@ export class CanvasEngine {
   }
 
   // Escape hatch for consumers that need direct Fabric access; unstable by design.
+  /** @deprecated Escape hatch for pre-RendererApi plugins. Prefer `engine.renderer` /
+   *  `EditorContext.renderer`, which work against any renderer, not just Fabric.
+   *  Scheduled for removal no earlier than the release after existing plugins migrate
+   *  (FUTURE_IMPLEMENTATION.md Stage 8). */
   getFabricCanvas(): Canvas {
     return this.canvas;
   }

@@ -393,4 +393,18 @@ describe("CanvasEngine + Store integration", () => {
 
     expect(() => engine.use(plugin)).toThrow('Plugin "broken" failed to install: Object type "rect" is already registered');
   });
+
+  it("exposes a functional engine.renderer (FUTURE_IMPLEMENTATION.md Chunk 2.3) alongside the existing facade methods", () => {
+    const engine = createEngine("test-canvas", { width: 400, height: 300 });
+    const rect = new Rect({ left: 0, top: 0, fill: "red" });
+
+    engine.renderer.addNode(rect);
+    expect(engine.renderer.getNodes()).toContain(rect);
+
+    engine.renderer.setActiveNode(rect);
+    expect(engine.renderer.getActiveNodes()).toContain(rect);
+
+    expect(engine.renderer.kind).toBe("fabric");
+    expect(engine.renderer.isDestroyed()).toBe(false);
+  });
 });
