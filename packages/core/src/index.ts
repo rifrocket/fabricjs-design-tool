@@ -74,6 +74,7 @@ export type {
   PropertyFieldOption,
   PropertyFieldProps,
 } from "./plugin/objectTypeRegistry";
+export type { SceneNode } from "./scene/sceneNode";
 export { ToolRegistry } from "./plugin/toolRegistry";
 export type { ToolActivationContext, ToolDefinition } from "./plugin/toolRegistry";
 export { PanelRegistry } from "./plugin/panelRegistry";
