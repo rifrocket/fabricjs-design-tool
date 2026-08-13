@@ -19,14 +19,14 @@ import type { AssetStore } from "../assets/assetStore";
 export interface EditorContext<TNode extends SceneNode = FabricObject> {
   readonly renderer: RendererApi<TNode>;
   readonly history: HistoryManager;
-  readonly registry: PluginRegistry;
+  readonly registry: PluginRegistry<TNode>;
   readonly events: EventBus;
   readonly store: Store<EngineState>;
   readonly shortcuts: KeyboardShortcutManager;
   readonly assets: AssetStore;
 
-  use(plugin: EditorPlugin): void;
-  useAll(plugins: EditorPlugin[]): void;
+  use(plugin: EditorPlugin<EditorContext<TNode>>): void;
+  useAll(plugins: EditorPlugin<EditorContext<TNode>>[]): void;
   unuse(pluginName: string): void;
   hasPlugin(pluginName: string): boolean;
 

@@ -7,6 +7,7 @@ import { HistoryManager } from "../history/historyManager";
 import { ObjectTypeRegistry, type ObjectTypeDefinition } from "../plugin/objectTypeRegistry";
 import { PluginRegistry } from "../plugin/pluginRegistry";
 import type { EditorPlugin } from "../plugin/plugin";
+import type { EditorContext } from "../plugin/editorContext";
 import { KeyboardShortcutManager } from "../plugin/keyboardShortcuts";
 import { EventBus } from "../events/eventBus";
 import { Store } from "../store/store";
@@ -247,35 +248,19 @@ describe("ObjectTypeRegistry<MockNode>", () => {
 // (plugin-shapes-basic's install(context) { registerBasicShapes(context.registry.objectTypes) })
 // ported to run against a fully non-Fabric renderer.
 //
-// Two real findings made while writing this test, both left as Stage 11 "not proven" items
-// rather than fixed here (fixing either is a bigger, cross-cutting EditorContext/EditorPlugin
-// design change, out of scope for a Stage 9 validation-only chunk):
-//
-// 1. EditorContext<TNode>.registry is a plain PluginRegistry (editorContext.ts), and
-//    PluginRegistry.objectTypes is hardcoded to ObjectTypeRegistry<FabricObject>
-//    (pluginRegistry.ts) — NOT generic over TNode. The literal pattern every shipped plugin uses
-//    today, `context.registry.objectTypes.register()`, only ever type-checks against
-//    FabricObject. Worked around below via a second, distinctly-named
-//    `mockObjectTypes: ObjectTypeRegistry<MockNode>` field.
-//
-// 2. EditorContext<TNode>.use(plugin: EditorPlugin): void — EditorPlugin's own default type
-//    parameter (`EditorPlugin<TContext = CanvasEngine>`, plugin.ts) means this signature is
-//    hardcoded to accept only CanvasEngine-shaped plugins, regardless of TNode. A class typing
-//    `use` against `EditorPlugin<FakeEditorContext>` instead fails `implements EditorContext<
-//    MockNode>` outright (TS2416: EditorPlugin<CanvasEngine> and EditorPlugin<FakeEditorContext>
-//    are mutually non-assignable, since FakeEditorContext and CanvasEngine share no structural
-//    overlap) — unlike Chunk 3.1's bivariance finding, there is no compatible direction here to
-//    exploit, because that finding only worked for the one real CanvasEngine class installing
-//    plugins written against itself. So FakeEditorContext below does NOT literally
-//    `implements EditorContext<MockNode>` — every field/method it needs to prove Chunk 9.5's
-//    claims (renderer, history, registry, events, store, shortcuts, assets, createObject,
-//    addObjectOfType, addObject, removeObject, deleteSelection, setObjectProperty, undo, redo)
-//    is still built exactly to that interface's shape; only the plugin-installation members
-//    (use/useAll/unuse/hasPlugin) use FakeEditorContext's own self-consistent signatures instead.
-class FakeEditorContext {
+// FUTURE_IMPLEMENTATION.md Stage 12 closes the two gaps Chunk 9.5 originally found and worked
+// around here (see git history for the prior FakeEditorContext workaround): PluginRegistry is now
+// generic over TNode (Chunk 12.1/12.2), and EditorContext.use()/useAll() are generic over TNode
+// too (Chunk 12.3, `EditorPlugin<EditorContext<TNode>>`) rather than hardcoded to
+// EditorPlugin<CanvasEngine>. MockEditorContext below is the actual proof: a genuinely different,
+// unrelated EditorContext implementer that literally `implements EditorContext<MockNode>` — not a
+// shape-matching workaround — installing a plugin written in the exact style shipped Fabric
+// plugins use (`context.registry.objectTypes.register(...)`), typed against itself
+// (`EditorPlugin<MockEditorContext>`) the same way CanvasEngine's plugins are typed against it.
+class MockEditorContext implements EditorContext<MockNode> {
   readonly renderer = new MockRendererApi();
   readonly history = new HistoryManager();
-  readonly registry = new PluginRegistry();
+  readonly registry = new PluginRegistry<MockNode>();
   readonly events = new EventBus();
   readonly store = new Store<EngineState>({
     zoom: 1,
@@ -289,22 +274,19 @@ class FakeEditorContext {
   });
   readonly shortcuts = new KeyboardShortcutManager();
   readonly assets: AssetStore = new InMemoryAssetStore();
-  readonly mockObjectTypes = new ObjectTypeRegistry<MockNode>();
 
   private readonly mockNodeOps: NodeOps<MockNode> = {
     get: (node, key) => node.get(key),
     set: (node, key, value) => node.set(key, value),
   };
-  private readonly installedPlugins = new Map<string, EditorPlugin<FakeEditorContext>>();
+  private readonly installedPlugins = new Map<string, EditorPlugin<MockEditorContext>>();
 
-  // Self-consistent signature (see the class-level comment above for why this can't also
-  // literally satisfy EditorContext<MockNode>.use(plugin: EditorPlugin): void).
-  use(plugin: EditorPlugin<FakeEditorContext>): void {
+  use(plugin: EditorPlugin<MockEditorContext>): void {
     plugin.install(this);
     this.installedPlugins.set(plugin.name, plugin);
   }
 
-  useAll(plugins: EditorPlugin<FakeEditorContext>[]): void {
+  useAll(plugins: EditorPlugin<MockEditorContext>[]): void {
     plugins.forEach((plugin) => this.use(plugin));
   }
 
@@ -320,7 +302,7 @@ class FakeEditorContext {
   }
 
   createObject(typeId: string, config: unknown): Promise<MockNode> {
-    return this.mockObjectTypes.create(typeId, config);
+    return this.registry.objectTypes.create(typeId, config);
   }
 
   async addObjectOfType(typeId: string, config: unknown): Promise<MockNode> {
@@ -358,6 +340,12 @@ class FakeEditorContext {
   }
 }
 
+// Compile-time proof, evaluated purely at the type level: if MockEditorContext ever stopped
+// structurally satisfying EditorContext<MockNode>, the `implements` clause above would itself
+// fail to compile — this assertion is a belt-and-braces check in the same style as
+// editorContext.test.ts's AssertCanvasEngineIsEditorContext, closing Stage 12's two findings.
+type AssertMockEditorContextIsEditorContext = MockEditorContext extends EditorContext<MockNode> ? true : never;
+
 interface MockShapeConfig {
   left?: number;
   top?: number;
@@ -383,10 +371,10 @@ function registerMockShapes(registry: ObjectTypeRegistry<MockNode>): void {
   });
 }
 
-const mockShapesPlugin: EditorPlugin<FakeEditorContext> = {
+const mockShapesPlugin: EditorPlugin<MockEditorContext> = {
   name: "mock-shapes",
   install(context) {
-    registerMockShapes(context.mockObjectTypes);
+    registerMockShapes(context.registry.objectTypes);
   },
 };
 
@@ -407,13 +395,18 @@ function getMockNodeId(node: MockNode): string {
   return id;
 }
 
-describe("Chunk 9.5 — real plugin pattern, end to end, zero Fabric", () => {
+describe("Chunk 9.5 / Stage 12 — real plugin pattern, end to end, zero Fabric", () => {
+  it("MockEditorContext genuinely implements EditorContext<MockNode> (compile-time)", () => {
+    const satisfiesEditorContext: AssertMockEditorContextIsEditorContext = true;
+    expect(satisfiesEditorContext).toBe(true);
+  });
+
   it("installs a real plugin-authoring-pattern plugin, creates+adds via addObjectOfType, undoes/redoes, and round-trips through canonical sync + renderer-free load/save", async () => {
-    const context = new FakeEditorContext();
+    const context = new MockEditorContext();
 
     context.use(mockShapesPlugin);
     expect(context.hasPlugin("mock-shapes")).toBe(true);
-    expect(context.mockObjectTypes.has("mock-rect")).toBe(true);
+    expect(context.registry.objectTypes.has("mock-rect")).toBe(true);
 
     const node = await context.addObjectOfType("mock-rect", { left: 10, top: 20 });
     expect(context.renderer.getNodes()).toEqual([node]);
@@ -432,7 +425,7 @@ describe("Chunk 9.5 — real plugin pattern, end to end, zero Fabric", () => {
     expect(node.get("left")).toBe(99);
 
     // The renderer-touching half: read the live scene into canonical form.
-    const syncResult = syncRendererToCanonicalPage(context.renderer, context.mockObjectTypes, "page_1", {
+    const syncResult = syncRendererToCanonicalPage(context.renderer, context.registry.objectTypes, "page_1", {
       resolveTypeId: resolveMockTypeId,
       getNodeId: getMockNodeId,
     });
@@ -451,9 +444,9 @@ describe("Chunk 9.5 — real plugin pattern, end to end, zero Fabric", () => {
     expect(loaded).toEqual(canonicalDoc);
 
     // Back to a live (different) renderer: syncCanonicalPageToRenderer recreates the scene.
-    const targetContext = new FakeEditorContext();
-    registerMockShapes(targetContext.mockObjectTypes);
-    await syncCanonicalPageToRenderer(targetContext.renderer, targetContext.mockObjectTypes, loaded.pages[0]);
+    const targetContext = new MockEditorContext();
+    registerMockShapes(targetContext.registry.objectTypes);
+    await syncCanonicalPageToRenderer(targetContext.renderer, targetContext.registry.objectTypes, loaded.pages[0]);
 
     const recreated = targetContext.renderer.getNodes();
     expect(recreated).toHaveLength(1);
