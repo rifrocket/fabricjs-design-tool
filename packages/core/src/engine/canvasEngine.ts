@@ -69,6 +69,7 @@ export class CanvasEngine implements EditorContext<FabricObject> {
   private constructor(
     private readonly canvas: Canvas,
     options: EngineOptions,
+    element: string | HTMLCanvasElement,
   ) {
     this.viewport = new ViewportManager(canvas);
     this.selection = new SelectionManager(canvas);
@@ -80,7 +81,18 @@ export class CanvasEngine implements EditorContext<FabricObject> {
     this.store = new Store(INITIAL_STATE);
     this.registry = new PluginRegistry();
     this.shortcuts = new KeyboardShortcutManager();
-    this.renderer = new FabricRendererApi(canvas, this.viewport, this.selection);
+    // Renderer-construction seam (FUTURE_IMPLEMENTATION.md Chunk 7.2). Honesty check: this
+    // makes the RENDERER pluggable, not the ENGINE SHELL around it — viewport/selection/layers/
+    // alignment/snapping/getFabricCanvas() above are still built from the ORIGINAL `canvas`
+    // this constructor received, independent of whatever a custom rendererFactory returns. The
+    // default (no custom factory) path is byte-identical to before this chunk: `this.renderer`
+    // wraps the exact same canvas/viewport/selection instances as everything else on this
+    // engine, exactly as Chunk 2.3 built it — a custom factory is the only way to introduce any
+    // divergence, and only for operations invoked via engine.renderer specifically rather than
+    // this engine's own top-level facade methods (which use this.viewport/.selection directly).
+    this.renderer = options.rendererFactory
+      ? options.rendererFactory(element, options)
+      : new FabricRendererApi(canvas, this.viewport, this.selection);
     this.assets = options.assets ?? new InMemoryAssetStore();
     this.registerDefaultExporters();
     this.bindCanvasEvents();
@@ -92,7 +104,7 @@ export class CanvasEngine implements EditorContext<FabricObject> {
       height: options.height,
       backgroundColor: options.backgroundColor,
     });
-    return new CanvasEngine(canvas, options);
+    return new CanvasEngine(canvas, options, element);
   }
 
   private registerDefaultExporters(): void {

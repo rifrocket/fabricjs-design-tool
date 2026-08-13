@@ -104,7 +104,7 @@ export type { EditorContext } from "./plugin/editorContext";
 export { KeyboardShortcutManager, normalizeKeyEvent } from "./plugin/keyboardShortcuts";
 export type { KeyCombo, ShortcutBinding } from "./plugin/keyboardShortcuts";
 
-export type { EngineOptions, EngineState } from "./types";
+export type { EngineOptions, EngineState, RendererApiFactory } from "./types";
 
 export {
   getEffectStack,

@@ -430,4 +430,42 @@ describe("CanvasEngine + Store integration", () => {
     expect(engineA.history).toBe(engineB.history);
     expect(engineA.assets).toBe(engineB.assets);
   });
+
+  it("options.rendererFactory is invoked with (element, options) and its RendererApi is what engine.renderer wraps (FUTURE_IMPLEMENTATION.md Chunk 7.3)", () => {
+    const customRenderer = {
+      kind: "custom-test-renderer",
+      addNode: vi.fn(),
+      removeNode: vi.fn(),
+      getNodes: vi.fn().mockReturnValue([]),
+      requestRender: vi.fn(),
+      setActiveNode: vi.fn(),
+      getActiveNodes: vi.fn().mockReturnValue([]),
+      clearSelection: vi.fn(),
+      getZoom: vi.fn().mockReturnValue(1),
+      setZoom: vi.fn(),
+      zoomBy: vi.fn(),
+      pan: vi.fn(),
+      panTo: vi.fn(),
+      getPan: vi.fn().mockReturnValue({ x: 0, y: 0 }),
+      resetViewport: vi.fn(),
+      setDimensions: vi.fn(),
+      exportSceneJSON: vi.fn().mockReturnValue({}),
+      importSceneJSON: vi.fn().mockResolvedValue(undefined),
+      setBackgroundColor: vi.fn(),
+      destroy: vi.fn(),
+      isDestroyed: vi.fn().mockReturnValue(false),
+    };
+    const rendererFactory = vi.fn().mockReturnValue(customRenderer);
+
+    const engine = createEngine("test-canvas", { width: 400, height: 300, rendererFactory });
+
+    expect(rendererFactory).toHaveBeenCalledWith("test-canvas", expect.objectContaining({ width: 400, height: 300, rendererFactory }));
+    expect(engine.renderer).toBe(customRenderer);
+    expect(engine.renderer.kind).toBe("custom-test-renderer");
+  });
+
+  it("without options.rendererFactory, the default path is unaffected (engine.renderer is a real FabricRendererApi)", () => {
+    const engine = createEngine("test-canvas", { width: 400, height: 300 });
+    expect(engine.renderer.kind).toBe("fabric");
+  });
 });
