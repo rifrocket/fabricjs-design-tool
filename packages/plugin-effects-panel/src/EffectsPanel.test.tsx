@@ -39,6 +39,10 @@ function createFakeEngine(activeObject: Rect | undefined) {
     registry: pluginRegistry,
     selection: { getActiveObjects: () => (activeObject ? [activeObject] : []) },
     getFabricCanvas: () => ({ requestRenderAll }),
+    // @rifrocket/fdt-react's useObjectEffects reads engine.renderer.requestRender(), not
+    // getFabricCanvas(), as of @rifrocket/fabricjs-design-tool's FUTURE_IMPLEMENTATION.md
+    // Chunk 8.2.
+    renderer: { requestRender: requestRenderAll },
   } as unknown as CanvasEngine;
   const wrapper = ({ children }: { children: ReactNode }) => (
     <EditorContext.Provider value={engine}>{children}</EditorContext.Provider>

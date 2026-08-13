@@ -29,9 +29,11 @@ export function SelectionQuickActions(): ReactElement | null {
   const [bounds, setBounds] = useState<Bounds | null>(null);
 
   useEffect(() => {
+    // Stays on getFabricCanvas() for the event wiring below — RendererApi has no
+    // event-subscription surface at all (FUTURE_IMPLEMENTATION.md Chunk 8.3).
     const canvas = engine.getFabricCanvas();
     const recompute = () => {
-      const active = canvas.getActiveObject();
+      const active = engine.selection.getActive();
       setBounds(active ? active.getBoundingRect() : null);
     };
     // Hide (not recompute) during "object:moving"/"object:scaling": those fire on every

@@ -38,7 +38,7 @@ export function CanvasSizeFields(): ReactElement {
     if (pageBoundary) {
       pageBoundary.set({ width: nextWidth, height: nextHeight });
       pageBoundary.setCoords();
-      engine.getFabricCanvas().requestRenderAll();
+      engine.renderer.requestRender();
     }
     setCanvasZoom(engine, 1);
     setCustomSize(nextWidth, nextHeight);

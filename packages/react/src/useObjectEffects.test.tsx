@@ -26,6 +26,9 @@ function createFakeEngine() {
     store,
     history,
     getFabricCanvas: () => ({ requestRenderAll }),
+    // useObjectEffects reads engine.renderer.requestRender(), not getFabricCanvas(), as of
+    // @rifrocket/fabricjs-design-tool's FUTURE_IMPLEMENTATION.md Chunk 8.2.
+    renderer: { requestRender: requestRenderAll },
   } as unknown as CanvasEngine;
   const wrapper = ({ children }: { children: ReactNode }) => (
     <EditorContext.Provider value={engine}>{children}</EditorContext.Provider>

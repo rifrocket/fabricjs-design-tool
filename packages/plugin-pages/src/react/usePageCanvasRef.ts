@@ -25,7 +25,8 @@ export function usePageCanvasRef(): UsePageCanvasRefResult {
 
     // Fabric wraps the lower + upper (interaction) canvases in one wrapperEl div — moving that
     // single node (not the raw <canvas>) is what keeps selection and drawing working after a
-    // relocation.
+    // relocation. Fabric-DOM-structure-specific, no RendererApi equivalent
+    // (FUTURE_IMPLEMENTATION.md Chunk 8.3).
     const canvas = activeEngine.getFabricCanvas();
     const wrapperEl = canvas.wrapperEl;
     container.appendChild(wrapperEl); // always re-parents; safe even mid a rapid page switch

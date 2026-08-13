@@ -206,11 +206,12 @@ function SingleDocumentWorkspace({
     isInitialLoadRef.current = false;
     pendingRestoreRef.current = null;
 
-    // Added via canvas.add() (not engine.addObject()) so the page-boundary rect is never
-    // history-tracked/undoable/deletable. Added after content since restoreSnapshot() replaces
-    // the whole canvas; sendToBack() restores the "always at the back" invariant.
+    // Added via engine.renderer.addNode() (not engine.addObject()) so the page-boundary rect is
+    // never history-tracked/undoable/deletable — addNode is the same raw, non-history-tracked
+    // scene mutation canvas.add() always was. Added after content since restoreSnapshot()
+    // replaces the whole canvas; sendToBack() restores the "always at the back" invariant.
     const boundaryRect = createPageBoundaryRect(activeTemplate);
-    nextEngine.getFabricCanvas().add(boundaryRect);
+    nextEngine.renderer.addNode(boundaryRect);
     nextEngine.layers.sendToBack(boundaryRect);
 
     // addObjectOfType is history-tracked, so starter content would otherwise be undoable away —

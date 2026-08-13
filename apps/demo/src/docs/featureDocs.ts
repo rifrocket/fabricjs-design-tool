@@ -180,7 +180,7 @@ export const FEATURE_DOCS: Record<string, FeatureDoc> = {
       "Unlike switching templates (a full remount that reloads starter content), resizing uses the same " +
       "setDimensions() call as zoom — it changes the canvas element's physical size without touching existing objects.",
     usageTip: "Visible when nothing is selected. Enter a width/height and click Apply.",
-    codeSnippet: "engine.getFabricCanvas().setDimensions({ width, height })",
+    codeSnippet: "engine.setDimensions(width, height)",
   },
   devTools: {
     key: "devTools",

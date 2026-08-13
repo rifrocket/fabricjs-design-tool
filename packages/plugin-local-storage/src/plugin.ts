@@ -71,7 +71,9 @@ export function localStoragePlugin<TMeta = unknown>(options: LocalStoragePluginO
       // that updates EngineState. It does NOT cover interactive drag/resize/rotate (Fabric
       // commits those straight to the object without going through the engine, see
       // CanvasEngine.bindCanvasEvents) — "object:modified"/"text:changed" cover that gap.
-      // REQUEST_SAVE_EVENT covers everything else (see its own comment above).
+      // REQUEST_SAVE_EVENT covers everything else (see its own comment above). Stays on
+      // getFabricCanvas(): RendererApi has no event-subscription surface at all
+      // (FUTURE_IMPLEMENTATION.md Chunk 8.3).
       const unsubscribeStore = engine.store.subscribe(scheduleSave);
       const canvas = engine.getFabricCanvas();
       canvas.on("object:modified", scheduleSave);

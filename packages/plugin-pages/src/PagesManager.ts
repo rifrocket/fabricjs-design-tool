@@ -381,8 +381,10 @@ export class PagesManager {
     this.patchMeta(id, { locked });
     const engine = this.getEngine(id);
     if (!engine) return;
-    // Locking is enforced at the Fabric canvas level rather than in CanvasEngine — no core
-    // change needed, this is the same escape hatch every other plugin in this repo uses.
+    // Locking is enforced at the Fabric canvas level (selection/evented interactivity flags) —
+    // no RendererApi equivalent exists for this, and a future renderer would implement "locking"
+    // differently, not identically, so there's no shared member to converge on yet
+    // (FUTURE_IMPLEMENTATION.md Chunk 8.3).
     engine.getFabricCanvas().set({ selection: !locked, evented: !locked });
   }
 
@@ -579,7 +581,8 @@ export class PagesManager {
   // engine.store covers object add/remove and undo/redo; it does NOT cover interactive
   // drag/resize/rotate (Fabric commits those straight to the object, bypassing the engine) or
   // text edits — "object:modified"/"text:changed" cover that gap. Same split
-  // plugin-local-storage's autosave uses, for the same reason.
+  // plugin-local-storage's autosave uses, for the same reason. Stays on getFabricCanvas():
+  // RendererApi has no event-subscription surface at all (FUTURE_IMPLEMENTATION.md Chunk 8.3).
   private wireThumbnailTracking(id: string, engine: CanvasEngine): void {
     const schedule = () => {
       // Fired undebounced, on every trigger — onContentChange consumers (e.g. <MultiPageDesignEditor

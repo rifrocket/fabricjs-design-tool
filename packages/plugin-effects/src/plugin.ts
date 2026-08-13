@@ -27,6 +27,9 @@ export function createEffectsPlugin(effects: EffectDefinition<any>[] = ALL_BUILT
         }
       }
       registerSerializedProperty(EFFECTS_PROPERTY);
+      // installRenderPatch patches FabricObject.prototype._render() itself and keys its
+      // canvas -> registry map by the raw Canvas instance — a Fabric rendering-pipeline
+      // internal with no RendererApi equivalent (FUTURE_IMPLEMENTATION.md Chunk 8.3).
       installRenderPatch(engine.registry.effects, engine.getFabricCanvas());
     },
     // Removes this engine's own canvas -> registry entry (see installRenderPatch.ts) so a
@@ -34,6 +37,8 @@ export function createEffectsPlugin(effects: EffectDefinition<any>[] = ALL_BUILT
     // FabricObject.prototype.render() patch itself — that stays installed for the process's
     // lifetime, since any other still-live engine may depend on it; it's a no-op for any object
     // with no live `.canvas` entry and no effect stack, so leaving it in place is harmless.
+    // Same Fabric-rendering-internals rationale as install() above for staying on
+    // getFabricCanvas().
     uninstall(engine) {
       uninstallRenderPatchForCanvas(engine.getFabricCanvas());
     },

@@ -23,12 +23,13 @@ export function ContextMenu(): ReactElement | null {
   const [menu, setMenu] = useState<MenuState | null>(null);
 
   useEffect(() => {
-    const canvas = engine.getFabricCanvas();
-    const target = canvas.wrapperEl;
+    // wrapperEl is Fabric's own DOM wrapper node — no RendererApi equivalent
+    // (FUTURE_IMPLEMENTATION.md Chunk 8.3), so this stays on getFabricCanvas().
+    const target = engine.getFabricCanvas().wrapperEl;
 
     const handleContextMenu = (event: globalThis.MouseEvent) => {
       event.preventDefault();
-      if (!canvas.getActiveObject()) return;
+      if (!engine.selection.getActive()) return;
       setMenu({ x: event.clientX, y: event.clientY });
     };
     const close = () => setMenu(null);
