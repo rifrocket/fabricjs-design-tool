@@ -1,6 +1,7 @@
 import type { FabricObject } from "fabric";
 import type { RendererApi } from "../engine/rendererApi";
 import type { ObjectTypeRegistry } from "../plugin/objectTypeRegistry";
+import type { SceneNode } from "../scene/sceneNode";
 import { resolveObjectTypeId } from "../engine/resolveObjectTypeId";
 import { getObjectId } from "../engine/objectId";
 import type { CanonicalNode, CanonicalPage } from "./canonicalDocument";
@@ -26,8 +27,17 @@ export interface CanonicalSyncResult {
   skippedNodeIds: string[];
 }
 
-export interface SyncRendererToCanonicalPageOptions {
+export interface SyncRendererToCanonicalPageOptions<TNode extends SceneNode = FabricObject> {
   strict?: boolean;
+  // Injectable strategy for resolving a live node's registry type id, mirroring Chunk 3.3's
+  // NodeOps pattern — defaults to resolveObjectTypeId, which reads Fabric's own `.type` getter
+  // (not part of SceneNode), so a non-Fabric TNode must supply its own. Found while implementing
+  // Chunk 9.5: resolveObjectTypeId/getObjectId are inherently Fabric-specific (shapeKind-with-
+  // Fabric-.type-fallback; a FabricObject-keyed WeakMap plus direct property indexing that
+  // bypasses SceneNode.get()), so genuine TNode-genericity here requires the caller to supply
+  // both strategies rather than this file reimplementing renderer-neutral versions of either.
+  resolveTypeId?: (node: TNode) => string;
+  getNodeId?: (node: TNode) => string;
 }
 
 // Produces a CanonicalPage by calling each live node's registered type's serialize() directly —
@@ -35,27 +45,29 @@ export interface SyncRendererToCanonicalPageOptions {
 // same stated limitation (fabric groups nest children inside their own entry, not flattened
 // into renderer.getNodes()). `pageId` is caller-supplied (e.g. a plugin-pages PageMeta.id) —
 // this function has no basis to invent a page identity on its own.
-export function syncRendererToCanonicalPage(
-  renderer: RendererApi<FabricObject>,
-  registry: ObjectTypeRegistry<FabricObject>,
+export function syncRendererToCanonicalPage<TNode extends SceneNode = FabricObject>(
+  renderer: RendererApi<TNode>,
+  registry: ObjectTypeRegistry<TNode>,
   pageId: string,
-  options: SyncRendererToCanonicalPageOptions = {},
+  options: SyncRendererToCanonicalPageOptions<TNode> = {},
 ): CanonicalSyncResult {
   const strict = options.strict ?? true;
+  const resolveTypeId = options.resolveTypeId ?? (resolveObjectTypeId as unknown as (node: TNode) => string);
+  const getNodeId = options.getNodeId ?? (getObjectId as unknown as (node: TNode) => string);
   const skippedNodeIds: string[] = [];
   const nodes: CanonicalNode[] = [];
 
   for (const node of renderer.getNodes()) {
-    const typeId = resolveObjectTypeId(node);
+    const typeId = resolveTypeId(node);
     const definition = registry.get(typeId);
     if (!definition?.serialize) {
       if (strict) {
         throw new Error(`Object type "${typeId}" has no serialize() hook — cannot produce a canonical node for it`);
       }
-      skippedNodeIds.push(getObjectId(node));
+      skippedNodeIds.push(getNodeId(node));
       continue;
     }
-    nodes.push({ id: getObjectId(node), typeId, properties: definition.serialize(node) });
+    nodes.push({ id: getNodeId(node), typeId, properties: definition.serialize(node) });
   }
 
   return {
@@ -67,9 +79,9 @@ export function syncRendererToCanonicalPage(
 
 // The reverse direction: creates a live node for each canonical node (via the registered type's
 // create()) and adds it to the renderer. Top-level nodes only, same limitation as above.
-export async function syncCanonicalPageToRenderer(
-  renderer: RendererApi<FabricObject>,
-  registry: ObjectTypeRegistry<FabricObject>,
+export async function syncCanonicalPageToRenderer<TNode extends SceneNode = FabricObject>(
+  renderer: RendererApi<TNode>,
+  registry: ObjectTypeRegistry<TNode>,
   page: CanonicalPage,
 ): Promise<void> {
   for (const node of page.nodes) {
