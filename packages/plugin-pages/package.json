@@ -63,6 +63,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@rifrocket/fdt-plugin-import-json": "workspace:*",
+    "@rifrocket/fdt-plugin-shapes-basic": "workspace:*",
     "@rifrocket/fdt-react": "workspace:*",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^24.0.3",
