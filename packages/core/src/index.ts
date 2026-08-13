@@ -87,6 +87,7 @@ export { EffectRegistry } from "./plugin/effectRegistry";
 export type { Exporter, Importer } from "./plugin/transfer";
 export { PluginRegistry } from "./plugin/pluginRegistry";
 export type { EditorPlugin } from "./plugin/plugin";
+export type { EditorContext } from "./plugin/editorContext";
 export { KeyboardShortcutManager, normalizeKeyEvent } from "./plugin/keyboardShortcuts";
 export type { KeyCombo, ShortcutBinding } from "./plugin/keyboardShortcuts";
 

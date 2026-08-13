@@ -15,6 +15,7 @@ import { AlignmentManager } from "./alignmentManager";
 import { SnapEngine } from "./snapEngine";
 import { FabricRendererApi } from "./fabricRendererApi";
 import type { RendererApi } from "./rendererApi";
+import type { EditorContext } from "../plugin/editorContext";
 import { getObjectId } from "./objectId";
 import { PluginRegistry } from "../plugin/pluginRegistry";
 import type { ObjectTypeId } from "../plugin/objectTypeRegistry";
@@ -39,7 +40,7 @@ const INITIAL_STATE: EngineState = {
 
 // Owns one Fabric canvas and composes the narrow, independently testable services
 // (viewport, selection, layers, history) around a single reactive store.
-export class CanvasEngine {
+export class CanvasEngine implements EditorContext<FabricObject> {
   readonly viewport: ViewportManager;
   readonly selection: SelectionManager;
   readonly layers: LayerManager;
@@ -227,12 +228,12 @@ export class CanvasEngine {
   }
 
   addObject(object: FabricObject): void {
-    this.history.execute(new AddObjectCommand(this.canvas, object));
+    this.history.execute(new AddObjectCommand(this.renderer, object));
     this.syncHistory();
   }
 
   removeObject(object: FabricObject): void {
-    this.history.execute(new RemoveObjectCommand(this.canvas, object));
+    this.history.execute(new RemoveObjectCommand(this.renderer, object));
     this.syncHistory();
   }
 
@@ -240,7 +241,7 @@ export class CanvasEngine {
   deleteSelection(): void {
     const objects = this.selection.getActiveObjects();
     if (objects.length === 0) return;
-    const commands = objects.map((object) => new RemoveObjectCommand(this.canvas, object));
+    const commands = objects.map((object) => new RemoveObjectCommand(this.renderer, object));
     this.history.execute(new CompositeCommand(commands, "delete"));
     this.selection.clear();
     this.syncHistory();
