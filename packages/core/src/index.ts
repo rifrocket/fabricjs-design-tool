@@ -62,6 +62,12 @@ export type {
 } from "./document/snapshot";
 export type { DesignDocument, DesignDocumentPage } from "./document/designDocument";
 
+export { InMemoryAssetStore } from "./assets/assetStore";
+export type { AssetRecord, AssetStore } from "./assets/assetStore";
+
+export { createDocumentSession } from "./document/documentSession";
+export type { DocumentSession, DocumentSessionOptions } from "./document/documentSession";
+
 export { Registry } from "./plugin/registry";
 
 export type { EditorPreset, PresetShortcutsConfig } from "./preset/types";

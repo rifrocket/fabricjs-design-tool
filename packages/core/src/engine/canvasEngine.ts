@@ -16,6 +16,8 @@ import { SnapEngine } from "./snapEngine";
 import { FabricRendererApi } from "./fabricRendererApi";
 import type { RendererApi } from "./rendererApi";
 import type { EditorContext } from "../plugin/editorContext";
+import { InMemoryAssetStore } from "../assets/assetStore";
+import type { AssetStore } from "../assets/assetStore";
 import { getObjectId } from "./objectId";
 import { PluginRegistry } from "../plugin/pluginRegistry";
 import type { ObjectTypeId } from "../plugin/objectTypeRegistry";
@@ -56,6 +58,9 @@ export class CanvasEngine implements EditorContext<FabricObject> {
   // consumers/plugins that only need scene/selection/viewport/serialization/lifecycle
   // operations can depend on this instead of getFabricCanvas().
   readonly renderer: RendererApi<FabricObject>;
+  // Injectable ownership (FUTURE_IMPLEMENTATION.md Chunk 4.3) — defaults to a private,
+  // per-engine store unless a DocumentSession supplies a shared one via EngineOptions.assets.
+  readonly assets: AssetStore;
 
   private readonly installedPlugins = new Map<string, EditorPlugin>();
   private readonly importLock = new AsyncLock();
@@ -68,7 +73,7 @@ export class CanvasEngine implements EditorContext<FabricObject> {
     this.viewport = new ViewportManager(canvas);
     this.selection = new SelectionManager(canvas);
     this.layers = new LayerManager(canvas, () => this.syncObjects());
-    this.history = new HistoryManager();
+    this.history = options.history ?? new HistoryManager();
     this.alignment = new AlignmentManager(canvas, this.history);
     this.snapping = new SnapEngine(canvas, options.snapping);
     this.events = new EventBus();
@@ -76,6 +81,7 @@ export class CanvasEngine implements EditorContext<FabricObject> {
     this.registry = new PluginRegistry();
     this.shortcuts = new KeyboardShortcutManager();
     this.renderer = new FabricRendererApi(canvas, this.viewport, this.selection);
+    this.assets = options.assets ?? new InMemoryAssetStore();
     this.registerDefaultExporters();
     this.bindCanvasEvents();
   }

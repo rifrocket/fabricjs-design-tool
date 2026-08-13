@@ -4,6 +4,8 @@ import type { FabricObject } from "fabric";
 import type { EditorPlugin } from "../plugin/plugin";
 import { getObjectId } from "./objectId";
 import { createEngine } from "./canvasEngine";
+import { HistoryManager } from "../history/historyManager";
+import { InMemoryAssetStore } from "../assets/assetStore";
 
 // Real fabric.Canvas needs a working 2D rendering context (HTMLCanvasElement#getContext), which
 // this workspace's node/jsdom test setup doesn't provide (node-canvas was tried as a
@@ -406,5 +408,26 @@ describe("CanvasEngine + Store integration", () => {
 
     expect(engine.renderer.kind).toBe("fabric");
     expect(engine.renderer.isDestroyed()).toBe(false);
+  });
+
+  it("without options.history/options.assets, constructs its own of each (unchanged default behavior)", () => {
+    const engineA = createEngine("test-canvas", { width: 400, height: 300 });
+    const engineB = createEngine("test-canvas", { width: 400, height: 300 });
+
+    expect(engineA.history).not.toBe(engineB.history);
+    expect(engineA.assets).not.toBe(engineB.assets);
+  });
+
+  it("options.history/options.assets inject externally-constructed instances instead of fresh ones (FUTURE_IMPLEMENTATION.md Chunk 4.3)", () => {
+    const sharedHistory = new HistoryManager();
+    const sharedAssets = new InMemoryAssetStore();
+
+    const engineA = createEngine("test-canvas", { width: 400, height: 300, history: sharedHistory, assets: sharedAssets });
+    const engineB = createEngine("test-canvas", { width: 400, height: 300, history: sharedHistory, assets: sharedAssets });
+
+    expect(engineA.history).toBe(sharedHistory);
+    expect(engineA.assets).toBe(sharedAssets);
+    expect(engineA.history).toBe(engineB.history);
+    expect(engineA.assets).toBe(engineB.assets);
   });
 });

@@ -9,15 +9,13 @@ import type { KeyboardShortcutManager } from "./keyboardShortcuts";
 import type { ObjectTypeId } from "./objectTypeRegistry";
 import type { EditorPlugin } from "./plugin";
 import type { EngineState } from "../types";
+import type { AssetStore } from "../assets/assetStore";
 
 // The plugin-facing façade — everything CanvasEngine exposes minus getFabricCanvas(). This is
 // an application-facing façade, not an ownership boundary: it does not itself OWN document
 // lifecycle — DocumentSession (Stage 4) owns document-scoped state (document data, assets,
 // optionally history); EditorContext/CanvasEngine just hold references to what a given renderer
 // instance was constructed with (FUTURE_IMPLEMENTATION.md Chunk 3.1).
-//
-// Does not yet include `assets` — AssetStore doesn't exist until Stage 4. It's added to this
-// interface once CanvasEngine actually has an `assets` field to satisfy it.
 export interface EditorContext<TNode extends SceneNode = FabricObject> {
   readonly renderer: RendererApi<TNode>;
   readonly history: HistoryManager;
@@ -25,6 +23,7 @@ export interface EditorContext<TNode extends SceneNode = FabricObject> {
   readonly events: EventBus;
   readonly store: Store<EngineState>;
   readonly shortcuts: KeyboardShortcutManager;
+  readonly assets: AssetStore;
 
   use(plugin: EditorPlugin): void;
   useAll(plugins: EditorPlugin[]): void;
