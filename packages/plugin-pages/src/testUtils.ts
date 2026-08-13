@@ -42,7 +42,13 @@ export function createFakeEngine(): FakeEngine {
     set: vi.fn(),
     on: vi.fn(),
     off: vi.fn(),
-    toObject: vi.fn(() => ({ objects: objects.map((o) => o.toObject()) })),
+    // Includes `background` when set, matching real fabric.Canvas#toObject()'s own shape —
+    // captureSnapshot() reads backgroundColor from this field, not a live property, as of
+    // FUTURE_IMPLEMENTATION.md Chunk 5.1.
+    toObject: vi.fn(() => ({
+      objects: objects.map((o) => o.toObject()),
+      ...(canvas.backgroundColor ? { background: canvas.backgroundColor } : {}),
+    })),
     calcOffset: vi.fn(),
     wrapperEl: document.createElement("div"),
     backgroundColor: undefined,
@@ -62,7 +68,10 @@ export function createFakeEngine(): FakeEngine {
   });
   const historyClear = vi.fn();
   const addObjectOfType = vi.fn(async () => {
-    const object = { toObject: () => ({}) } as unknown as FabricObject;
+    // get() stubbed (returns undefined for any key, including resolveObjectTypeId's
+    // "shapeKind" lookup) since captureSnapshot -> serializeWithTypeOverrides ->
+    // resolveObjectTypeId now calls object.get() on every live node (Chunk 5.2).
+    const object = { toObject: () => ({}), get: () => undefined, type: "rect" } as unknown as FabricObject;
     objects.push(object);
     return object;
   });
@@ -70,6 +79,14 @@ export function createFakeEngine(): FakeEngine {
 
   const engine = {
     getFabricCanvas: () => canvas,
+    // captureSnapshot() (used by PagesManager.getSnapshotForPersistence/refreshThumbnail) reads
+    // through engine.renderer, not getFabricCanvas(), as of @rifrocket/fabricjs-design-tool's
+    // FUTURE_IMPLEMENTATION.md Chunk 5.1 — getFabricCanvas() itself stays mocked above since
+    // other fake-canvas methods (set/on/off/calcOffset/wrapperEl) are still used directly.
+    // getNodes() added alongside exportSceneJSON for Chunk 5.2's serializeWithTypeOverrides,
+    // which matches json.objects[] to live nodes by index — reuses the same `objects` array
+    // the fake canvas/engine already tracks.
+    renderer: { exportSceneJSON: vi.fn(() => canvas.toObject()), getNodes: () => objects },
     setBackgroundColor,
     importFile,
     destroy,

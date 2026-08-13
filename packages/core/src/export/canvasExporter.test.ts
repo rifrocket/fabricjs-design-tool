@@ -9,6 +9,10 @@ function createFakeCanvas(overrides: Partial<Canvas> = {}): Canvas {
     toDataURL: vi.fn().mockReturnValue("data:image/png;base64,fake"),
     toSVG: vi.fn().mockReturnValue("<svg></svg>"),
     toObject: vi.fn().mockReturnValue({ objects: [{ type: "rect", [ID_PROPERTY]: "obj_1" }] }),
+    // exportJSON() now also reads getObjects() (serializeWithTypeOverrides matches it
+    // index-wise against toObject()'s objects[]) — empty here since these tests exercise the
+    // no-registered-type-overrides path (CanvasExporter's default, empty ObjectTypeRegistry).
+    getObjects: vi.fn().mockReturnValue([]),
     ...overrides,
   } as unknown as Canvas;
 }

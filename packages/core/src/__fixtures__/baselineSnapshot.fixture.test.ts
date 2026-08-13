@@ -2,17 +2,22 @@ import { describe, expect, it, vi } from "vitest";
 import type { CanvasEngine } from "../engine/canvasEngine";
 import { restoreSnapshot } from "../document/snapshot";
 import type { DocumentSnapshotData } from "../document/snapshot";
+import { ObjectTypeRegistry } from "../plugin/objectTypeRegistry";
 import baselineSnapshot from "./baseline-snapshot.json";
 
 // Chunk 0.2 of FUTURE_IMPLEMENTATION.md: a snapshot captured from real Fabric objects
 // (Rect/Circle/Image, matching plugin-shapes-basic/plugin-image) using today's — pre-refactor —
 // captureSnapshot() serialization shape. Every later chunk's "old documents still load
-// unchanged" claim gets checked against this fixture, not asserted from memory. This test uses
-// only code that exists right now; no architecture changes.
+// unchanged" claim gets checked against this fixture, not asserted from memory.
 function createFakeEngine(): CanvasEngine {
   return {
     setBackgroundColor: vi.fn(),
     importFile: vi.fn().mockResolvedValue(undefined),
+    // restoreSnapshot() also runs applyDeserializeOverrides() as of Chunk 5.2 — a no-op here
+    // since no live nodes/registered types are involved in this mock, exactly the
+    // no-type-opted-in behavior that keeps this fixture's expected shape unchanged.
+    renderer: { getNodes: vi.fn().mockReturnValue([]) },
+    registry: { objectTypes: new ObjectTypeRegistry() },
   } as unknown as CanvasEngine;
 }
 

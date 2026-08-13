@@ -52,6 +52,8 @@ export { FabricRendererApi } from "./engine/fabricRendererApi";
 export { CanvasExporter } from "./export/canvasExporter";
 export type { ExportFormat, ExportResult } from "./export/canvasExporter";
 
+export { serializeWithTypeOverrides, applyDeserializeOverrides } from "./document/objectTypeSerialization";
+
 export { captureSnapshot, restoreSnapshot, renderSnapshotThumbnail } from "./document/snapshot";
 export type {
   DocumentSnapshotData,

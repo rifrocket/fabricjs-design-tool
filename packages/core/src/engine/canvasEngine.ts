@@ -96,7 +96,7 @@ export class CanvasEngine implements EditorContext<FabricObject> {
   }
 
   private registerDefaultExporters(): void {
-    const exporter = new CanvasExporter(this.canvas);
+    const exporter = new CanvasExporter(this.canvas, this.registry.objectTypes);
     for (const format of DEFAULT_EXPORT_FORMATS) {
       this.registry.exporters.register(format, () => exporter.export(format));
     }

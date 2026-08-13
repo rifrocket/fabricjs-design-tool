@@ -1,5 +1,7 @@
-import type { Canvas } from "fabric";
+import type { Canvas, FabricObject } from "fabric";
 import { getSerializedProperties } from "../engine/serializedProperties";
+import { ObjectTypeRegistry } from "../plugin/objectTypeRegistry";
+import { serializeWithTypeOverrides } from "../document/objectTypeSerialization";
 
 export type ExportFormat = "png" | "jpeg" | "svg" | "json";
 
@@ -20,7 +22,14 @@ export interface ExportResult {
 // @rifrocket/fdt-plugin-export-pdf instead of here — it pulls in jsPDF as a hard dependency,
 // which most editors never need.
 export class CanvasExporter {
-  constructor(private readonly canvas: Canvas) {}
+  // registry defaults to a fresh, empty ObjectTypeRegistry so every existing
+  // `new CanvasExporter(canvas)` call site (no second argument) behaves byte-identically to
+  // before Chunk 5.2 — an empty registry has no serialize() overrides to apply, so exportJSON()
+  // falls through to plain canvas.toObject() output unchanged.
+  constructor(
+    private readonly canvas: Canvas,
+    private readonly registry: ObjectTypeRegistry<FabricObject> = new ObjectTypeRegistry(),
+  ) {}
 
   export(format: ExportFormat): ExportResult {
     switch (format) {
@@ -55,7 +64,12 @@ export class CanvasExporter {
   }
 
   private exportJSON(): ExportResult {
-    const data = JSON.stringify(this.canvas.toObject(getSerializedProperties()), null, 2);
+    const sceneSource = {
+      exportSceneJSON: (extraProps?: string[]) => this.canvas.toObject(extraProps) as Record<string, unknown>,
+      getNodes: () => this.canvas.getObjects(),
+    };
+    const json = serializeWithTypeOverrides(sceneSource, this.registry, getSerializedProperties());
+    const data = JSON.stringify(json, null, 2);
     return { format: "json", fileName: this.fileName("json"), mimeType: "application/json", data };
   }
 }
