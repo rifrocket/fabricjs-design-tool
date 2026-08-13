@@ -70,6 +70,11 @@ export type { AssetRecord, AssetStore } from "./assets/assetStore";
 export { createDocumentSession } from "./document/documentSession";
 export type { DocumentSession, DocumentSessionOptions } from "./document/documentSession";
 
+export type { PortableNodeProperties, CanonicalNode, CanonicalPage, CanonicalDocument } from "./document/canonicalDocument";
+export { loadCanonicalDocument, saveCanonicalDocument, migrateCanonicalDocument } from "./document/canonicalDocument";
+export { syncRendererToCanonicalPage, syncCanonicalPageToRenderer } from "./document/canonicalSceneSync";
+export type { CanonicalSyncResult, SyncRendererToCanonicalPageOptions } from "./document/canonicalSceneSync";
+
 export { Registry } from "./plugin/registry";
 
 export type { EditorPreset, PresetShortcutsConfig } from "./preset/types";
