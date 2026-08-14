@@ -17,6 +17,7 @@ export { resolveObjectTypeId } from "./engine/resolveObjectTypeId";
 export { AsyncLock } from "./engine/asyncLock";
 export { applyViewportTransform } from "./engine/viewportTransform";
 export { ViewportManager } from "./engine/viewportManager";
+export type { SetZoomOptions } from "./engine/viewportManager";
 export { SelectionManager } from "./engine/selectionManager";
 export { LayerManager } from "./engine/layerManager";
 export { AlignmentManager } from "./engine/alignmentManager";
@@ -45,8 +46,13 @@ export type { RulerOptions, RulerTick } from "./engine/ruler";
 
 export { CanvasEngine, createEngine } from "./engine/canvasEngine";
 
+export type { RendererApi, SceneApi, SelectionApi, ViewportApi, SerializationApi, LifecycleApi } from "./engine/rendererApi";
+export { FabricRendererApi } from "./engine/fabricRendererApi";
+
 export { CanvasExporter } from "./export/canvasExporter";
 export type { ExportFormat, ExportResult } from "./export/canvasExporter";
+
+export { serializeWithTypeOverrides, applyDeserializeOverrides } from "./document/objectTypeSerialization";
 
 export { captureSnapshot, restoreSnapshot, renderSnapshotThumbnail } from "./document/snapshot";
 export type {
@@ -57,6 +63,17 @@ export type {
   OffscreenCanvasFactory,
 } from "./document/snapshot";
 export type { DesignDocument, DesignDocumentPage } from "./document/designDocument";
+
+export { InMemoryAssetStore } from "./assets/assetStore";
+export type { AssetRecord, AssetStore } from "./assets/assetStore";
+
+export { createDocumentSession } from "./document/documentSession";
+export type { DocumentSession, DocumentSessionOptions } from "./document/documentSession";
+
+export type { PortableNodeProperties, CanonicalNode, CanonicalPage, CanonicalDocument } from "./document/canonicalDocument";
+export { loadCanonicalDocument, saveCanonicalDocument, migrateCanonicalDocument } from "./document/canonicalDocument";
+export { syncRendererToCanonicalPage, syncCanonicalPageToRenderer } from "./document/canonicalSceneSync";
+export type { CanonicalSyncResult, SyncRendererToCanonicalPageOptions } from "./document/canonicalSceneSync";
 
 export { Registry } from "./plugin/registry";
 
@@ -74,6 +91,7 @@ export type {
   PropertyFieldOption,
   PropertyFieldProps,
 } from "./plugin/objectTypeRegistry";
+export type { SceneNode } from "./scene/sceneNode";
 export { ToolRegistry } from "./plugin/toolRegistry";
 export type { ToolActivationContext, ToolDefinition } from "./plugin/toolRegistry";
 export { PanelRegistry } from "./plugin/panelRegistry";
@@ -82,10 +100,11 @@ export { EffectRegistry } from "./plugin/effectRegistry";
 export type { Exporter, Importer } from "./plugin/transfer";
 export { PluginRegistry } from "./plugin/pluginRegistry";
 export type { EditorPlugin } from "./plugin/plugin";
+export type { EditorContext } from "./plugin/editorContext";
 export { KeyboardShortcutManager, normalizeKeyEvent } from "./plugin/keyboardShortcuts";
 export type { KeyCombo, ShortcutBinding } from "./plugin/keyboardShortcuts";
 
-export type { EngineOptions, EngineState } from "./types";
+export type { EngineOptions, EngineState, RendererApiFactory } from "./types";
 
 export {
   getEffectStack,

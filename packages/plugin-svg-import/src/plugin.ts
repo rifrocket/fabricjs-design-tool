@@ -20,7 +20,9 @@ export const svgImportPlugin: EditorPlugin = {
 // already a separate, deliberate choice — see this package's own README) — see canvasEngine.ts's
 // own comment on importFile(). Goes through the *registered* importer (honoring a `.replace()`'d
 // one), not the pure importSVG(canvas, string) function directly, so a consumer that swapped in
-// a custom SVG importer still gets it called here.
+// a custom SVG importer still gets it called here. Registered importers are typed against the
+// raw Canvas across this whole framework (not RendererApi) — a broader pattern this stage
+// doesn't migrate (FUTURE_IMPLEMENTATION.md Chunk 8.3), so getFabricCanvas() stays here too.
 export async function importSvgToEngine(engine: CanvasEngine, svgString: string): Promise<void> {
   const importer = engine.registry.importers.get("svg");
   if (!importer) {

@@ -29,7 +29,7 @@ export function useObjectEffects(object: FabricObject | undefined): UseObjectEff
   const apply = (next: EffectStack) => {
     if (!object) return;
     engine.history.execute(EffectStackCommand.capture(object, next));
-    engine.getFabricCanvas().requestRenderAll();
+    engine.renderer.requestRender();
     // canUndo/canRedo aren't notified by history.execute() alone (HistoryManager holds no store
     // reference) — resynced by hand via the same public Store API EngineHost.tsx already uses
     // for the same reason after engine.history.clear().

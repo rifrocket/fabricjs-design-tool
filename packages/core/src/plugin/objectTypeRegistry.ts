@@ -1,4 +1,5 @@
 import type { FabricObject } from "fabric";
+import type { SceneNode } from "../scene/sceneNode";
 
 export interface PropertyFieldOption {
   label: string;
@@ -33,11 +34,19 @@ export interface PropertyFieldProps {
   onChange: (value: unknown) => void;
 }
 
-export interface ObjectTypeDefinition<TConfig = unknown> {
+// TNode defaults to FabricObject so every existing registration (ObjectTypeDefinition<TConfig>,
+// no second type argument) means exactly what it means today — this widening is the whole point
+// of FUTURE_IMPLEMENTATION.md's Chunk 1.2, not a change any existing plugin needs to make.
+export interface ObjectTypeDefinition<TConfig = unknown, TNode extends SceneNode = FabricObject> {
   // Async because real object types need it (QR codes, image uploads, SVG import all
   // decode/generate asynchronously) — create() is always awaited by the registry.
-  create(config: TConfig): FabricObject | Promise<FabricObject>;
+  create(config: TConfig): TNode | Promise<TNode>;
   propertyFields?: PropertyFieldDefinition[];
+  // Optional per-object-type serialization hooks — unused by any shipped plugin until
+  // FUTURE_IMPLEMENTATION.md Stage 5/6 wires them into the serialization pipeline. Declared now
+  // so those stages don't need another registry-touching change.
+  serialize?(node: TNode): Record<string, unknown>;
+  deserialize?(data: Record<string, unknown>, ctx: { object: TNode }): void | Promise<void>;
 }
 
 // Open interface (module-augmentation pattern) a plugin can extend to get typo-checked
@@ -60,14 +69,19 @@ export type ObjectTypeId = keyof ObjectTypeMap | (string & {});
 
 // Replaces v1's closed ShapeFactory static class: any plugin can register a new
 // object type (create/serialize/property-fields) without editing this package's source.
-export class ObjectTypeRegistry {
-  private readonly types = new Map<string, ObjectTypeDefinition<unknown>>();
+//
+// Generic over TNode (default FabricObject) so a non-Fabric renderer's node type can be
+// registered against too — see FUTURE_IMPLEMENTATION.md Chunk 1.2. Every existing call site
+// (`registry.register<ShapeConfig>("rect", {...})` in plugin-shapes-basic/plugin-image) omits
+// the type argument, so the default keeps meaning exactly what it means today.
+export class ObjectTypeRegistry<TNode extends SceneNode = FabricObject> {
+  private readonly types = new Map<string, ObjectTypeDefinition<unknown, TNode>>();
 
-  register<TConfig>(typeId: ObjectTypeId, definition: ObjectTypeDefinition<TConfig>): void {
+  register<TConfig>(typeId: ObjectTypeId, definition: ObjectTypeDefinition<TConfig, TNode>): void {
     if (this.types.has(typeId)) {
       throw new Error(`Object type "${typeId}" is already registered`);
     }
-    this.types.set(typeId, definition as ObjectTypeDefinition<unknown>);
+    this.types.set(typeId, definition as ObjectTypeDefinition<unknown, TNode>);
   }
 
   unregister(typeId: ObjectTypeId): void {
@@ -75,11 +89,11 @@ export class ObjectTypeRegistry {
   }
 
   // Atomic unregister+register, avoiding a transient gap where typeId resolves to nothing.
-  replace<TConfig>(typeId: ObjectTypeId, definition: ObjectTypeDefinition<TConfig>): void {
-    this.types.set(typeId, definition as ObjectTypeDefinition<unknown>);
+  replace<TConfig>(typeId: ObjectTypeId, definition: ObjectTypeDefinition<TConfig, TNode>): void {
+    this.types.set(typeId, definition as ObjectTypeDefinition<unknown, TNode>);
   }
 
-  get(typeId: ObjectTypeId): ObjectTypeDefinition<unknown> | undefined {
+  get(typeId: ObjectTypeId): ObjectTypeDefinition<unknown, TNode> | undefined {
     return this.types.get(typeId);
   }
 
@@ -91,7 +105,7 @@ export class ObjectTypeRegistry {
     return Array.from(this.types.keys());
   }
 
-  async create(typeId: ObjectTypeId, config: unknown): Promise<FabricObject> {
+  async create(typeId: ObjectTypeId, config: unknown): Promise<TNode> {
     const definition = this.types.get(typeId);
     if (!definition) {
       throw new Error(`No object type registered for "${typeId}"`);

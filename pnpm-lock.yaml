@@ -705,6 +705,12 @@ importers:
       '@eslint/js':
         specifier: ^9.25.0
         version: 9.39.5
+      '@rifrocket/fdt-plugin-import-json':
+        specifier: workspace:*
+        version: link:../plugin-import-json
+      '@rifrocket/fdt-plugin-shapes-basic':
+        specifier: workspace:*
+        version: link:../plugin-shapes-basic
       '@rifrocket/fdt-react':
         specifier: workspace:*
         version: link:../react

@@ -1,12 +1,24 @@
 import { describe, expect, it, vi } from "vitest";
 import type { FabricObject } from "fabric";
+import { ObjectTypeRegistry } from "@rifrocket/fabricjs-design-tool";
 import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { captureSnapshotExcludingBoundary, createPageBoundaryRect, findPageBoundary } from "./pageBoundary";
 
-function createFakeEngine(objects: FabricObject[], toObject = vi.fn(() => ({ objects: [] }))): CanvasEngine {
+function createFakeEngine(
+  objects: FabricObject[],
+  toObject = vi.fn(() => ({ objects: [], background: "#abcdef" })),
+): CanvasEngine {
   return {
     layers: { getObjects: () => objects },
     getFabricCanvas: () => ({ toObject, backgroundColor: "#abcdef" }),
+    // captureSnapshot() (called by captureSnapshotExcludingBoundary) reads through
+    // engine.renderer/engine.registry, not getFabricCanvas(), as of
+    // FUTURE_IMPLEMENTATION.md Chunks 5.1/5.2 — reuses the same `toObject` mock for
+    // exportSceneJSON so this file's existing assertions on it (called-with,
+    // exclude-during-capture, throws) still exercise the real call path. An empty
+    // ObjectTypeRegistry means serializeWithTypeOverrides never merges anything on top.
+    renderer: { exportSceneJSON: toObject, getNodes: () => objects },
+    registry: { objectTypes: new ObjectTypeRegistry() },
   } as unknown as CanvasEngine;
 }
 

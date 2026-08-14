@@ -23,7 +23,8 @@ export function PagesToolbar(): ReactElement {
   // there's nothing to copy — engine.selection has no reactive subscribe of its own (ContextMenu
   // reads it imperatively, at click time, for the same reason), so this listens to the
   // underlying Fabric canvas' own selection events directly, same as any other Fabric consumer
-  // would outside this framework.
+  // would outside this framework. RendererApi has no event-subscription surface at all
+  // (FUTURE_IMPLEMENTATION.md Chunk 8.3), so this stays on getFabricCanvas().
   useEffect(() => {
     if (!activeEngine) {
       setSelectionCount(0);

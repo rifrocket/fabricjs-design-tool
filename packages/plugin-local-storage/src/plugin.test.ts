@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { EventBus } from "@rifrocket/fabricjs-design-tool";
+import { EventBus, ObjectTypeRegistry } from "@rifrocket/fabricjs-design-tool";
 import type { CanvasEngine } from "@rifrocket/fabricjs-design-tool";
 import { localStoragePlugin, requestSave } from "./plugin";
 import { DEFAULT_STORAGE_KEY, loadDesignFromStorage } from "./storage";
@@ -40,6 +40,16 @@ function createFakeEngine() {
     },
     events,
     getFabricCanvas: vi.fn().mockReturnValue(fabricCanvas),
+    // captureSnapshot() (called internally via this file's `capture`) reads through
+    // engine.renderer/engine.registry, not getFabricCanvas(), as of
+    // @rifrocket/fabricjs-design-tool's FUTURE_IMPLEMENTATION.md Chunks 5.1/5.2 —
+    // getFabricCanvas() itself stays mocked above since this plugin still legitimately uses it
+    // directly for object:modified/text:changed wiring.
+    renderer: {
+      exportSceneJSON: vi.fn().mockReturnValue({ objects: [] }),
+      getNodes: vi.fn().mockReturnValue([]),
+    },
+    registry: { objectTypes: new ObjectTypeRegistry() },
   } as unknown as CanvasEngine;
 
   return {

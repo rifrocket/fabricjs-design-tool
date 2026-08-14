@@ -57,6 +57,10 @@ function createFakeEngine() {
   const panTo = vi.fn();
   const engine = {
     getFabricCanvas: () => canvas,
+    // The boundary-rect creation path reads engine.renderer.addNode(), not getFabricCanvas(),
+    // as of FUTURE_IMPLEMENTATION.md Chunk 8.2 — reuses the same backing `objects` array/mock
+    // so this file's existing assertions on `canvas.add` still exercise real state.
+    renderer: { addNode: canvas.add },
     setDimensions,
     layers: { getObjects: () => objects, sendToBack },
     viewport: { getZoom: () => 1 },

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Rect } from "fabric";
 import { SetPropertyCommand } from "./setPropertyCommand";
+import type { NodeOps } from "./setPropertyCommand";
 
 describe("SetPropertyCommand", () => {
   it("captures the current value and applies the next one on do()", () => {
@@ -43,5 +44,22 @@ describe("SetPropertyCommand", () => {
 
     expect(command.merge(SetPropertyCommand.capture(rectB, "left", 10))).toBeNull();
     expect(command.merge(SetPropertyCommand.capture(rectA, "top", 10))).toBeNull();
+  });
+
+  it("works against a non-default NodeOps, with no FabricObject involved", () => {
+    const node = new Map<string, unknown>([["count", 1]]);
+    const mapNodeOps: NodeOps<Map<string, unknown>> = {
+      get: (target, key) => target.get(key),
+      set: (target, key, value) => {
+        target.set(key, value);
+      },
+    };
+
+    const command = SetPropertyCommand.capture(node, "count", 5, mapNodeOps);
+    command.do();
+    expect(node.get("count")).toBe(5);
+
+    command.undo();
+    expect(node.get("count")).toBe(1);
   });
 });

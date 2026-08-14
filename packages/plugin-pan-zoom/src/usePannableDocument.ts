@@ -33,6 +33,8 @@ export function usePannableDocument(
   useEffect(() => {
     if (!engine || !containerSize || contentWidth <= 0 || contentHeight <= 0) return;
     engine.setDimensions(containerSize.width, containerSize.height);
+    // calcOffset() recalculates Fabric's cached DOM element position for pointer-event math —
+    // Fabric-DOM-specific, no RendererApi equivalent (FUTURE_IMPLEMENTATION.md Chunk 8.3).
     engine.getFabricCanvas().calcOffset();
 
     // Created once and left in place for any host that keeps this engine alive across
@@ -40,7 +42,7 @@ export function usePannableDocument(
     // findPageBoundary makes this idempotent rather than re-creating on every effect run.
     if (!findPageBoundary(engine)) {
       const boundary = createPageBoundaryRect({ width: contentWidth, height: contentHeight, backgroundColor });
-      engine.getFabricCanvas().add(boundary);
+      engine.renderer.addNode(boundary);
       engine.layers.sendToBack(boundary);
     }
 

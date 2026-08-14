@@ -13,6 +13,11 @@ import { SelectionManager } from "./selectionManager";
 import { LayerManager } from "./layerManager";
 import { AlignmentManager } from "./alignmentManager";
 import { SnapEngine } from "./snapEngine";
+import { FabricRendererApi } from "./fabricRendererApi";
+import type { RendererApi } from "./rendererApi";
+import type { EditorContext } from "../plugin/editorContext";
+import { InMemoryAssetStore } from "../assets/assetStore";
+import type { AssetStore } from "../assets/assetStore";
 import { getObjectId } from "./objectId";
 import { PluginRegistry } from "../plugin/pluginRegistry";
 import type { ObjectTypeId } from "../plugin/objectTypeRegistry";
@@ -37,7 +42,7 @@ const INITIAL_STATE: EngineState = {
 
 // Owns one Fabric canvas and composes the narrow, independently testable services
 // (viewport, selection, layers, history) around a single reactive store.
-export class CanvasEngine {
+export class CanvasEngine implements EditorContext<FabricObject> {
   readonly viewport: ViewportManager;
   readonly selection: SelectionManager;
   readonly layers: LayerManager;
@@ -48,6 +53,14 @@ export class CanvasEngine {
   readonly store: Store<EngineState>;
   readonly registry: PluginRegistry;
   readonly shortcuts: KeyboardShortcutManager;
+  // Renderer-agnostic seam (FUTURE_IMPLEMENTATION.md Stage 2) — everything above this field
+  // stays Fabric-typed for now (see the "Explicitly out of scope" section of that plan), but
+  // consumers/plugins that only need scene/selection/viewport/serialization/lifecycle
+  // operations can depend on this instead of getFabricCanvas().
+  readonly renderer: RendererApi<FabricObject>;
+  // Injectable ownership (FUTURE_IMPLEMENTATION.md Chunk 4.3) — defaults to a private,
+  // per-engine store unless a DocumentSession supplies a shared one via EngineOptions.assets.
+  readonly assets: AssetStore;
 
   private readonly installedPlugins = new Map<string, EditorPlugin>();
   private readonly importLock = new AsyncLock();
@@ -56,17 +69,31 @@ export class CanvasEngine {
   private constructor(
     private readonly canvas: Canvas,
     options: EngineOptions,
+    element: string | HTMLCanvasElement,
   ) {
     this.viewport = new ViewportManager(canvas);
     this.selection = new SelectionManager(canvas);
     this.layers = new LayerManager(canvas, () => this.syncObjects());
-    this.history = new HistoryManager();
+    this.history = options.history ?? new HistoryManager();
     this.alignment = new AlignmentManager(canvas, this.history);
     this.snapping = new SnapEngine(canvas, options.snapping);
     this.events = new EventBus();
     this.store = new Store(INITIAL_STATE);
     this.registry = new PluginRegistry();
     this.shortcuts = new KeyboardShortcutManager();
+    // Renderer-construction seam (FUTURE_IMPLEMENTATION.md Chunk 7.2). Honesty check: this
+    // makes the RENDERER pluggable, not the ENGINE SHELL around it — viewport/selection/layers/
+    // alignment/snapping/getFabricCanvas() above are still built from the ORIGINAL `canvas`
+    // this constructor received, independent of whatever a custom rendererFactory returns. The
+    // default (no custom factory) path is byte-identical to before this chunk: `this.renderer`
+    // wraps the exact same canvas/viewport/selection instances as everything else on this
+    // engine, exactly as Chunk 2.3 built it — a custom factory is the only way to introduce any
+    // divergence, and only for operations invoked via engine.renderer specifically rather than
+    // this engine's own top-level facade methods (which use this.viewport/.selection directly).
+    this.renderer = options.rendererFactory
+      ? options.rendererFactory(element, options)
+      : new FabricRendererApi(canvas, this.viewport, this.selection);
+    this.assets = options.assets ?? new InMemoryAssetStore();
     this.registerDefaultExporters();
     this.bindCanvasEvents();
   }
@@ -77,11 +104,11 @@ export class CanvasEngine {
       height: options.height,
       backgroundColor: options.backgroundColor,
     });
-    return new CanvasEngine(canvas, options);
+    return new CanvasEngine(canvas, options, element);
   }
 
   private registerDefaultExporters(): void {
-    const exporter = new CanvasExporter(this.canvas);
+    const exporter = new CanvasExporter(this.canvas, this.registry.objectTypes);
     for (const format of DEFAULT_EXPORT_FORMATS) {
       this.registry.exporters.register(format, () => exporter.export(format));
     }
@@ -219,12 +246,12 @@ export class CanvasEngine {
   }
 
   addObject(object: FabricObject): void {
-    this.history.execute(new AddObjectCommand(this.canvas, object));
+    this.history.execute(new AddObjectCommand(this.renderer, object));
     this.syncHistory();
   }
 
   removeObject(object: FabricObject): void {
-    this.history.execute(new RemoveObjectCommand(this.canvas, object));
+    this.history.execute(new RemoveObjectCommand(this.renderer, object));
     this.syncHistory();
   }
 
@@ -232,7 +259,7 @@ export class CanvasEngine {
   deleteSelection(): void {
     const objects = this.selection.getActiveObjects();
     if (objects.length === 0) return;
-    const commands = objects.map((object) => new RemoveObjectCommand(this.canvas, object));
+    const commands = objects.map((object) => new RemoveObjectCommand(this.renderer, object));
     this.history.execute(new CompositeCommand(commands, "delete"));
     this.selection.clear();
     this.syncHistory();
@@ -308,6 +335,10 @@ export class CanvasEngine {
   }
 
   // Escape hatch for consumers that need direct Fabric access; unstable by design.
+  /** @deprecated Escape hatch for pre-RendererApi plugins. Prefer `engine.renderer` /
+   *  `EditorContext.renderer`, which work against any renderer, not just Fabric.
+   *  Scheduled for removal no earlier than the release after existing plugins migrate
+   *  (FUTURE_IMPLEMENTATION.md Stage 8). */
   getFabricCanvas(): Canvas {
     return this.canvas;
   }

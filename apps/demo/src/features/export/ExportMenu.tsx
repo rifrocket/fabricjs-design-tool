@@ -36,6 +36,9 @@ interface ViewportSnapshot {
 // identically for a page that's currently mounted/visible and one that isn't — needed here since
 // a pair's other side may not be the one currently on screen.
 function resetToDocument(engine: CanvasEngine, size: { width: number; height: number }): ViewportSnapshot {
+  // RendererApi's ViewportApi has setDimensions() but no getter for the current canvas
+  // dimensions — no equivalent to read back from yet (FUTURE_IMPLEMENTATION.md Chunk 8.3), so
+  // this stays on getFabricCanvas().
   const canvas = engine.getFabricCanvas();
   const snapshot: ViewportSnapshot = {
     zoom: engine.viewport.getZoom(),
@@ -69,6 +72,9 @@ async function exportPagePair(manager: PagesManager, activeMeta: PageMeta, sibli
 
   const frontPrev = resetToDocument(frontEngine, frontMeta);
   const backPrev = resetToDocument(backEngine, backMeta);
+  // exportPdfMultiPage (plugin-export-pdf) is Fabric-specific PDF rendering built on jsPDF —
+  // entirely outside RendererApi's scope, not just missing a member from it
+  // (FUTURE_IMPLEMENTATION.md Chunk 8.3).
   const result = exportPdfMultiPage([frontEngine.getFabricCanvas(), backEngine.getFabricCanvas()], {
     pageSize: "match-canvas",
     marginMm: 0,

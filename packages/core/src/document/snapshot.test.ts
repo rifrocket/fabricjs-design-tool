@@ -2,35 +2,39 @@ import { describe, expect, it, vi } from "vitest";
 import type { CanvasEngine } from "../engine/canvasEngine";
 import { ID_PROPERTY } from "../engine/objectId";
 import { getSerializedProperties } from "../engine/serializedProperties";
+import { ObjectTypeRegistry } from "../plugin/objectTypeRegistry";
 import { captureSnapshot, restoreSnapshot, renderSnapshotThumbnail } from "./snapshot";
 import type { DocumentSnapshotData, OffscreenCanvas, OffscreenCanvasFactory } from "./snapshot";
 
 function createFakeEngine(): CanvasEngine {
-  const fabricCanvas = {
-    toObject: vi.fn().mockReturnValue({ objects: [{ type: "rect", [ID_PROPERTY]: "obj_1" }] }),
-    backgroundColor: "#123456" as string | undefined,
-  };
   return {
-    getFabricCanvas: vi.fn().mockReturnValue(fabricCanvas),
+    renderer: {
+      exportSceneJSON: vi.fn().mockReturnValue({ objects: [{ type: "rect", [ID_PROPERTY]: "obj_1" }], background: "#123456" }),
+      // No live nodes to match json.objects[] by index against — serializeWithTypeOverrides/
+      // applyDeserializeOverrides fall through to unmodified raw output, exactly the
+      // no-type-registered-a-serialize()-hook behavior these tests exercise.
+      getNodes: vi.fn().mockReturnValue([]),
+    },
+    registry: { objectTypes: new ObjectTypeRegistry() },
     setBackgroundColor: vi.fn(),
     importFile: vi.fn().mockResolvedValue(undefined),
   } as unknown as CanvasEngine;
 }
 
 describe("captureSnapshot", () => {
-  it("reads the live canvas directly, including the object-id property", () => {
+  it("reads the live scene through engine.renderer, including the object-id property", () => {
     const engine = createFakeEngine();
 
     const snapshot = captureSnapshot(engine);
 
-    expect(engine.getFabricCanvas().toObject).toHaveBeenCalledWith(getSerializedProperties());
+    expect(engine.renderer.exportSceneJSON).toHaveBeenCalledWith(getSerializedProperties());
     expect(snapshot.backgroundColor).toBe("#123456");
-    expect(snapshot.json).toEqual({ objects: [{ type: "rect", [ID_PROPERTY]: "obj_1" }] });
+    expect(snapshot.json).toEqual({ objects: [{ type: "rect", [ID_PROPERTY]: "obj_1" }], background: "#123456" });
   });
 
-  it("falls back to white when the canvas has no background color set", () => {
+  it("falls back to white when the exported scene has no background field", () => {
     const engine = createFakeEngine();
-    (engine.getFabricCanvas() as unknown as { backgroundColor?: string }).backgroundColor = undefined;
+    vi.mocked(engine.renderer.exportSceneJSON).mockReturnValue({ objects: [] });
 
     expect(captureSnapshot(engine).backgroundColor).toBe("#ffffff");
   });
